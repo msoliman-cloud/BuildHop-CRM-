@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>BuildHop CRM</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Arial,sans-serif;background:#f5f4f0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+  .container{width:100%;max-width:380px}
+  .logo{text-align:center;margin-bottom:40px}
+  .logo-mark{width:64px;height:64px;background:#141414;border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:26px;font-weight:900;color:#F5C000}
+  .logo h1{font-size:22px;font-weight:900;color:#141414}
+  .logo p{font-size:11px;color:#999;font-weight:600;margin-top:4px;text-transform:uppercase;letter-spacing:2px}
+  .screen{display:none}
+  .screen.active{display:block}
+  .card{background:white;border-radius:24px;padding:28px;box-shadow:0 4px 24px rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.06)}
+  .card-title{font-size:11px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:2px;text-align:center;margin-bottom:20px}
+  .rep-btn{width:100%;padding:16px 20px;background:#141414;color:#F5C000;border:none;border-radius:16px;font-size:16px;font-weight:900;cursor:pointer;margin-bottom:12px;transition:all .2s;display:flex;align-items:center;justify-content:space-between;text-align:right}
+  .rep-btn:last-child{margin-bottom:0}
+  .rep-btn:active{transform:scale(.98)}
+  .rep-avatar{width:40px;height:40px;border-radius:12px;background:rgba(245,192,0,.15);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+  .rep-info{flex:1;padding:0 12px}
+  .rep-name{font-size:15px;font-weight:900}
+  .rep-role{font-size:10px;opacity:.5;font-weight:600;margin-top:2px}
+  .back-btn{background:none;border:none;color:#888;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:20px;display:flex;align-items:center;gap:6px;padding:0}
+  .selected-rep{display:flex;align-items:center;gap:12px;margin-bottom:24px;padding:14px 16px;background:#f9f8f5;border-radius:14px}
+  .s-avatar{width:44px;height:44px;background:#141414;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+  .s-name{font-size:16px;font-weight:900;color:#141414}
+  .s-sub{font-size:11px;color:#999;font-weight:600;margin-top:2px}
+  .pw-label{font-size:11px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;display:block}
+  .pw-wrap{position:relative;margin-bottom:16px}
+  .pw-input{width:100%;padding:16px 18px;padding-left:50px;background:#f5f4f0;border:2px solid transparent;border-radius:14px;font-size:18px;font-weight:700;color:#141414;outline:none;transition:all .2s;letter-spacing:3px;text-align:right;direction:ltr}
+  .pw-input:focus{border-color:#141414;background:white}
+  .pw-input.err{border-color:#ef4444;background:#fef2f2}
+  .toggle{position:absolute;left:16px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:18px;opacity:.4}
+  .err-msg{color:#ef4444;font-size:12px;font-weight:700;margin-bottom:14px;text-align:center;display:none}
+  .err-msg.show{display:block}
+  .login-btn{width:100%;padding:16px;background:#141414;color:#F5C000;border:none;border-radius:14px;font-size:16px;font-weight:900;cursor:pointer;transition:all .2s}
+  .login-btn:active{transform:scale(.98)}
+  .footer{text-align:center;margin-top:32px;font-size:11px;color:#bbb;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+  @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+  .shake{animation:shake .4s ease}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="logo">
+    <div class="logo-mark">BH</div>
+    <h1>BuildHop CRM</h1>
+    <p>Field Sales Platform</p>
+  </div>
+
+  <div class="screen active" id="s1">
+    <div class="card">
+      <p class="card-title">اختر حسابك</p>
+      <button class="rep-btn" onclick="pick('hassan')">
+        <div class="rep-info"><div class="rep-name">الحسن موسى</div><div class="rep-role">مندوب مبيعات ميداني</div></div>
+        <div class="rep-avatar">🏗️</div>
+      </button>
+      <button class="rep-btn" onclick="pick('abdulrazzaq')">
+        <div class="rep-info"><div class="rep-name">عبدالرزاق محمد</div><div class="rep-role">مندوب مبيعات ميداني</div></div>
+        <div class="rep-avatar">🏗️</div>
+      </button>
+    </div>
+  </div>
+
+  <div class="screen" id="s2">
+    <div class="card">
+      <button class="back-btn" onclick="back()">← رجوع</button>
+      <div class="selected-rep">
+        <div class="s-avatar">🏗️</div>
+        <div><div class="s-name" id="sName">—</div><div class="s-sub">أدخل كلمة المرور للدخول</div></div>
+      </div>
+      <label class="pw-label">كلمة المرور</label>
+      <div class="pw-wrap">
+        <input class="pw-input" type="password" id="pwInput" placeholder="••••••••"
+          onkeydown="if(event.key==='Enter')tryLogin()" autocomplete="current-password"/>
+        <button class="toggle" onclick="togglePw()" id="toggleBtn">👁</button>
+      </div>
+      <div class="err-msg" id="errMsg">❌ كلمة المرور غير صحيحة</div>
+      <button class="login-btn" id="loginBtn" onclick="tryLogin()">دخول ←</button>
+    </div>
+  </div>
+
+  <div class="footer">BuildHop · Sales Intelligence · 2026</div>
+</div>
+<script>
+const R={hassan:{name:'الحسن موسى',pw:'Mousa52024',file:'hassan.html'},abdulrazzaq:{name:'عبدالرزاق محمد',pw:'Razak12025',file:'abdulrazzaq.html'}};
+let cur=null;
+function pick(id){cur=id;document.getElementById('sName').textContent=R[id].name;document.getElementById('pwInput').value='';document.getElementById('errMsg').classList.remove('show');document.getElementById('pwInput').classList.remove('err');document.getElementById('s1').classList.remove('active');document.getElementById('s2').classList.add('active');setTimeout(()=>document.getElementById('pwInput').focus(),100);}
+function back(){document.getElementById('s2').classList.remove('active');document.getElementById('s1').classList.add('active');cur=null;}
+function tryLogin(){const v=document.getElementById('pwInput').value;if(v===R[cur].pw){document.getElementById('loginBtn').textContent='✅ جاري الدخول...';setTimeout(()=>{window.location.href=R[cur].file;},400);}else{const i=document.getElementById('pwInput');const e=document.getElementById('errMsg');i.classList.add('err','shake');e.classList.add('show');setTimeout(()=>i.classList.remove('shake'),500);i.value='';i.focus();}}
+function togglePw(){const i=document.getElementById('pwInput');const b=document.getElementById('toggleBtn');if(i.type==='password'){i.type='text';b.textContent='🙈';}else{i.type='password';b.textContent='👁';}}
+</script>
+</body>
+</html>
