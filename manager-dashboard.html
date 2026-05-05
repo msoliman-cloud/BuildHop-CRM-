@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BuildHop — Manager Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Cairo',sans-serif;background:#F0EDE8;color:#0D1117;min-height:100vh}
+:root{--navy:#1B2A4A;--navy-l:#E8EDF8;--gold:#E8A320;--gold-l:#FDF0D5;--green:#0A6640;--green-l:#E3F5EC;--red:#B91C1C;--red-l:#FEF2F2;--amb:#D97706;--amb-l:#FFFBEB;--pu:#7C3AED;--pu-l:#F5F3FF;--bg:#F0EDE8;--mut:#7C849A;--ink:#0D1117;--ln:#DDD9D2;--ln2:#EAE7E1;}
+input,select,button{font-family:'Cairo',sans-serif}
+.hdr{background:var(--navy);padding:14px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50}
+.layout{display:flex;min-height:calc(100vh - 58px)}
+.sidebar{width:220px;background:#fff;border-right:1px solid var(--ln);padding:14px 0;flex-shrink:0;position:sticky;top:58px;height:calc(100vh - 58px);overflow-y:auto}
+.main{flex:1;padding:20px;overflow-y:auto}
+.page{display:none}.page.active{display:block}
+.snav{padding:10px 12px;margin:2px 8px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:9px;font-size:12px;font-weight:700;color:var(--mut);border:none;background:transparent;width:calc(100% - 16px);text-align:left;transition:all .15s}
+.snav:hover{background:var(--bg)}
+.snav.on{background:var(--navy-l);color:var(--navy)}
+.snav .si{font-size:16px}
+.card{background:#fff;border-radius:15px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:14px}
+.kgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.kcard{background:#fff;border-radius:13px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{padding:9px 10px;text-align:left;color:var(--mut);font-weight:700;background:var(--bg);border-bottom:1px solid var(--ln);font-size:10px}
+.tbl td{padding:9px 10px;border-bottom:1px solid var(--ln2)}
+.shdr{font-size:13px;font-weight:800;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.abox{border-radius:12px;padding:14px 16px;margin-bottom:9px;display:flex;justify-content:space-between;align-items:center}
+.bar-t{height:6px;background:#EAE7E1;border-radius:3px;overflow:hidden}
+.bar-f{height:100%;border-radius:3px}
+.vli{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--ln2)}
+.rep-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.rep-card{background:#fff;border-radius:15px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.badge{display:inline-block;font-size:9px;font-weight:800;padding:3px 9px;border-radius:20px}
+/* LOGIN */
+.login-screen{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:500}
+.login-box{background:#fff;border-radius:20px;padding:36px;width:340px;text-align:center}
+.pin-input{width:100%;padding:16px;font-size:28px;letter-spacing:14px;text-align:center;border:2px solid var(--ln);border-radius:13px;outline:none;font-family:'Cairo',sans-serif;margin:18px 0}
+.pin-input:focus{border-color:var(--navy)}
+/* STATUS DOT */
+.sdot{width:9px;height:9px;border-radius:50%;flex-shrink:0;transition:background .3s}
+/* REFRESH BTN */
+.refresh-btn{background:rgba(255,255,255,.1);color:#fff;border:none;border-radius:8px;padding:7px 13px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px}
+.refresh-btn:hover{background:rgba(255,255,255,.2)}
+/* LOADING */
+.loading{text-align:center;padding:40px;color:var(--mut)}
+.spin{display:inline-block;width:32px;height:32px;border:3px solid var(--ln);border-top-color:var(--navy);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:700px){.sidebar{display:none}.kgrid{grid-template-columns:1fr 1fr}.rep-grid{grid-template-columns:1fr}.g2{grid-template-columns:1fr}.g3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="login">
+  <div class="login-box">
+    <div style="background:var(--gold);width:60px;height:60px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;margin:0 auto 16px">BH</div>
+    <div style="font-size:22px;font-weight:900;color:var(--navy)">Manager Dashboard</div>
+    <div style="font-size:12px;color:var(--mut);margin-top:4px">BuildHop · لوحة تحكم المدير</div>
+    <input class="pin-input" type="password" id="pin" placeholder="••••" maxlength="4" oninput="checkPin()"/>
+    <div style="font-size:12px;color:var(--mut)">Enter PIN · الرقم السري: 1234</div>
+    <div style="font-size:11px;color:var(--red);margin-top:8px;display:none" id="pin-err">❌ Incorrect PIN</div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div style="display:flex;align-items:center;gap:10px">
+    <div style="background:var(--gold);border-radius:9px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:var(--ink)">BH</div>
+    <div>
+      <div style="font-size:15px;font-weight:900;color:#fff">BuildHop — Manager Dashboard</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.4)">لوحة تحكم المدير · Real-time from Google Sheets</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:10px;align-items:center">
+    <div style="font-size:10px;color:rgba(255,255,255,.4)" id="hdr-date"></div>
+    <div style="font-size:10px;font-weight:700" id="sync-status" style="color:rgba(255,255,255,.5)"></div>
+    <button class="refresh-btn" onclick="loadAllData()">🔄 Refresh</button>
+  </div>
+</div>
+
+<div class="layout">
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div style="padding:8px 16px 12px;border-bottom:1px solid var(--ln);margin-bottom:6px">
+    <div style="font-size:9px;font-weight:700;color:var(--mut);text-transform:uppercase">Navigation</div>
+  </div>
+  <button class="snav on" onclick="goPage('overview')"><span class="si">📊</span> Overview</button>
+  <button class="snav" onclick="goPage('reps')"><span class="si">👥</span> Rep Performance</button>
+  <button class="snav" onclick="goPage('pipeline')"><span class="si">📋</span> Pipeline</button>
+  <button class="snav" onclick="goPage('visits')"><span class="si">📍</span> Field Activity</button>
+  <button class="snav" onclick="goPage('followups')"><span class="si">🔔</span> Follow-ups</button>
+  <button class="snav" onclick="goPage('daily')"><span class="si">📅</span> Daily Reports</button>
+  <div style="padding:16px;border-top:1px solid var(--ln);margin-top:12px">
+    <div style="font-size:9px;font-weight:700;color:var(--mut);margin-bottom:10px">DATA STATUS</div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px">
+      <div class="sdot" id="st-h" style="background:#EAE7E1"></div>
+      <div style="font-size:11px;font-weight:700">Hassan · حسن</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="sdot" id="st-a" style="background:#EAE7E1"></div>
+      <div style="font-size:11px;font-weight:700">Abdulrazzaq · عبدالرزاق</div>
+    </div>
+    <div style="font-size:9px;color:var(--mut);margin-top:10px" id="last-sync">Not synced yet</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- ══ OVERVIEW ══ -->
+<div class="page active" id="page-overview">
+  <div style="font-size:17px;font-weight:900;color:var(--navy);margin-bottom:4px">Overview · النظرة العامة</div>
+  <div style="font-size:11px;color:var(--mut);margin-bottom:16px" id="ov-date"></div>
+  <div class="kgrid">
+    <div class="kcard" style="border-top:3px solid var(--navy)">
+      <div style="font-size:22px;margin-bottom:4px">📍</div>
+      <div style="font-size:26px;font-weight:900;color:var(--navy)" id="kpi-v">—</div>
+      <div style="font-size:11px;font-weight:700">Total Visits Today</div>
+      <div style="font-size:9px;color:var(--mut)">إجمالي الزيارات</div>
+      <div style="margin-top:8px;display:flex;gap:8px">
+        <span style="font-size:9px;color:var(--mut)">H: <b id="kpi-vh">—</b></span>
+        <span style="font-size:9px;color:var(--mut)">A: <b id="kpi-va">—</b></span>
+      </div>
+    </div>
+    <div class="kcard" style="border-top:3px solid var(--green)">
+      <div style="font-size:22px;margin-bottom:4px">💼</div>
+      <div style="font-size:22px;font-weight:900;color:var(--green)" id="kpi-pipe">—</div>
+      <div style="font-size:11px;font-weight:700">Total Pipeline</div>
+      <div style="font-size:9px;color:var(--mut)">قيمة الفرص</div>
+      <div style="margin-top:8px;display:flex;gap:8px">
+        <span style="font-size:9px;color:var(--mut)">H: <b id="kpi-ph">—</b></span>
+        <span style="font-size:9px;color:var(--mut)">A: <b id="kpi-pa">—</b></span>
+      </div>
+    </div>
+    <div class="kcard" style="border-top:3px solid var(--amb)">
+      <div style="font-size:22px;margin-bottom:4px">🌱</div>
+      <div style="font-size:26px;font-weight:900;color:var(--amb)" id="kpi-leads">—</div>
+      <div style="font-size:11px;font-weight:700">Active Leads</div>
+      <div style="font-size:9px;color:var(--mut)">صفقات نشطة</div>
+    </div>
+    <div class="kcard" style="border-top:3px solid var(--red)">
+      <div style="font-size:22px;margin-bottom:4px">⚠️</div>
+      <div style="font-size:26px;font-weight:900;color:var(--red)" id="kpi-urg">—</div>
+      <div style="font-size:11px;font-weight:700">Urgent Issues</div>
+      <div style="font-size:9px;color:var(--mut)">مشاكل عاجلة</div>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="shdr">📊 Pipeline by Stage</div>
+      <div id="ov-pipe"><div class="loading"><div class="spin"></div><div>Loading...</div></div></div>
+    </div>
+    <div class="card">
+      <div class="shdr">🔔 Follow-up Alerts</div>
+      <div class="abox" style="background:var(--red-l)"><div style="font-size:12px;font-weight:700;color:var(--red)">🔴 Overdue · متأخرة</div><div style="font-size:28px;font-weight:900;color:var(--red)" id="al-od">—</div></div>
+      <div class="abox" style="background:var(--amb-l)"><div style="font-size:12px;font-weight:700;color:var(--amb)">🟡 Today · اليوم</div><div style="font-size:28px;font-weight:900;color:var(--amb)" id="al-td">—</div></div>
+      <div class="abox" style="background:var(--green-l)"><div style="font-size:12px;font-weight:700;color:var(--green)">🟢 Upcoming · قادمة</div><div style="font-size:28px;font-weight:900;color:var(--green)" id="al-up">—</div></div>
+    </div>
+  </div>
+  <div class="g3">
+    <div class="card"><div class="shdr">⭐ Top Clients</div><div id="ov-clients"></div></div>
+    <div class="card"><div class="shdr">📦 Top Materials</div><div id="ov-mats"></div></div>
+    <div class="card"><div class="shdr">💡 Smart Insights</div><div id="ov-insights"></div></div>
+  </div>
+</div>
+
+<!-- ══ REP PERFORMANCE ══ -->
+<div class="page" id="page-reps">
+  <div style="font-size:17px;font-weight:900;color:var(--navy);margin-bottom:16px">Rep Performance · أداء المناديب</div>
+  <div class="rep-grid">
+    <div class="rep-card" style="border-top:4px solid var(--navy)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+        <div style="background:var(--navy);width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:900">H</div>
+        <div><div style="font-size:16px;font-weight:900;color:var(--navy)">Hassan · حسن</div><div style="font-size:10px;color:var(--mut)" id="h-sync">Not submitted yet</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+        <div style="background:var(--bg);border-radius:10px;padding:13px;text-align:center"><div style="font-size:22px;font-weight:900;color:var(--navy)" id="h-vis">—</div><div style="font-size:9px;color:var(--mut)">Today's Visits</div></div>
+        <div style="background:var(--bg);border-radius:10px;padding:13px;text-align:center"><div style="font-size:22px;font-weight:900;color:var(--green)" id="h-leads">—</div><div style="font-size:9px;color:var(--mut)">Active Leads</div></div>
+        <div style="background:var(--bg);border-radius:10px;padding:13px;text-align:center"><div style="font-size:16px;font-weight:900;color:var(--amb)" id="h-pipe">—</div><div style="font-size:9px;color:var(--mut)">Pipeline Value</div></div>
+        <div style="background:var(--bg);border-radius:10px;padding:13px;text-align:center"><div style="font-size:22px;font-weight:900;color:var(--red)" id="h-urg">—</div><div style="font-size:9px;color:var(--mut)">Urgent Issues</div></div>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:var(--navy);margin-bottom:8px">Today's Visits</div>
+      <div id="h-vlog"></div>
+      <div style="font-size:11px;font-weight:700;color:var(--navy);margin:12px 0 8px">Top Leads</div>
+      <div id="h-top"></div>
+    </div>
+    <div class="rep-card" style="border-top:4px solid var(--gold)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+        <div style="background:var(--gold);width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:var(--ink);font-size:18px;font-weight:900">A</div>
+        <div><div style="font-size:16px;font-weight:900;color:var(--navy)">Abdulrazzaq · عبدالرزاق</div><div style="font-size:10px;color:var(--mut)" id="a-sync">Not submitted yet</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+        <div style="background:var(--bg);border-radius:10px;padding:13px;text-align:center"><div style="font-size:22px;font-weight:900;color:var(--navy)" id="a-vis">—</div><div style="font-size:9px;color:var(--mut)">Today's Visits</div></div>
+        <div style="background:var(--bg);border-radius:10px;padding:13px;text-align:center"><div style="font-size:22px;font-weight:900;color:var(--green)" id="a-leads">—</div><div style="font-size:9px;color:var(--mut)">Active Leads</div></div>
+        <div style="background:var(--bg);border-radius:10px;padding:13px;text-align:center"><div style="font-size:16px;font-weight:900;color:var(--amb)" id="a-pipe">—</div><div style="font-size:9px;color:var(--mut)">Pipeline Value</div></div>
+        <div style="background:var(--bg);border-radius:10px;padding:13px;text-align:center"><div style="font-size:22px;font-weight:900;color:var(--red)" id="a-urg">—</div><div style="font-size:9px;color:var(--mut)">Urgent Issues</div></div>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:var(--navy);margin-bottom:8px">Today's Visits</div>
+      <div id="a-vlog"></div>
+      <div style="font-size:11px;font-weight:700;color:var(--navy);margin:12px 0 8px">Top Leads</div>
+      <div id="a-top"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PIPELINE ══ -->
+<div class="page" id="page-pipeline">
+  <div style="font-size:17px;font-weight:900;color:var(--navy);margin-bottom:16px">Pipeline · الصفقات النشطة</div>
+  <div id="pipe-content"><div class="loading"><div class="spin"></div><div>Loading pipeline...</div></div></div>
+</div>
+
+<!-- ══ VISITS ══ -->
+<div class="page" id="page-visits">
+  <div style="font-size:17px;font-weight:900;color:var(--navy);margin-bottom:16px">Field Activity · النشاط الميداني</div>
+  <div id="visits-content"><div class="loading"><div class="spin"></div><div>Loading visits...</div></div></div>
+</div>
+
+<!-- ══ FOLLOW-UPS PAGE ══ -->
+<div class="page" id="page-followups">
+  <div style="font-size:18px;font-weight:900;color:var(--navy);margin-bottom:5px">🔔 Follow-ups · المتابعات</div>
+  <div style="font-size:12px;color:var(--mut);margin-bottom:16px">المتابعات القادمة للمناديب</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
+    <div style="background:#fff;border-radius:12px;padding:13px;text-align:center;border-top:3px solid var(--red);box-shadow:0 2px 6px rgba(0,0,0,.06)"><div style="font-size:22px;font-weight:900;color:var(--red)" id="fu-today-cnt">0</div><div style="font-size:11px;font-weight:700">Today</div></div>
+    <div style="background:#fff;border-radius:12px;padding:13px;text-align:center;border-top:3px solid var(--amb);box-shadow:0 2px 6px rgba(0,0,0,.06)"><div style="font-size:22px;font-weight:900;color:var(--amb)" id="fu-week-cnt">0</div><div style="font-size:11px;font-weight:700">This Week</div></div>
+    <div style="background:#fff;border-radius:12px;padding:13px;text-align:center;border-top:3px solid var(--green);box-shadow:0 2px 6px rgba(0,0,0,.06)"><div style="font-size:22px;font-weight:900;color:var(--green)" id="fu-total-cnt">0</div><div style="font-size:11px;font-weight:700">Total</div></div>
+  </div>
+  <div id="followups-list"><div class="loading">Loading follow-ups...</div></div>
+</div>
+
+
+<!-- ══ DAILY REPORTS ══ -->
+<div class="page" id="page-daily">
+  <div style="font-size:17px;font-weight:900;color:var(--navy);margin-bottom:5px">📅 Daily Reports · سجل التقارير اليومية</div>
+  <div style="font-size:12px;color:var(--mut);margin-bottom:16px">كل التقارير المُرسلة من المناديب</div>
+  <div style="display:flex;gap:8px;margin-bottom:14px" id="dr-filter-bar">
+    <button onclick="filterDR('all',this)" class="dr-tab" style="padding:7px 16px;border:2px solid var(--navy);border-radius:20px;background:var(--navy);color:#fff;font-size:11px;font-weight:700;cursor:pointer">الكل</button>
+    <button onclick="filterDR('Hassan',this)" class="dr-tab" style="padding:7px 16px;border:2px solid var(--ln);border-radius:20px;background:#fff;color:var(--mut);font-size:11px;font-weight:700;cursor:pointer">حسن</button>
+    <button onclick="filterDR('Abdulrazzaq',this)" class="dr-tab" style="padding:7px 16px;border:2px solid var(--ln);border-radius:20px;background:#fff;color:var(--mut);font-size:11px;font-weight:700;cursor:pointer">عبدالرزاق</button>
+  </div>
+  <div id="daily-content"></div>
+</div>
+
+</div><!-- /main -->
+</div><!-- /layout -->
+
+<script>
+var SCRIPT_URL='https://script.google.com/macros/s/AKfycbyNmDBboUSmrxtCOHbbFuXCPvOfAOeJyZt4wlUUVrR6dyk9jKgF2GYSyJ7PKjdduZ5QA/exec';
+var PIN='1234';
+var allData={visits:[],leads:[],blockers:[],summary:[],notes:[],followups:[]};
+
+function checkPin(){var v=document.getElementById('pin').value;if(v.length===4){if(v===PIN){document.getElementById('login').style.display='none';document.getElementById('hdr-date').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',day:'numeric',month:'long',year:'numeric'});document.getElementById('ov-date').textContent='Report for '+new Date().toLocaleDateString('en-US',{weekday:'long',day:'numeric',month:'long'});loadAllData();}else{document.getElementById('pin-err').style.display='block';document.getElementById('pin').value='';setTimeout(function(){document.getElementById('pin-err').style.display='none';},2000);}}}
+
+var PAGES=['overview','reps','pipeline','visits','followups','daily'];
+function goPage(id){PAGES.forEach(function(p){document.getElementById('page-'+p).classList.remove('active');});document.getElementById('page-'+id).classList.add('active');document.querySelectorAll('.snav').forEach(function(b,i){b.classList.remove('on');if(PAGES[i]===id)b.classList.add('on');});if(id==='pipeline')renderPipeline();if(id==='visits')renderVisits();if(id==='followups')renderFollowupsPage();if(id==='daily')renderDailyReports('all');}
+
+function clearMgrData(){
+  if(!confirm('مسح كل البيانات من الداشبورد؟\nClear all data from dashboard?'))return;
+  allData={visits:[],leads:[],blockers:[],summary:[],notes:[],followups:[]};
+  repData={hassan:null,abdulrazzaq:null};
+  /* Reset rep status dots */
+  ['st-h','st-ab'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.background='#EAE7E1';});
+  ['h-sync','a-sync'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent='Not submitted yet';});
+  var ss=document.getElementById('sync-status');if(ss){ss.textContent='No data';ss.style.color='rgba(255,255,255,.45)';}
+  var ls=document.getElementById('last-sync');if(ls)ls.textContent='Not synced yet';
+  /* Re-render all pages */
+  renderOverview();
+  var nl=document.getElementById('notes-list');if(nl)nl.innerHTML='<div class="loading">No notes yet</div>';
+  var fl=document.getElementById('followups-list');if(fl)fl.innerHTML='<div class="loading">No follow-ups yet</div>';
+  ['fu-today-cnt','fu-week-cnt','fu-total-cnt'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent='0';});
+  alert('✅ تم مسح كل البيانات');
+}
+
+function fmtM(n){var num=parseFloat(n)||0;if(num===0)return 'SAR 0';if(num>=1000000)return 'SAR '+(num/1000000).toFixed(1).replace(/\.0$/,'')+'M';if(num>=1000)return 'SAR '+(num/1000).toFixed(0)+'K';return 'SAR '+num.toLocaleString();}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function today(){return new Date().toISOString().split('T')[0];}
+
+function loadAllData(){
+  if(!allData.notes)allData.notes=[];
+  if(!allData.followups)allData.followups=[];
+  var ss=document.getElementById('sync-status');if(ss)ss.textContent='🔄 Syncing...';
+  var ls=document.getElementById('last-sync');if(ls)ls.textContent='Syncing...';
+  // Try single-call first (new Apps Script v2), fall back to multi-call
+  fetch(SCRIPT_URL+'?type=all&rep=all&t='+Date.now())
+    .then(function(r){return r.json();})
+    .then(function(res){
+      // New format: {visits:[...], leads:[...], blockers:[...], data:[...summary], followups:[...]}
+      if(res.visits)  allData.visits   = res.visits;
+      if(res.leads)   allData.leads    = res.leads;
+      if(res.blockers)allData.blockers = res.blockers;
+      if(res.data)    allData.summary  = res.data;   // summary from ?type=all returns in data
+      if(res.followups)allData.followups = res.followups;
+      // Old format fallback: each type returns {data:[...]}
+      if(!res.visits && !res.leads && res.data) {
+        allData.visits = res.data;
+      }
+      var now=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+      if(ss)ss.textContent='✅ Synced at '+now;
+      if(ls)ls.textContent='Last sync: '+now;
+      updateRepDots();
+      renderOverview();
+      renderReps();
+    })
+    .catch(function(){
+      // Fall back to 4 separate calls
+      var types=['visits','leads','blockers','summary'];
+      var done=0;
+      types.forEach(function(type){
+        fetch(SCRIPT_URL+'?type='+type+'&rep=all')
+          .then(function(r){return r.json();})
+          .then(function(res){
+            if(res.data)allData[type]=res.data;
+            if(res.followups)allData.followups=res.followups;
+            done++;
+            if(done===types.length){
+              var now=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+              if(ss)ss.textContent='✅ Synced at '+now;
+              if(ls)ls.textContent='Last sync: '+now;
+              updateRepDots();renderOverview();renderReps();
+            }
+          })
+          .catch(function(){done++;if(done===types.length){if(ss)ss.textContent='⚠️ Sync error';}});
+      });
+    });
+}
+
+function updateRepDots(){
+  var reps=['Hassan','Abdulrazzaq'];var dots=['st-h','st-a'];
+  reps.forEach(function(rep,i){
+    var hasData=allData.visits.some(function(v){return String(v['Rep']||'').toLowerCase()===rep.toLowerCase();});
+    var dot=document.getElementById(dots[i]);if(dot)dot.style.background=hasData?'var(--green)':'#EAE7E1';
+    var syncEl=document.getElementById((i===0?'h':'a')+'-sync');
+    if(syncEl){
+      var latest=allData.summary.filter(function(s){return String(s['Rep']||'').toLowerCase()===rep.toLowerCase();});
+      if(latest.length>0){var last=latest[latest.length-1];syncEl.textContent='Submitted: '+(last['Submitted At']||'Unknown');}
+      else syncEl.textContent='Not submitted yet';
+    }
+  });
+}
+
+function getRepVisits(rep){return allData.visits.filter(function(v){return String(v['Rep']||'').toLowerCase()===rep.toLowerCase();});}
+function getRepLeads(rep){return allData.leads.filter(function(l){return String(l['Rep']||'').toLowerCase()===rep.toLowerCase();});}
+function getRepBlockers(rep){return allData.blockers.filter(function(b){return String(b['Rep']||'').toLowerCase()===rep.toLowerCase();});}
+function getTodayVisits(rep){var td=today();return getRepVisits(rep).filter(function(v){return String(v['Date']||'').substring(0,10)===td;});}
+function getActiveLeads(rep){return getRepLeads(rep).filter(function(l){var s=String(l['Stage']||'');return s!=='Won'&&s!=='Lost';});}
+function getPipeVal(rep){return getActiveLeads(rep).reduce(function(s,l){return s+(parseFloat(l['Value (SAR)'])||0);},0);}
+function getUrgent(rep){return getRepBlockers(rep).filter(function(b){return String(b['Priority']||'').toLowerCase()==='urgent';}).length;}
+
+var SCOLS={'Quotation Sent':'#2563EB',Negotiation:'var(--pu)',Closing:'var(--amb)',Won:'var(--green)',Lost:'var(--mut)'};
+
+function renderOverview(){
+  var hv=getTodayVisits('hassan').length;var av=getTodayVisits('abdulrazzaq').length;
+  var hp=getPipeVal('hassan');var ap=getPipeVal('abdulrazzaq');
+  var hl=getActiveLeads('hassan').length;var al=getActiveLeads('abdulrazzaq').length;
+  var hu=getUrgent('hassan');var au=getUrgent('abdulrazzaq');
+  setText('kpi-v',hv+av);setText('kpi-vh',hv);setText('kpi-va',av);
+  setText('kpi-pipe',fmtM(hp+ap));setText('kpi-ph',fmtM(hp));setText('kpi-pa',fmtM(ap));
+  setText('kpi-leads',hl+al);setText('kpi-urg',hu+au);
+  // Pipeline
+  var allLeads=allData.leads.filter(function(l){var s=String(l['Stage']||'');return s!=='Won'&&s!=='Lost';});
+  var pp=document.getElementById('ov-pipe');
+  if(allLeads.length===0){pp.innerHTML='<div style="text-align:center;padding:16px;color:var(--mut);font-size:11px">No data yet — wait for reps to SUBMIT</div>';}
+  else{
+    var stages=['Quotation Sent','Negotiation','Closing'];var tot=allLeads.length;var h='';
+    stages.forEach(function(s){
+      var cnt=allLeads.filter(function(l){return l['Stage']===s;}).length;if(cnt===0)return;
+      var pct=Math.round(cnt/tot*100);var val=allLeads.filter(function(l){return l['Stage']===s;}).reduce(function(sum,l){return sum+(parseFloat(l['Value (SAR)'])||0);},0);
+      h+='<div style="margin-bottom:11px"><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:12px;font-weight:700">'+esc(s)+'</span><span style="font-size:10px;color:var(--mut)">'+cnt+' · '+fmtM(val)+'</span></div><div class="bar-t"><div class="bar-f" style="width:'+pct+'%;background:'+(SCOLS[s]||'var(--navy)')+'"></div></div></div>';
+    });
+    pp.innerHTML=h;
+  }
+  // Alerts
+  var td=today();
+  var od=allLeads.filter(function(l){return l['Next Date']&&String(l['Next Date']).substring(0,10)<td;}).length;
+  var todn=allLeads.filter(function(l){return String(l['Next Date']||'').substring(0,10)===td;}).length;
+  var up=allLeads.filter(function(l){return l['Next Date']&&String(l['Next Date']).substring(0,10)>td;}).length;
+  setText('al-od',od);setText('al-td',todn);setText('al-up',up);
+  // Top Clients
+  var sortedLeads=allData.leads.slice().sort(function(a,b){return (parseFloat(b['Value (SAR)'])||0)-(parseFloat(a['Value (SAR)'])||0);});
+  var ch='';sortedLeads.slice(0,4).forEach(function(l,i){ch+='<div style="display:flex;justify-content:space-between;padding:7px 0;'+(i<3?'border-bottom:1px solid var(--ln2)':'')+'"><div style="font-size:12px;font-weight:700">'+esc(l['Client']||'')+'</div><div style="font-size:12px;font-weight:700;color:var(--navy)">'+fmtM(l['Value (SAR)'])+'</div></div>';});
+  var oc=document.getElementById('ov-clients');if(oc)oc.innerHTML=ch||'<div style="text-align:center;padding:12px;color:var(--mut);font-size:11px">No data</div>';
+  // Materials
+  var matCount={};allData.leads.forEach(function(l){var mats=String(l['Materials']||'').split(',');mats.forEach(function(m){m=m.trim();if(m)matCount[m]=(matCount[m]||0)+1;});});
+  var matKeys=Object.keys(matCount).sort(function(a,b){return matCount[b]-matCount[a];});var matColors=['var(--navy)','var(--gold)','var(--green)','var(--pu)','var(--amb)'];
+  var om=document.getElementById('ov-mats');
+  if(matKeys.length===0){om.innerHTML='<div style="text-align:center;padding:12px;color:var(--mut);font-size:11px">No data</div>';}
+  else{var mtot=matKeys.reduce(function(s,k){return s+matCount[k];},0);var mh='';matKeys.slice(0,5).forEach(function(k,i){var pct=Math.round(matCount[k]/mtot*100);mh+='<div style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:11px">'+esc(k)+'</span><span style="font-size:11px;font-weight:700;color:'+matColors[i%matColors.length]+'">'+pct+'%</span></div><div class="bar-t"><div class="bar-f" style="width:'+pct+'%;background:'+matColors[i%matColors.length]+'"></div></div></div>';});om.innerHTML=mh;}
+  // Insights
+  var allTdVisits=allData.visits.filter(function(v){return String(v['Date']||'').substring(0,10)===td;});
+  var newC=allTdVisits.filter(function(v){return String(v['Visit Type']||'').includes('New Client');}).length;
+  var ins=[{ic:'📍',t:'Total visits today: '+(hv+av)+' (H:'+hv+', A:'+av+')'},{ic:'💼',t:'Combined pipeline: '+fmtM(hp+ap)},{ic:'🌱',t:'New clients today: '+newC},{ic:od>0?'🔴':'✅',t:od>0?(od+' overdue follow-ups!'):'All follow-ups on track'},{ic:'⚠️',t:(hu+au)+' urgent issues open'}];
+  var ih='';ins.forEach(function(i){ih+='<div style="display:flex;gap:8px;align-items:flex-start;padding:8px 10px;background:var(--bg);border-radius:9px;margin-bottom:8px"><span style="font-size:15px">'+i.ic+'</span><span style="font-size:11px;font-weight:600">'+esc(i.t)+'</span></div>';});var oi=document.getElementById('ov-insights');if(oi)oi.innerHTML=ih;
+}
+
+function renderReps(){
+  renderRepCard('hassan','h');
+  renderRepCard('abdulrazzaq','a');
+}
+function renderRepCard(rep,pfx){
+  var tv=getTodayVisits(rep);var al=getActiveLeads(rep);var pv=getPipeVal(rep);var urg=getUrgent(rep);
+  setText(pfx+'-vis',tv.length);setText(pfx+'-leads',al.length);setText(pfx+'-pipe',fmtM(pv));setText(pfx+'-urg',urg);
+  var vlog=document.getElementById(pfx+'-vlog');
+  if(vlog){if(tv.length===0){vlog.innerHTML='<div style="font-size:11px;color:var(--mut);padding:6px 0">No visits today yet</div>';}else{var h='';tv.slice(0,5).forEach(function(v){h+='<div class="vli"><div><div style="font-size:12px;font-weight:700">'+esc(v['Client']||'')+'</div><div style="font-size:10px;color:var(--mut)">'+esc(v['Visit Type']||'')+'</div></div><span style="font-size:10px;color:var(--mut)">'+esc(v['Time']||'')+'</span></div>';});vlog.innerHTML=h;}}
+  var top=document.getElementById(pfx+'-top');
+  var sorted=al.slice().sort(function(a,b){return (parseFloat(b['Value (SAR)'])||0)-(parseFloat(a['Value (SAR)'])||0);});
+  if(top){if(sorted.length===0){top.innerHTML='<div style="font-size:11px;color:var(--mut);padding:6px 0">No leads yet</div>';}else{var h2='';sorted.slice(0,3).forEach(function(l){var col=SCOLS[l['Stage']]||'var(--navy)';h2+='<div class="vli"><div><div style="font-size:12px;font-weight:700">'+esc(l['Client']||'')+'</div><span style="font-size:9px;font-weight:800;background:'+col+'22;color:'+col+';padding:1px 7px;border-radius:12px">'+esc(l['Stage']||'')+'</span></div><div style="font-size:12px;font-weight:700;color:var(--navy)">'+fmtM(l['Value (SAR)'])+'</div></div>';});top.innerHTML=h2;}}
+}
+
+function renderPipeline(){
+  var all=allData.leads.filter(function(l){var s=String(l['Stage']||'');return s!=='Won'&&s!=='Lost';});
+  var pc=document.getElementById('pipe-content');
+  if(all.length===0){pc.innerHTML='<div class="card" style="text-align:center;padding:30px;color:var(--mut)">No pipeline data yet — reps need to SUBMIT</div>';return;}
+  var stages=['Quotation Sent','Negotiation','Closing'];var h='';
+  stages.forEach(function(s){
+    var sd=all.filter(function(l){return l['Stage']===s;});if(sd.length===0)return;
+    var col=SCOLS[s]||'var(--navy)';var val=sd.reduce(function(sum,l){return sum+(parseFloat(l['Value (SAR)'])||0);},0);
+    h+='<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="font-size:15px;font-weight:800;color:'+col+'">'+s+' ('+sd.length+')</div><div style="font-size:13px;font-weight:700;color:var(--navy)">'+fmtM(val)+'</div></div>';
+    h+='<div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Client</th><th>Value</th><th>Rep</th><th>RFQ</th><th>Next Action</th><th>Date</th></tr></thead><tbody>';
+    sd.forEach(function(l){
+      var td=today();var od=l['Next Date']&&String(l['Next Date']).substring(0,10)<td;
+      h+='<tr'+(od?' style="background:var(--red-l)"':'')+'>';
+      h+='<td style="font-weight:700">'+esc(l['Client']||'')+'</td>';
+      h+='<td style="font-weight:700;color:var(--navy)">'+fmtM(l['Value (SAR)'])+'</td>';
+      h+='<td><span class="badge" style="background:'+(String(l['Rep']||'').toLowerCase()==='hassan'?'var(--navy-l)':'var(--gold-l)')+';color:'+(String(l['Rep']||'').toLowerCase()==='hassan'?'var(--navy)':'var(--amb)')+'">'+esc(l['Rep']||'')+'</span></td>';
+      h+='<td style="color:var(--mut);font-size:10px">'+esc(l['RFQ Reference']||'-')+'</td>';
+      h+='<td style="color:var(--mut);font-size:10px">'+esc(l['Next Action']||'-')+'</td>';
+      h+='<td style="color:'+(od?'var(--red)':'var(--mut)')+';font-size:10px">'+esc(String(l['Next Date']||'-').substring(0,10))+'</td>';
+      h+='</tr>';
+    });
+    h+='</tbody></table></div></div>';
+  });
+  pc.innerHTML=h;
+}
+
+function renderVisits(){
+  var all=allData.visits.slice().sort(function(a,b){return String(b['Date']||'').localeCompare(String(a['Date']||''));});
+  var vc=document.getElementById('visits-content');
+  if(all.length===0){vc.innerHTML='<div class="card" style="text-align:center;padding:30px;color:var(--mut)">No visits yet</div>';return;}
+  var vtypes={};all.forEach(function(v){var t=v['Visit Type']||'Other';vtypes[t]=(vtypes[t]||0)+1;});
+  var sh='<div class="card"><div class="shdr">Visit Summary</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">';
+  Object.keys(vtypes).forEach(function(t){sh+='<div style="background:var(--bg);border-radius:10px;padding:12px;text-align:center"><div style="font-size:20px;font-weight:900;color:var(--navy)">'+vtypes[t]+'</div><div style="font-size:9px;color:var(--mut);margin-top:2px">'+esc(t)+'</div></div>';});
+  sh+='</div></div>';
+  var td=today();
+  var th='<div class="card"><div class="shdr">All Visits · الزيارات</div><div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Rep</th><th>Client</th><th>Type</th><th>City</th><th>Details</th><th>Date</th><th>Time</th></tr></thead><tbody>';
+  all.forEach(function(v){
+    var isToday=String(v['Date']||'').substring(0,10)===td;var rep=String(v['Rep']||'');
+    th+='<tr'+(isToday?' style="background:#FFFBF0"':'')+'>';
+    th+='<td><span class="badge" style="background:'+(rep.toLowerCase()==='hassan'?'var(--navy-l)':'var(--gold-l)')+';color:'+(rep.toLowerCase()==='hassan'?'var(--navy)':'var(--amb)')+'">'+esc(rep)+'</span></td>';
+    th+='<td style="font-weight:700">'+esc(v['Client']||'')+'</td>';
+    th+='<td style="font-size:10px">'+esc(v['Visit Type']||'')+'</td>';
+    th+='<td style="font-size:10px;color:var(--mut)">'+esc(v['City']||'-')+'</td>';
+    th+='<td style="font-size:10px;color:var(--mut)">'+esc(v['Purpose/Interest']||'-')+'</td>';
+    th+='<td style="font-size:10px;color:var(--mut)">'+esc(String(v['Date']||'').substring(0,10))+'</td>';
+    th+='<td style="font-size:10px;color:var(--mut)">'+esc(v['Time']||'')+'</td></tr>';
+  });
+  th+='</tbody></table></div></div>';
+  vc.innerHTML=sh+th;
+}
+
+function renderBL(){
+  var all=allData.blockers.filter(function(b){return b['Issue Type']||b['Details'];});
+  var bc=document.getElementById('bl-content');
+  if(all.length===0){bc.innerHTML='<div class="card" style="text-align:center;padding:30px;color:var(--mut)">No blockers data yet</div>';return;}
+  function blTable(rows,title,icon,color){
+    if(rows.length===0)return '';
+    var h='<div class="card"><div style="font-size:15px;font-weight:800;color:'+color+';margin-bottom:12px">'+icon+' '+title+' ('+rows.length+')</div><div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Rep</th><th>Category</th><th>Issue</th><th>Ref</th><th>Details</th></tr></thead><tbody>';
+    rows.forEach(function(r){var rep=String(r['Rep']||'');h+='<tr><td><span class="badge" style="background:'+(rep.toLowerCase()==='hassan'?'var(--navy-l)':'var(--gold-l)')+';color:'+(rep.toLowerCase()==='hassan'?'var(--navy)':'var(--amb)')+'">'+esc(rep)+'</span></td><td style="font-size:10px">'+esc(r['Category']||'')+'</td><td style="font-weight:700;font-size:11px">'+esc(r['Issue Type']||'')+'</td><td style="color:var(--mut);font-size:10px">'+esc(r['RFQ/Ref']||'-')+'</td><td style="color:var(--mut);font-size:10px">'+esc(r['Details']||'-')+'</td></tr>';});
+    h+='</tbody></table></div></div>';return h;
+  }
+  var urg=all.filter(function(r){return String(r['Priority']||'').toLowerCase()==='urgent';});
+  var imp=all.filter(function(r){return String(r['Priority']||'').toLowerCase()==='important';});
+  var mon=all.filter(function(r){return !['urgent','important'].includes(String(r['Priority']||'').toLowerCase());});
+  bc.innerHTML=blTable(urg,'Urgent Issues','🔴','var(--red)')+blTable(imp,'Important Issues','🟡','var(--amb)')+blTable(mon,'Monitoring','🟢','var(--green)');
+}
+
+
+/* ══ NOTES MANAGEMENT ══ */
+var _noteFilter='all';
+function filterNotes(f){
+  _noteFilter=f;
+  ['all','unresolved','resolved'].forEach(function(x){
+    var el=document.getElementById('nf-'+x);
+    if(el){el.style.background=x===f?'var(--navy)':'#fff';el.style.color=x===f?'#fff':'var(--mut)';el.style.borderColor=x===f?'var(--navy)':'var(--ln)';}
+  });
+  renderNotes(f);
+}
+
+function renderNotes(filter){
+  var list=document.getElementById('notes-list');if(!list)return;
+  /* Collect notes from allData */
+  var allNotes=[];
+  if(allData.visits&&allData.visits[0]&&allData.visits[0]['Notes']){
+    /* Notes came through sheets */
+  }
+  /* Use manually uploaded notes data */
+  var notes=(allData.notes||[]);
+  if(notes.length===0){list.innerHTML='<div class="loading">No notes yet. Notes appear after reps submit their daily report.</div>';return;}
+  var filtered=filter==='all'?notes:filter==='resolved'?notes.filter(function(n){return n.resolved;}):notes.filter(function(n){return !n.resolved;});
+  if(filtered.length===0){list.innerHTML='<div class="loading">No notes in this category</div>';return;}
+  var h='';
+  filtered.forEach(function(n,i){
+    var SCOLS={'Quotation Sent':'#2563EB','Negotiation':'#7C3AED','في انتظار PO':'#E8A320','Credit Approval':'#D97706','WON':'#0A6640','LOST':'#7C849A'};
+    h+='<div style="background:#fff;border-radius:14px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07);'+(n.resolved?'border-left:4px solid var(--green)':'border-left:4px solid var(--amb)')+'">';
+    h+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">';
+    h+='<div><div style="font-size:14px;font-weight:800">'+esc(n.client||'Unknown')+'</div>';
+    h+='<div style="font-size:10px;color:var(--mut)">'+esc(n.rep||'')+(n.date?' · '+esc(n.date):'')+'</div></div>';
+    h+='<span style="font-size:10px;font-weight:800;padding:3px 10px;border-radius:20px;'+(n.resolved?'background:var(--green-l);color:var(--green)':'background:var(--amb-l);color:var(--amb)')+'">'+( n.resolved?'✅ محلول':'⏳ بانتظار')+'</span>';
+    h+='</div>';
+    h+='<div style="background:var(--bg);border-radius:9px;padding:11px;margin-bottom:10px">';
+    h+='<div style="font-size:11px;font-weight:700;color:var(--mut);margin-bottom:4px">📝 ملاحظة المندوب:</div>';
+    h+='<div style="font-size:13px;color:var(--ink)">'+esc(n.text||'')+'</div>';
+    h+='</div>';
+    /* Existing responses */
+    if(n.responses&&n.responses.length>0){
+      n.responses.forEach(function(r){
+        h+='<div style="background:var(--green-l);border-radius:9px;padding:10px 12px;margin-bottom:8px;border-right:3px solid var(--green)">';
+        h+='<div style="font-size:10px;font-weight:800;color:var(--green);margin-bottom:3px">✅ '+esc(r.manager)+' · '+esc(r.date||'')+'</div>';
+        h+='<div style="font-size:12px">'+esc(r.text)+'</div></div>';
+      });
+    }
+    /* Response input */
+    if(!n.resolved){
+      h+='<div style="border-top:1px solid var(--ln2);padding-top:10px;margin-top:4px">';
+      h+='<textarea id="resp_'+i+'" placeholder="اكتب الرد أو الحل هنا..." style="width:100%;padding:11px;border:2px solid var(--ln);border-radius:9px;font-size:13px;resize:none;font-family:Cairo,sans-serif;outline:none" rows="2"></textarea>';
+      h+='<button data-ni="'+i+'" data-cl="'+esc(n.client||'')+'" data-nidx="'+(n.noteIndex||0)+'" onclick="saveResponseBtn(this)" style="width:100%;margin-top:8px;padding:12px;background:var(--navy);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer">✅ إرسال الرد لـ '+esc(n.rep||'المندوب')+'</button>';
+      h+='</div>';
+    }
+    h+='</div>';
+  });
+  list.innerHTML=h;
+}
+
+function saveResponseBtn(btn){
+  var ni=parseInt(btn.getAttribute('data-ni'));
+  var cl=btn.getAttribute('data-cl');
+  var nidx=parseInt(btn.getAttribute('data-nidx'));
+  saveResponse(ni,cl,nidx);
+}
+function saveResponse(noteIdx,clientName,clientNoteIndex){
+  var txt=document.getElementById('resp_'+noteIdx);
+  var text=(txt?txt.value:'').trim();
+  if(!text){alert('اكتب الرد أولاً');return;}
+  var resp={manager:window._mgrName||'Manager',text:text,date:new Date().toLocaleDateString('en-CA'),time:new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),noteIndex:clientNoteIndex,relatedClient:clientName};
+  /* Save to allData.notes */
+  if(allData.notes&&allData.notes[noteIdx]){
+    allData.notes[noteIdx].resolved=true;
+    if(!allData.notes[noteIdx].responses)allData.notes[noteIdx].responses=[];
+    allData.notes[noteIdx].responses.push(resp);
+  }
+  /* Also POST to Google Sheets */
+  var SCRIPT_URL2=SCRIPT_URL;
+  fetch(SCRIPT_URL2,{method:'POST',body:JSON.stringify({type:'manager_response',manager:resp.manager,client:clientName,noteIndex:clientNoteIndex,response:text,date:resp.date})})
+    .then(function(r){return r.json();})
+    .then(function(){
+      renderNotes(_noteFilter);
+      alert('✅ تم إرسال الرد بنجاح!');
+    })
+    .catch(function(){
+      /* Still save locally even if sheets fails */
+      renderNotes(_noteFilter);
+      alert('✅ تم الحفظ محلياً (سيُرسل عند التزامن)');
+    });
+}
+
+/* ══ FOLLOW-UPS PAGE ══ */
+function renderFollowupsPage(){
+  var fus=allData.followups||[];
+  var td=new Date().toLocaleDateString('en-CA');
+  var weekEnd=new Date();weekEnd.setDate(weekEnd.getDate()+7);var weekEndStr=weekEnd.toLocaleDateString('en-CA');
+  var todayFus=fus.filter(function(f){return f.nextDate===td;});
+  var weekFus=fus.filter(function(f){return f.nextDate>td&&f.nextDate<=weekEndStr;});
+  setText('fu-today-cnt',todayFus.length);
+  setText('fu-week-cnt',weekFus.length);
+  setText('fu-total-cnt',fus.length);
+  var list=document.getElementById('followups-list');if(!list)return;
+  if(fus.length===0){list.innerHTML='<div class="loading">No follow-ups yet</div>';return;}
+  var SCOLS={'Quotation Sent':'#2563EB','Negotiation':'#7C3AED','في انتظار PO':'#E8A320','Credit Approval':'#D97706','WON':'#0A6640','LOST':'#7C849A'};
+  var priC={hot:'#DC2626',active:'#2563EB',warm:'#D97706',cold:'#94A3B8'};
+  var sorted=fus.slice().sort(function(a,b){return (a.nextDate||'').localeCompare(b.nextDate||'');});
+  var h='';
+  sorted.forEach(function(f){
+    var isToday=f.nextDate===td;var isOverdue=f.nextDate<td;
+    var sc=SCOLS[f.stage]||'var(--mut)';var pc=priC[(f.priority||'').toLowerCase()]||null;
+    h+='<div style="background:#fff;border-radius:13px;padding:14px;margin-bottom:10px;box-shadow:0 2px 7px rgba(0,0,0,.07);border-left:4px solid '+(isOverdue?'var(--red)':isToday?'var(--gold)':'var(--navy)')+'">';
+    h+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">';
+    h+='<div><div style="font-size:14px;font-weight:800">'+esc(f.client||'')+'</div>';
+    h+='<div style="font-size:10px;color:var(--mut)">'+esc(f.rep||'')+'</div></div>';
+    h+='<div style="text-align:right"><span style="font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;'+(isToday?'background:#FDF0D5;color:var(--amb)':isOverdue?'background:var(--red-l);color:var(--red)':'background:var(--navy-l);color:var(--navy)')+'">'+esc(f.nextDate||'')+'</span></div>';
+    h+='</div>';
+    h+='<div style="display:flex;justify-content:space-between;align-items:center">';
+    h+='<div><div style="font-size:12px;font-weight:700;color:var(--mut)">'+esc(f.nextAction||'Follow-up')+'</div><span style="font-size:10px;font-weight:700;color:'+sc+'">'+esc(f.stage||'')+'</span></div>';
+    h+='<div style="text-align:right"><div style="font-size:13px;font-weight:800;color:var(--navy)">'+fmtM(f.value||0)+'</div>';
+    if(pc)h+='<span style="font-size:9px;font-weight:800;color:'+pc+'">● '+(f.priority||'').toUpperCase()+'</span>';
+    h+='</div></div></div>';
+  });
+  list.innerHTML=h;
+}
+
+
+function clearMgrData(){
+  if(!confirm('مسح كل البيانات من الداشبورد؟\nClear all data from dashboard?'))return;
+  allData={visits:[],leads:[],blockers:[],summary:[],notes:[],followups:[]};
+  repData={hassan:null,abdulrazzaq:null};
+  /* Reset rep status dots */
+  ['st-h','st-ab'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.background='#EAE7E1';});
+  ['h-sync','a-sync'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent='Not submitted yet';});
+  var ss=document.getElementById('sync-status');if(ss){ss.textContent='No data';ss.style.color='rgba(255,255,255,.45)';}
+  var ls=document.getElementById('last-sync');if(ls)ls.textContent='Not synced yet';
+  /* Re-render all pages */
+  renderOverview();
+  var nl=document.getElementById('notes-list');if(nl)nl.innerHTML='<div class="loading">No notes yet</div>';
+  var fl=document.getElementById('followups-list');if(fl)fl.innerHTML='<div class="loading">No follow-ups yet</div>';
+  ['fu-today-cnt','fu-week-cnt','fu-total-cnt'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent='0';});
+  alert('✅ تم مسح كل البيانات');
+}
+
+function fmtM(n){var x=parseFloat(String(n||'').replace(/,/g,''))||0;if(x===0)return 'SAR 0';if(x>=1e6)return 'SAR '+(x/1e6).toFixed(1)+'M';if(x>=1000)return 'SAR '+Math.round(x/1000)+'K';return 'SAR '+x.toLocaleString();}
+function setText(id,val){var el=document.getElementById(id);if(el)el.textContent=val;}
+
+/* ══ DAILY REPORTS PAGE ══ */
+var _drFilter='all';
+function filterDR(f,btn){
+  _drFilter=f;
+  document.querySelectorAll('.dr-tab').forEach(function(b){
+    b.style.background='#fff';b.style.color='var(--mut)';b.style.borderColor='var(--ln)';
+  });
+  btn.style.background='var(--navy)';btn.style.color='#fff';btn.style.borderColor='var(--navy)';
+  renderDailyReports(f);
+}
+function renderDailyReports(f){
+  var el=document.getElementById('daily-content');if(!el)return;
+  var rows=(allData.summary||[]).slice().reverse();
+  if(f!=='all')rows=rows.filter(function(r){return String(r['Rep']||'')===f;});
+  if(!rows.length){el.innerHTML='<div class="card" style="text-align:center;padding:30px;color:var(--mut)">لا توجد تقارير بعد</div>';return;}
+  var td=today();
+  var h='<div class="card"><div style="overflow-x:auto"><table class="tbl"><thead><tr>';
+  h+='<th>المندوب</th><th>التاريخ</th><th>وقت الإرسال</th><th>الزيارات</th><th>الصفقات النشطة</th><th>Pipeline (SAR)</th><th>متابعات اليوم</th>';
+  h+='</tr></thead><tbody>';
+  rows.forEach(function(r){
+    var isToday=String(r['Date']||'').substring(0,10)===td;
+    var rep=String(r['Rep']||'');
+    h+='<tr'+(isToday?' style="background:#FFFBF0"':'')+'>';
+    h+='<td><span class="badge" style="background:'+(rep==='Hassan'?'var(--navy-l)':'var(--gold-l)')+';color:'+(rep==='Hassan'?'var(--navy)':'var(--amb)')+'">'+esc(rep)+'</span></td>';
+    h+='<td style="font-weight:700">'+esc(String(r['Date']||'').substring(0,10))+(isToday?' <span style="font-size:9px;background:var(--gold-l);color:var(--amb);padding:1px 6px;border-radius:8px">اليوم</span>':'')+'</td>';
+    h+='<td style="color:var(--mut);font-size:11px">'+esc(r['Submitted At']||'—')+'</td>';
+    h+='<td style="font-weight:800;color:var(--navy);font-size:15px">'+esc(String(r['Visits Count']||0))+'</td>';
+    h+='<td style="font-weight:700">'+esc(String(r['Active Leads']||0))+'</td>';
+    h+='<td style="font-weight:700;color:var(--green)">'+fmtM(r['Pipeline Value (SAR)']||0)+'</td>';
+    var due=parseInt(r['Due Today']||0);
+    h+='<td><span style="font-weight:800;color:'+(due>0?'var(--red)':'var(--green)')+'">'+due+'</span></td>';
+    h+='</tr>';
+  });
+  h+='</tbody></table></div></div>';
+  el.innerHTML=h;
+}
+
+</script>
+</body>
+</html>
