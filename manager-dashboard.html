@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BuildHop — Manager Dashboard</title>
+<style>
+:root{
+  --bg:#f5f4f0;--card:#fff;--navy:#141414;--gold:#F5C000;--green:#16a34a;
+  --red:#dc2626;--purple:#7c3aed;--blue:#2563eb;--orange:#ea580c;--teal:#0d9488;
+  --mut:#9ca3af;--border:#e5e7eb;--ln:#f3f4f6;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:var(--bg);color:var(--navy);min-height:100vh}
+
+/* Header */
+.hdr{background:var(--navy);color:#fff;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+.hdr-logo{font-size:18px;font-weight:900;letter-spacing:-0.5px}
+.hdr-logo span{color:var(--gold)}
+.hdr-right{display:flex;align-items:center;gap:12px;font-size:11px;color:rgba(255,255,255,.5)}
+.sync-btn{background:rgba(255,255,255,.1);border:none;color:#fff;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer}
+.sync-btn:hover{background:rgba(255,255,255,.2)}
+
+/* Login */
+#login{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:999}
+.login-card{background:#1f1f1f;border-radius:24px;padding:40px;width:320px;text-align:center}
+.login-logo{font-size:32px;font-weight:900;color:#fff;margin-bottom:4px}.login-logo span{color:var(--gold)}
+.login-sub{color:var(--mut);font-size:12px;margin-bottom:32px}
+.pin-display{font-size:32px;letter-spacing:12px;color:var(--gold);margin-bottom:20px;min-height:40px}
+.pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:220px;margin:0 auto 16px}
+.pin-btn{background:#2a2a2a;border:none;color:#fff;border-radius:12px;padding:16px;font-size:20px;font-weight:700;cursor:pointer}
+.pin-btn:hover{background:#333}
+.pin-err{color:var(--red);font-size:12px;display:none;margin-top:8px}
+
+/* Nav */
+.nav{background:#fff;border-bottom:1px solid var(--border);padding:0 24px;display:flex;gap:4px;overflow-x:auto}
+.nav-btn{padding:12px 16px;font-size:12px;font-weight:700;border:none;background:none;cursor:pointer;color:var(--mut);border-bottom:2px solid transparent;white-space:nowrap}
+.nav-btn.on{color:var(--navy);border-bottom-color:var(--gold)}
+
+/* Main */
+.main{padding:20px 24px;max-width:1300px;margin:0 auto}
+.page{display:none}.page.active{display:block}
+
+/* Cards */
+.card{background:var(--card);border-radius:16px;padding:20px;border:1px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+
+/* KPI Card */
+.kpi-card{background:var(--card);border-radius:14px;padding:16px;border:1px solid var(--border)}
+.kpi-icon{font-size:20px;margin-bottom:8px}
+.kpi-val{font-size:28px;font-weight:900;line-height:1}
+.kpi-lbl{font-size:10px;font-weight:700;color:var(--mut);margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
+.kpi-sub{font-size:10px;font-weight:600;margin-top:2px}
+
+/* Rep cards */
+.rep-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.rep-name{font-size:16px;font-weight:900}
+.rep-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-left:8px}
+.rep-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.rep-kpi{background:var(--ln);border-radius:10px;padding:10px;text-align:center}
+.rep-kpi .v{font-size:20px;font-weight:900}
+.rep-kpi .l{font-size:9px;color:var(--mut);font-weight:700;margin-top:2px}
+
+/* Table */
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{background:var(--navy);color:#fff;padding:8px 10px;text-align:right;font-size:10px;font-weight:800}
+.tbl td{padding:8px 10px;border-bottom:1px solid var(--ln);text-align:right}
+.tbl tr:hover td{background:var(--ln)}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:9px;font-weight:800}
+
+/* Visit log */
+.vli{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--ln)}
+.vli:last-child{border-bottom:none}
+
+/* Alert rows */
+.alert-row{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-radius:12px;margin-bottom:10px}
+.alert-cnt{font-size:20px;font-weight:900}
+
+/* Bar */
+.bar-t{background:var(--ln);border-radius:4px;height:6px;overflow:hidden}
+.bar-f{height:6px;border-radius:4px;transition:width .6s ease}
+
+/* Responsive */
+@media(max-width:768px){
+  .grid4{grid-template-columns:repeat(2,1fr)}
+  .grid3{grid-template-columns:1fr}
+  .grid2{grid-template-columns:1fr}
+  .rep-kpis{grid-template-columns:repeat(2,1fr)}
+  .main{padding:12px}
+  .tbl{font-size:10px}
+}
+
+.section-title{font-size:14px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.loading{text-align:center;padding:24px;color:var(--mut);font-size:12px}
+.tag-h{background:#EEF2FF;color:var(--blue);padding:2px 8px;border-radius:20px;font-size:9px;font-weight:800}
+.tag-a{background:#FEF9C3;color:#854d0e;padding:2px 8px;border-radius:20px;font-size:9px;font-weight:800}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="login-card">
+    <div class="login-logo">Build<span>Hop</span></div>
+    <div class="login-sub">Manager Dashboard · لوحة تحكم المدير</div>
+    <div class="pin-display" id="pin-disp">_ _ _ _</div>
+    <div class="pin-grid">
+      <button class="pin-btn" onclick="pinPress('1')">1</button>
+      <button class="pin-btn" onclick="pinPress('2')">2</button>
+      <button class="pin-btn" onclick="pinPress('3')">3</button>
+      <button class="pin-btn" onclick="pinPress('4')">4</button>
+      <button class="pin-btn" onclick="pinPress('5')">5</button>
+      <button class="pin-btn" onclick="pinPress('6')">6</button>
+      <button class="pin-btn" onclick="pinPress('7')">7</button>
+      <button class="pin-btn" onclick="pinPress('8')">8</button>
+      <button class="pin-btn" onclick="pinPress('9')">9</button>
+      <button class="pin-btn" onclick="pinPress('back')" style="color:var(--red)">⌫</button>
+      <button class="pin-btn" onclick="pinPress('0')">0</button>
+      <button class="pin-btn" onclick="pinPress('ok')" style="background:var(--gold);color:var(--navy)">✓</button>
+    </div>
+    <div class="pin-err" id="pin-err">❌ رقم سري خاطئ</div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="hdr" id="app" style="display:none">
+  <div>
+    <div class="hdr-logo">Build<span>Hop</span> <span style="font-size:11px;font-weight:400;color:rgba(255,255,255,.4)">Manager</span></div>
+    <div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:2px" id="hdr-date"></div>
+  </div>
+  <div class="hdr-right">
+    <span id="sync-status">—</span>
+    <button class="sync-btn" onclick="loadData()">🔄 Refresh</button>
+    <span id="last-sync" style="font-size:10px"></span>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav" id="nav" style="display:none">
+  <button class="nav-btn on" onclick="goPage('overview')">📊 النظرة العامة</button>
+  <button class="nav-btn" onclick="goPage('reps')">👤 المناديب</button>
+  <button class="nav-btn" onclick="goPage('visits')">📍 الزيارات</button>
+  <button class="nav-btn" onclick="goPage('deals')">📦 الصفقات</button>
+  <button class="nav-btn" onclick="goPage('reports')">📋 التقارير</button>
+</div>
+
+<div class="main" id="main-content" style="display:none">
+
+  <!-- OVERVIEW -->
+  <div class="page active" id="page-overview">
+    <div class="grid4" style="margin-bottom:16px" id="kpi-grid">
+      <div class="kpi-card"><div class="kpi-icon">📍</div><div class="kpi-val" id="kv-visits">0</div><div class="kpi-lbl">زيارات اليوم</div><div class="kpi-sub" id="kv-vis-split" style="color:var(--mut)"></div></div>
+      <div class="kpi-card"><div class="kpi-icon">💰</div><div class="kpi-val" id="kv-pipeline">SAR 0</div><div class="kpi-lbl">إجمالي Pipeline</div><div class="kpi-sub" id="kv-pipe-split" style="color:var(--mut)"></div></div>
+      <div class="kpi-card"><div class="kpi-icon">📈</div><div class="kpi-val" id="kv-leads">0</div><div class="kpi-lbl">صفقات نشطة</div></div>
+      <div class="kpi-card"><div class="kpi-icon">🏆</div><div class="kpi-val" id="kv-won">0</div><div class="kpi-lbl">صفقات رابحة</div><div class="kpi-sub" id="kv-won-val" style="color:var(--green)"></div></div>
+      <div class="kpi-card"><div class="kpi-icon">📤</div><div class="kpi-val" id="kv-quotes">0</div><div class="kpi-lbl">عروض أسعار</div></div>
+      <div class="kpi-card"><div class="kpi-icon">🆕</div><div class="kpi-val" id="kv-newclients">0</div><div class="kpi-lbl">عملاء جدد زُيروا</div></div>
+      <div class="kpi-card"><div class="kpi-icon">⭐</div><div class="kpi-val" id="kv-score-h">0</div><div class="kpi-lbl">نقاط حسن</div></div>
+      <div class="kpi-card"><div class="kpi-icon">⭐</div><div class="kpi-val" id="kv-score-a">0</div><div class="kpi-lbl">نقاط عبدالرزاق</div></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="section-title">🔔 تنبيهات المتابعة</div>
+        <div class="alert-row" style="background:#fef2f2">
+          <div><span style="color:var(--red);font-weight:800">🔴 متأخرة</span><div style="font-size:10px;color:var(--mut)">Overdue follow-ups</div></div>
+          <div class="alert-cnt" style="color:var(--red)" id="al-od">0</div>
+        </div>
+        <div class="alert-row" style="background:#fefce8">
+          <div><span style="color:#854d0e;font-weight:800">🟡 اليوم</span><div style="font-size:10px;color:var(--mut)">Due today</div></div>
+          <div class="alert-cnt" style="color:#854d0e" id="al-td">0</div>
+        </div>
+        <div class="alert-row" style="background:#f0fdf4">
+          <div><span style="color:var(--green);font-weight:800">🟢 قادمة</span><div style="font-size:10px;color:var(--mut)">Upcoming</div></div>
+          <div class="alert-cnt" style="color:var(--green)" id="al-up">0</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">📊 أحدث الزيارات</div>
+        <div id="recent-visits"><div class="loading">لا توجد بيانات</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REPS -->
+  <div class="page" id="page-reps">
+    <div class="grid2">
+      <!-- Hassan -->
+      <div class="card">
+        <div class="rep-hdr">
+          <div><span class="rep-dot" id="dot-h" style="background:#e5e7eb"></span><span class="rep-name">الحسن موسى · Hassan</span></div>
+          <span class="tag-h">مندوب ١</span>
+        </div>
+        <div class="rep-kpis">
+          <div class="rep-kpi"><div class="v" id="h-visits">0</div><div class="l">زيارات اليوم</div></div>
+          <div class="rep-kpi"><div class="v" id="h-deals">0</div><div class="l">صفقات نشطة</div></div>
+          <div class="rep-kpi"><div class="v" id="h-pipe">—</div><div class="l">Pipeline</div></div>
+          <div class="rep-kpi"><div class="v" id="h-score">0</div><div class="l">النقاط</div></div>
+          <div class="rep-kpi"><div class="v" id="h-won">0</div><div class="l">WON</div></div>
+          <div class="rep-kpi"><div class="v" id="h-quotes">0</div><div class="l">عروض</div></div>
+          <div class="rep-kpi"><div class="v" id="h-new">0</div><div class="l">عملاء جدد</div></div>
+          <div class="rep-kpi"><div class="v" id="h-sync" style="font-size:10px;color:var(--mut)">—</div><div class="l">آخر إرسال</div></div>
+        </div>
+        <div class="section-title" style="font-size:12px">📍 زيارات اليوم</div>
+        <div id="h-vlog"><div class="loading">لا توجد بيانات</div></div>
+      </div>
+
+      <!-- Abdulrazzaq -->
+      <div class="card">
+        <div class="rep-hdr">
+          <div><span class="rep-dot" id="dot-a" style="background:#e5e7eb"></span><span class="rep-name">عبدالرزاق محمد</span></div>
+          <span class="tag-a">مندوب ٢</span>
+        </div>
+        <div class="rep-kpis">
+          <div class="rep-kpi"><div class="v" id="a-visits">0</div><div class="l">زيارات اليوم</div></div>
+          <div class="rep-kpi"><div class="v" id="a-deals">0</div><div class="l">صفقات نشطة</div></div>
+          <div class="rep-kpi"><div class="v" id="a-pipe">—</div><div class="l">Pipeline</div></div>
+          <div class="rep-kpi"><div class="v" id="a-score">0</div><div class="l">النقاط</div></div>
+          <div class="rep-kpi"><div class="v" id="a-won">0</div><div class="l">WON</div></div>
+          <div class="rep-kpi"><div class="v" id="a-quotes">0</div><div class="l">عروض</div></div>
+          <div class="rep-kpi"><div class="v" id="a-new">0</div><div class="l">عملاء جدد</div></div>
+          <div class="rep-kpi"><div class="v" id="a-sync" style="font-size:10px;color:var(--mut)">—</div><div class="l">آخر إرسال</div></div>
+        </div>
+        <div class="section-title" style="font-size:12px">📍 زيارات اليوم</div>
+        <div id="a-vlog"><div class="loading">لا توجد بيانات</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VISITS -->
+  <div class="page" id="page-visits">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+        <div class="section-title" style="margin:0">📍 سجل الزيارات</div>
+        <select id="vis-rep-filter" onchange="renderVisits()" style="padding:6px 12px;border-radius:8px;border:1px solid var(--border);font-size:12px;font-weight:700">
+          <option value="all">الكل</option>
+          <option value="الحسن موسى">الحسن موسى</option>
+          <option value="عبدالرزاق محمد">عبدالرزاق محمد</option>
+        </select>
+      </div>
+      <div id="visits-table"><div class="loading">لا توجد بيانات</div></div>
+    </div>
+  </div>
+
+  <!-- DEALS -->
+  <div class="page" id="page-deals">
+    <div class="card">
+      <div class="section-title">📦 الصفقات</div>
+      <div id="deals-table"><div class="loading">لا توجد بيانات</div></div>
+    </div>
+  </div>
+
+  <!-- DAILY REPORTS -->
+  <div class="page" id="page-reports">
+    <div class="card">
+      <div class="section-title">📋 التقارير اليومية</div>
+      <div id="reports-table"><div class="loading">لا توجد بيانات</div></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var SCRIPT_URL='https://script.google.com/macros/s/AKfycbwSQaW2UddN0mEwZiavM60V8WIcCGPobioqyVouiQX0OotKu5Mf9W_f1mDXHvt85V3r_w/exec';
+var PIN='1234';
+var pinVal='';
+var D={summary:[],reports:[],visits:[],deals:[]};
+
+// ── PIN ──────────────────────────────────────────────────────────
+function pinPress(v){
+  if(v==='back'){pinVal=pinVal.slice(0,-1);}
+  else if(v==='ok'){checkPin();}
+  else if(pinVal.length<4){pinVal+=v;}
+  document.getElementById('pin-disp').textContent=pinVal.padEnd(4,'_').split('').join(' ');
+}
+function checkPin(){
+  if(pinVal===PIN){
+    document.getElementById('login').style.display='none';
+    document.getElementById('app').style.display='flex';
+    document.getElementById('nav').style.display='flex';
+    document.getElementById('main-content').style.display='block';
+    document.getElementById('hdr-date').textContent=new Date().toLocaleDateString('ar-SA',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    loadData();
+  } else {
+    var e=document.getElementById('pin-err');e.style.display='block';
+    setTimeout(function(){e.style.display='none';},2000);
+    pinVal=''; document.getElementById('pin-disp').textContent='_ _ _ _';
+  }
+}
+function goPage(id){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('on');});
+  event.target.classList.add('on');
+  if(id==='visits')renderVisits();
+  if(id==='deals')renderDeals();
+  if(id==='reports')renderReports();
+}
+
+// ── DATA ─────────────────────────────────────────────────────────
+function loadData(){
+  var ss=document.getElementById('sync-status');
+  ss.textContent='🔄 جاري التحديث...';
+  // Use JSONP to bypass CORS
+  var cbName='cb_'+Date.now();
+  window[cbName]=function(res){
+    if(res.summary)  D.summary  = res.summary;
+    if(res.recentReports) D.reports = res.recentReports;
+    if(res.visits)   D.visits   = res.visits;
+    if(res.deals)    D.deals    = res.deals;
+    var now=new Date().toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'});
+    ss.textContent='✅ '+now;
+    document.getElementById('last-sync').textContent='آخر تحديث: '+now;
+    render();
+    // cleanup
+    delete window[cbName];
+    var s=document.getElementById('jsonp-script');if(s)s.remove();
+  };
+  var script=document.createElement('script');
+  script.id='jsonp-script';
+  script.src=SCRIPT_URL+'?type=all&rep=all&callback='+cbName+'&t='+Date.now();
+  script.onerror=function(){
+    ss.textContent='❌ خطأ - تحقق من Apps Script';
+    // Try regular fetch as fallback
+    fetch(SCRIPT_URL+'?type=all&rep=all')
+      .then(function(r){return r.json();})
+      .then(function(res){
+        if(res.summary)D.summary=res.summary;
+        if(res.recentReports)D.reports=res.recentReports;
+        if(res.visits)D.visits=res.visits;
+        if(res.deals)D.deals=res.deals;
+        var now=new Date().toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'});
+        ss.textContent='✅ '+now;
+        document.getElementById('last-sync').textContent='آخر تحديث: '+now;
+        render();
+      })
+      .catch(function(){ss.textContent='❌ فشل الاتصال - تأكد من Apps Script';});
+  };
+  document.head.appendChild(script);
+}
+
+function fmtM(n){var v=parseFloat(n)||0;if(!v)return 'SAR 0';if(v>=1000000)return 'SAR '+(v/1e6).toFixed(1)+'M';if(v>=1000)return 'SAR '+(v/1000).toFixed(0)+'K';return 'SAR '+v.toLocaleString();}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+function setText(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
+function today(){return new Date().toISOString().split('T')[0];}
+function getRep(r){
+  var name=String(r['المندوب']||r['repName']||r['rep']||'').toLowerCase();
+  if(name.includes('حسن')||name.includes('hassan'))return 'hassan';
+  if(name.includes('عبد')||name.includes('abdulrazzaq'))return 'abdulrazzaq';
+  return name;
+}
+
+// ── RENDER ────────────────────────────────────────────────────────
+function render(){
+  var td=today();
+  // Get latest report per rep
+  var hRep=null,aRep=null;
+  D.reports.forEach(function(r){
+    var rep=getRep(r);
+    if(rep==='hassan'&&!hRep)hRep=r;
+    if(rep==='abdulrazzaq'&&!aRep)aRep=r;
+  });
+  // Summary from summary sheet
+  D.summary.forEach(function(r){
+    var rep=getRep(r);
+    if(rep==='hassan')hRep=hRep||r;
+    if(rep==='abdulrazzaq')aRep=aRep||r;
+  });
+
+  var hv=parseInt(hRep&&(hRep['زيارات اليوم']||hRep['todayVisits'])||0);
+  var av=parseInt(aRep&&(aRep['زيارات اليوم']||aRep['todayVisits'])||0);
+  var hp=parseFloat(hRep&&(hRep['Pipeline SAR']||hRep['pipeline'])||0);
+  var ap=parseFloat(aRep&&(aRep['Pipeline SAR']||aRep['pipeline'])||0);
+  var hl=parseInt(hRep&&(hRep['صفقات نشطة']||hRep['activeDeals'])||0);
+  var al=parseInt(aRep&&(aRep['صفقات نشطة']||aRep['activeDeals'])||0);
+  var hwon=parseInt(hRep&&(hRep['صفقات رابحة']||hRep['wonCount'])||0);
+  var awon=parseInt(aRep&&(aRep['صفقات رابحة']||aRep['wonCount'])||0);
+  var hwonv=parseFloat(hRep&&(hRep['WON SAR']||hRep['wonValue'])||0);
+  var awonv=parseFloat(aRep&&(aRep['WON SAR']||aRep['wonValue'])||0);
+  var hq=parseInt(hRep&&(hRep['عروض أسعار']||hRep['quotesCount'])||0);
+  var aq=parseInt(aRep&&(aRep['عروض أسعار']||aRep['quotesCount'])||0);
+  var hnew=parseInt(hRep&&(hRep['عملاء جدد']||hRep['todayNewClients'])||0);
+  var anew=parseInt(aRep&&(aRep['عملاء جدد']||aRep['todayNewClients'])||0);
+  var hs=parseInt(hRep&&(hRep['نقاط الأداء']||hRep['score'])||0);
+  var as_=parseInt(aRep&&(aRep['نقاط الأداء']||aRep['score'])||0);
+
+  // Overview KPIs
+  setText('kv-visits',hv+av);
+  setText('kv-vis-split','حسن: '+hv+' · عبدالرزاق: '+av);
+  setText('kv-pipeline',fmtM(hp+ap));
+  setText('kv-pipe-split','H: '+fmtM(hp)+' · A: '+fmtM(ap));
+  setText('kv-leads',hl+al);
+  setText('kv-won',hwon+awon);
+  setText('kv-won-val',fmtM(hwonv+awonv)+' ربح');
+  setText('kv-quotes',hq+aq);
+  setText('kv-newclients',hnew+anew);
+  setText('kv-score-h',hs);
+  setText('kv-score-a',as_);
+
+  // Rep dots
+  var hel=document.getElementById('dot-h');if(hel)hel.style.background=hRep?'#16a34a':'#e5e7eb';
+  var ael=document.getElementById('dot-a');if(ael)ael.style.background=aRep?'#16a34a':'#e5e7eb';
+
+  // Rep page
+  setText('h-visits',hv);setText('h-deals',hl);setText('h-pipe',fmtM(hp));
+  setText('h-score',hs);setText('h-won',hwon);setText('h-quotes',hq);setText('h-new',hnew);
+  setText('a-visits',av);setText('a-deals',al);setText('a-pipe',fmtM(ap));
+  setText('a-score',as_);setText('a-won',awon);setText('a-quotes',aq);setText('a-new',anew);
+
+  // Last sync times
+  if(hRep)setText('h-sync',String(hRep['وقت الإرسال']||hRep['آخر تحديث']||'—').substring(0,16));
+  if(aRep)setText('a-sync',String(aRep['وقت الإرسال']||aRep['آخر تحديث']||'—').substring(0,16));
+
+  // Visit log per rep
+  renderRepVisits('hassan','h-vlog');
+  renderRepVisits('abdulrazzaq','a-vlog');
+
+  // Alerts from deals
+  var od=0,todn=0,up=0;
+  D.deals.forEach(function(d){
+    var nd=String(d['متابعة']||d['nextDate']||'').substring(0,10);
+    if(!nd)return;
+    if(nd<td)od++;else if(nd===td)todn++;else if(nd>td)up++;
+  });
+  setText('al-od',od);setText('al-td',todn);setText('al-up',up);
+
+  // Recent visits in overview
+  var rv=document.getElementById('recent-visits');
+  if(D.visits.length===0){rv.innerHTML='<div class="loading">لا توجد زيارات بعد</div>';}
+  else{
+    var h='';D.visits.slice(0,6).forEach(function(v){
+      var rep=getRep(v);
+      h+='<div class="vli"><div><div style="font-size:12px;font-weight:700">'+esc(v['العميل']||v['client']||'')+'</div><div style="font-size:10px;color:var(--mut)">'+esc(v['المندوب']||v['repName']||'')+'</div></div><span class="'+(rep==='hassan'?'tag-h':'tag-a')+'">'+esc(v['الوقت']||v['time']||'')+'</span></div>';
+    });rv.innerHTML=h;
+  }
+}
+
+function renderRepVisits(rep,elId){
+  var el=document.getElementById(elId);if(!el)return;
+  var td=today();
+  var vis=D.visits.filter(function(v){
+    return getRep(v)===rep&&String(v['التاريخ']||v['date']||'').substring(0,10)===td;
+  });
+  if(vis.length===0){el.innerHTML='<div class="loading">لا توجد زيارات اليوم</div>';return;}
+  var h='';vis.slice(0,5).forEach(function(v){
+    h+='<div class="vli"><div><div style="font-size:12px;font-weight:700">'+esc(v['العميل']||v['client']||'')+'</div><div style="font-size:10px;color:var(--mut)">'+esc(v['النوع']||v['type']||'')+'</div></div><span style="font-size:10px;color:var(--mut)">'+esc(v['الوقت']||v['time']||'')+'</span></div>';
+  });el.innerHTML=h;
+}
+
+function renderVisits(){
+  var el=document.getElementById('visits-table');if(!el)return;
+  var filter=document.getElementById('vis-rep-filter').value;
+  var data=D.visits.filter(function(v){
+    if(filter==='all')return true;
+    return String(v['المندوب']||v['repName']||'').includes(filter.split(' ')[0]);
+  });
+  if(data.length===0){el.innerHTML='<div class="loading">لا توجد بيانات</div>';return;}
+  var h='<div style="overflow-x:auto"><table class="tbl"><thead><tr><th>التاريخ</th><th>الوقت</th><th>المندوب</th><th>العميل</th><th>النوع</th><th>الحي</th><th>الغرض</th></tr></thead><tbody>';
+  data.forEach(function(v){
+    var rep=getRep(v);
+    h+='<tr><td>'+esc(String(v['التاريخ']||v['date']||'').substring(0,10))+'</td>';
+    h+='<td>'+esc(v['الوقت']||v['time']||'')+'</td>';
+    h+='<td><span class="'+(rep==='hassan'?'tag-h':'tag-a')+'">'+esc(v['المندوب']||v['repName']||'')+'</span></td>';
+    h+='<td style="font-weight:700">'+esc(v['العميل']||v['client']||'')+'</td>';
+    h+='<td>'+esc(v['النوع']||v['type']||'')+'</td>';
+    h+='<td style="color:var(--mut)">'+esc(v['الحي']||v['hood']||'')+'</td>';
+    h+='<td style="color:var(--mut)">'+esc(v['الغرض']||v['purpose']||'')+'</td></tr>';
+  });
+  h+='</tbody></table></div>';el.innerHTML=h;
+}
+
+function renderDeals(){
+  var el=document.getElementById('deals-table');if(!el)return;
+  if(D.deals.length===0){el.innerHTML='<div class="loading">لا توجد بيانات</div>';return;}
+  var h='<div style="overflow-x:auto"><table class="tbl"><thead><tr><th>التاريخ</th><th>المندوب</th><th>العميل</th><th>المرحلة</th><th>القيمة</th><th>القطاعات</th><th>متابعة</th></tr></thead><tbody>';
+  D.deals.forEach(function(d){
+    var rep=getRep(d);var td2=today();
+    var nd=String(d['متابعة']||d['nextDate']||'').substring(0,10);
+    var od=nd&&nd<td2;
+    h+='<tr'+(od?' style="background:#fef2f2"':'')+'>';
+    h+='<td>'+esc(String(d['التاريخ']||d['date']||'').substring(0,10))+'</td>';
+    h+='<td><span class="'+(rep==='hassan'?'tag-h':'tag-a')+'">'+esc(d['المندوب']||d['repName']||'')+'</span></td>';
+    h+='<td style="font-weight:700">'+esc(d['العميل']||d['client']||'')+'</td>';
+    h+='<td><span class="badge" style="background:#EEF2FF;color:var(--blue)">'+esc(d['المرحلة']||d['stage']||'')+'</span></td>';
+    h+='<td style="font-weight:700;color:var(--navy)">'+fmtM(d['القيمة']||d['value']||0)+'</td>';
+    h+='<td style="font-size:10px;color:var(--mut)">'+esc(d['القطاعات']||d['sectors']||'')+'</td>';
+    h+='<td style="color:'+(od?'var(--red)':'var(--mut)')+';font-size:10px">'+esc(nd||'—')+'</td></tr>';
+  });
+  h+='</tbody></table></div>';el.innerHTML=h;
+}
+
+function renderReports(){
+  var el=document.getElementById('reports-table');if(!el)return;
+  if(D.reports.length===0){el.innerHTML='<div class="loading">لا توجد تقارير بعد</div>';return;}
+  var h='<div style="overflow-x:auto"><table class="tbl"><thead><tr><th>التاريخ</th><th>المندوب</th><th>الزيارات</th><th>جديدة</th><th>صفقات</th><th>Pipeline</th><th>WON</th><th>الربح</th><th>عروض</th><th>نقاط</th><th>الإرسال</th></tr></thead><tbody>';
+  D.reports.forEach(function(r){
+    var rep=getRep(r);
+    h+='<tr>';
+    h+='<td>'+esc(String(r['التاريخ']||r['date']||'').substring(0,10))+'</td>';
+    h+='<td><span class="'+(rep==='hassan'?'tag-h':'tag-a')+'">'+esc(r['المندوب']||r['repName']||'')+'</span></td>';
+    h+='<td style="font-weight:700">'+esc(r['زيارات اليوم']||r['todayVisits']||0)+'</td>';
+    h+='<td>'+esc(r['زيارات جديدة']||r['todayNewClients']||0)+'</td>';
+    h+='<td>'+esc(r['صفقات نشطة']||r['activeDeals']||0)+'</td>';
+    h+='<td>'+fmtM(r['Pipeline SAR']||r['pipeline']||0)+'</td>';
+    h+='<td style="color:var(--green);font-weight:700">'+esc(r['صفقات رابحة']||r['wonCount']||0)+'</td>';
+    h+='<td style="color:var(--green)">'+fmtM(r['ربح WON']||r['wonProfit']||0)+'</td>';
+    h+='<td>'+esc(r['عروض أسعار']||r['quotesCount']||0)+'</td>';
+    h+='<td style="font-weight:700">'+esc(r['نقاط الأداء']||r['score']||0)+'</td>';
+    h+='<td style="font-size:10px;color:var(--mut)">'+esc(String(r['وقت الإرسال']||'').substring(0,16))+'</td></tr>';
+  });
+  h+='</tbody></table></div>';el.innerHTML=h;
+}
+
+// Auto-refresh every 5 minutes
+setInterval(function(){if(document.getElementById('app').style.display!=='none')loadData();},300000);
+</script>
+</body>
+</html>
