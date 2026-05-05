@@ -133,6 +133,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--navy);min-hei
   <div class="hdr-right">
     <span id="sync-status">—</span>
     <button class="sync-btn" onclick="loadData()">🔄 Refresh</button>
+    <button class="sync-btn" onclick="clearDashboard()" style="background:rgba(220,38,38,.3);color:#fca5a5">🗑 مسح</button>
     <span id="last-sync" style="font-size:10px"></span>
   </div>
 </div>
@@ -516,6 +517,28 @@ function renderReports(){
 
 // Auto-refresh every 5 minutes
 setInterval(function(){if(document.getElementById('app').style.display!=='none')loadData();},300000);
+
+function clearDashboard(){
+  if(!confirm('مسح بيانات الداشبورد فقط؟\n(لن يؤثر على بيانات المناديب أو Google Sheets)'))return;
+  D={summary:[],reports:[],visits:[],deals:[]};
+  // Reset all KPIs to zero
+  var zeros=['kv-visits','kv-leads','kv-won','kv-quotes','kv-newclients','kv-score-h','kv-score-a',
+    'al-od','al-td','al-up','h-visits','h-deals','h-score','h-won','h-quotes','h-new',
+    'a-visits','a-deals','a-score','a-won','a-quotes','a-new'];
+  zeros.forEach(function(id){setText(id,'0');});
+  setText('kv-pipeline','SAR 0');setText('kv-pipe-split','');setText('kv-vis-split','');
+  setText('kv-won-val','');setText('h-pipe','—');setText('a-pipe','—');
+  setText('h-sync','—');setText('a-sync','—');
+  // Reset dots
+  ['dot-h','dot-a'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.background='#e5e7eb';});
+  // Reset lists
+  ['recent-visits','h-vlog','a-vlog','visits-table','deals-table','reports-table'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.innerHTML='<div class="loading">لا توجد بيانات</div>';
+  });
+  document.getElementById('sync-status').textContent='🗑 تم المسح';
+  document.getElementById('last-sync').textContent='';
+  alert('✅ تم مسح بيانات الداشبورد\nبيانات المناديب على أجهزتهم بخير ✅');
+}
 </script>
 </body>
 </html>
