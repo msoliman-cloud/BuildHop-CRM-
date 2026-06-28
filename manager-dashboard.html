@@ -174,6 +174,7 @@ input,select,button,textarea{font-family:'Cairo',sans-serif}
   <button class="snav" onclick="goPage('requests')"><span class="si">📦</span><span class="snav-label">طلبات المنتجات</span><span class="snav-cnt" id="sb-rq-cnt" style="display:none">0</span></button>
   <button class="snav" onclick="goPage('followups')"><span class="si">🔔</span><span class="snav-label">المتابعات</span><span class="snav-cnt" id="sb-fu-cnt" style="display:none">0</span></button>
   <button class="snav" onclick="goPage('reports')"><span class="si">📋</span><span class="snav-label">التقارير اليومية</span></button>
+  <button class="snav" onclick="goPage('archive')"><span class="si">🗂️</span><span class="snav-label">سجل الزيارات</span></button>
 
   <div class="sidebar-footer">
     <div style="font-size:9px;font-weight:800;color:var(--mut);margin-bottom:10px;text-transform:uppercase">حالة المناديب</div>
@@ -306,7 +307,21 @@ input,select,button,textarea{font-family:'Cairo',sans-serif}
   <div id="reports-content"><div class="spin-wrap"><div class="spin"></div><div>انتظر الإرسال...</div></div></div>
 </div>
 
-</div><!-- /main -->
+<!-- ── ARCHIVE (سجل الزيارات) ─────────────────────────────── -->
+<div class="page" id="page-archive">
+  <div style="font-size:19px;font-weight:900;color:var(--navy);margin-bottom:4px">🗂️ سجل الزيارات</div>
+  <div style="font-size:11px;color:var(--mut);margin-bottom:14px">السجل الكامل لكل الزيارات مرتّبة بالتاريخ — مرجع دائم للرجوع لأي يوم</div>
+  <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
+    <button class="fpill on" id="af-all" onclick="setArchRep('all')">الكل</button>
+    <button class="fpill" id="af-abd" onclick="setArchRep('عبدالرزاق محمد')">عبدالرزاق</button>
+    <button class="fpill" id="af-has" onclick="setArchRep('الحسن موسى')">الحسن</button>
+    <input type="date" id="arch-date" onchange="renderArchive()" style="padding:8px 10px;border:1px solid var(--ln2);border-radius:10px;font-size:13px">
+    <input type="search" id="arch-q" oninput="renderArchive()" placeholder="بحث باسم العميل" style="flex:1;min-width:140px;padding:8px 12px;border:1px solid var(--ln2);border-radius:10px;font-size:13px">
+    <button class="fpill" onclick="document.getElementById('arch-date').value='';document.getElementById('arch-q').value='';renderArchive()">عرض الكل</button>
+  </div>
+  <div id="archive-content"><div class="spin-wrap"><div class="spin"></div><div>انتظر الإرسال...</div></div></div>
+</div>
+
 </div><!-- /layout -->
 
 <!-- ══ MOBILE TAB BAR ════════════════════════════════════════ -->
@@ -317,6 +332,7 @@ input,select,button,textarea{font-family:'Cairo',sans-serif}
   <button class="mob-tab" onclick="goPage('requests')"><span>📦</span>طلبات</button>
   <button class="mob-tab" onclick="goPage('followups')"><span>🔔</span>متابعات</button>
   <button class="mob-tab" onclick="goPage('reports')"><span>📋</span>تقارير</button>
+  <button class="mob-tab" onclick="goPage('archive')"><span>🗂️</span>السجل</button>
 </div>
 
 <div class="toast-msg" id="toast"></div>
@@ -330,15 +346,16 @@ var REPS       = ['عبدالرزاق محمد','الحسن موسى'];
 // ══ DATA (from backend v4: visit-based) ══════════════════════
 var DATA = { summary:[], recentReports:[], visits:[], requests:[] };
 var _visitFilter = 'all';
-var PAGES = ['overview','reps','visits','requests','followups','reports'];
+var PAGES = ['overview','reps','visits','requests','followups','reports','archive'];
+var _archRep = 'all';
 
 // ══ UTILS ═════════════════════════════════════════════════════
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function n(v){return Number(String(v||'').replace(/,/g,''))||0;}
 function txt(v){return (v===undefined||v===null)?'':String(v);}
 function setText(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
-function today(){return new Date().toISOString().split('T')[0];}
-function weekEnd(){var d=new Date();d.setDate(d.getDate()+7);return d.toISOString().split('T')[0];}
+function today(){return new Date(Date.now()+180*60000).toISOString().split('T')[0];}
+function weekEnd(){var r=new Date(Date.now()+180*60000);r.setDate(r.getDate()+7);return r.toISOString().split('T')[0];}
 function dstr(v){var s=txt(v);return s?s.substring(0,10):'';}
 function toast(m,d){var t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(function(){t.style.display='none';},d||2500);}
 function shortRep(rep){return rep.split(' ')[0];}
@@ -389,6 +406,7 @@ function goPage(id){
   if(id==='requests')renderRequests();
   if(id==='followups')renderFollowupsPage();
   if(id==='reports')renderReports();
+  if(id==='archive')renderArchive();
 }
 
 // ══ DATA LOADING (JSONP — bypasses CORS) ═════════════════════
@@ -435,6 +453,7 @@ function renderAll(){
   renderRequests();
   renderFollowupsPage();
   renderReports();
+  renderArchive();
   updateSidebarCounts();
 }
 
@@ -465,14 +484,18 @@ function updateSidebarCounts(){
 }
 
 function renderOverview(){
-  var tV=0,tNew=0,tExist=0,tProspect=0,tScore=0,scoreByRep={},visByRep={};
+  var td=today();
+  var todayV=DATA.visits.filter(function(v){return dstr(v['التاريخ'])===td;});
+  var tV=todayV.length;
+  var tNew=todayV.filter(function(v){return txt(v['النوع'])==='New';}).length;
+  var tExist=todayV.filter(function(v){return txt(v['النوع'])==='Existing';}).length;
+  var tProspect=todayV.filter(function(v){return txt(v['تصنيف العميل'])==='prospect';}).length;
+  var visByRep={},scoreByRep={},tScore=0;
   REPS.forEach(function(rep){
+    visByRep[rep]=todayV.filter(function(v){return txt(v['المندوب'])===rep;}).length;
     var s=repSummary(rep);
-    if(s){
-      tV+=n(s['زيارات اليوم']);tExist+=n(s['حاليين']);
-      tProspect+=n(s['محتملين']);tNew+=n(s['جدد']);tScore+=n(s['النقاط']);
-      scoreByRep[rep]=n(s['النقاط']);visByRep[rep]=n(s['زيارات اليوم']);
-    }
+    var pts=(s&&dstr(s['آخر تحديث'])===td)?n(s['النقاط']):0;  // نقاط اليوم فقط
+    scoreByRep[rep]=pts;tScore+=pts;
   });
   setText('kpi-v',tV);
   setText('kpi-va',visByRep['عبدالرزاق محمد']||0);
@@ -495,7 +518,7 @@ function renderOverview(){
   // Today split bar
   var splitEl=document.getElementById('ov-split');
   if(tV>0){
-    var seg=[{l:'حاليين',v:tExist,c:'var(--green)'},{l:'محتملين',v:tProspect,c:'var(--gold)'},{l:'جدد',v:tNew,c:'var(--navy)'}];
+    var seg=[{l:'حاليين',v:tExist,c:'var(--green)'},{l:'جدد',v:tNew,c:'var(--navy)'}];
     splitEl.innerHTML=seg.map(function(s){
       var pct=tV?Math.round(s.v/tV*100):0;
       return '<div style="margin-bottom:11px"><div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;margin-bottom:3px"><span>'+s.l+'</span><span>'+s.v+' ('+pct+'%)</span></div>'+
@@ -555,10 +578,10 @@ function renderReps(){
         '<div style="margin-right:auto;text-align:center"><div style="font-size:26px;font-weight:900;color:var(--gold)">'+(s?n(s['النقاط']):0)+'</div><div style="font-size:9px;color:var(--mut)">نقطة</div></div>'+
       '</div>'+
       '<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:9px;margin-bottom:14px">'+
-        '<div style="background:var(--bg);border-radius:10px;padding:12px 6px;text-align:center"><div style="font-size:20px;font-weight:900;color:var(--navy)">'+(s?n(s['زيارات اليوم']):0)+'</div><div style="font-size:9px;color:var(--mut)">زيارات</div></div>'+
-        '<div style="background:var(--bg);border-radius:10px;padding:12px 6px;text-align:center"><div style="font-size:20px;font-weight:900;color:var(--green)">'+(s?n(s['حاليين']):0)+'</div><div style="font-size:9px;color:var(--mut)">حاليين</div></div>'+
-        '<div style="background:var(--bg);border-radius:10px;padding:12px 6px;text-align:center"><div style="font-size:20px;font-weight:900;color:var(--amb)">'+(s?n(s['محتملين']):0)+'</div><div style="font-size:9px;color:var(--mut)">محتملين</div></div>'+
-        '<div style="background:var(--bg);border-radius:10px;padding:12px 6px;text-align:center"><div style="font-size:20px;font-weight:900;color:var(--pu)">'+(s?n(s['جدد']):0)+'</div><div style="font-size:9px;color:var(--mut)">جدد</div></div>'+
+        '<div style="background:var(--bg);border-radius:10px;padding:12px 6px;text-align:center"><div style="font-size:20px;font-weight:900;color:var(--navy)">'+tv.length+'</div><div style="font-size:9px;color:var(--mut)">زيارات</div></div>'+
+        '<div style="background:var(--bg);border-radius:10px;padding:12px 6px;text-align:center"><div style="font-size:20px;font-weight:900;color:var(--green)">'+tv.filter(function(v){return txt(v['النوع'])==='Existing';}).length+'</div><div style="font-size:9px;color:var(--mut)">حاليين</div></div>'+
+        '<div style="background:var(--bg);border-radius:10px;padding:12px 6px;text-align:center"><div style="font-size:20px;font-weight:900;color:var(--amb)">'+tv.filter(function(v){return txt(v['تصنيف العميل'])==='prospect';}).length+'</div><div style="font-size:9px;color:var(--mut)">محتملين</div></div>'+
+        '<div style="background:var(--bg);border-radius:10px;padding:12px 6px;text-align:center"><div style="font-size:20px;font-weight:900;color:var(--pu)">'+tv.filter(function(v){return txt(v['النوع'])==='New';}).length+'</div><div style="font-size:9px;color:var(--mut)">جدد</div></div>'+
       '</div>'+
       '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:14px">'+
         '<div style="background:var(--navy-l);border-radius:10px;padding:10px 6px;text-align:center"><div style="font-size:16px;font-weight:900;color:var(--navy)">'+(s?n(s['عملاء جدد (الشهر)']):0)+'</div><div style="font-size:9px;color:var(--mut)">عملاء جدد/شهر</div></div>'+
@@ -671,6 +694,56 @@ function renderReports(){
   el.innerHTML='<div class="card" style="overflow-x:auto"><table class="tbl"><thead><tr>'+
     '<th>التاريخ</th><th>المندوب</th><th>الزيارات</th><th>حاليين</th><th>محتملين</th><th>جدد</th><th>النقاط</th><th>طلبات</th><th>الإرسال</th>'+
     '</tr></thead><tbody>'+rows+'</tbody></table></div>';
+}
+
+function setArchRep(r){
+  _archRep=r;
+  document.querySelectorAll('#page-archive .fpill').forEach(function(b){b.classList.remove('on');});
+  var map={'all':'af-all','عبدالرزاق محمد':'af-abd','الحسن موسى':'af-has'};
+  var el=document.getElementById(map[r]);if(el)el.classList.add('on');
+  renderArchive();
+}
+function prettyDate(d){
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(d))return d;
+  var dt=new Date(d+'T00:00:00');
+  var days=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  return days[dt.getDay()]+' · '+dt.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+}
+function archCard(v){
+  var fields=[['النوع',txt(v['النوع'])],['المنطقة',txt(v['المنطقة'])],['الحي',txt(v['الحي'])],['الغرض',txt(v['هدف الزيارة'])],['النتيجة',txt(v['نتيجة الزيارة'])],['التصنيف',txt(v['تصنيف العميل'])],['جهة الاتصال',txt(v['جهة الاتصال'])],['الهاتف',txt(v['الهاتف'])],['نوع المشروع',txt(v['نوع المشروع'])],['مرحلة المشروع',txt(v['مرحلة المشروع'])],['الخطوة القادمة',txt(v['الخطوة القادمة'])],['تاريخ المتابعة',dstr(v['تاريخ المتابعة'])],['حالة العرض',txt(v['حالة العرض'])],['المدة',txt(v['المدة (د)'])]];
+  var rows=fields.filter(function(f){return f[1];}).map(function(f){return '<div style="font-size:11.5px"><span style="color:var(--mut);font-size:10px">'+f[0]+'</span><div style="font-weight:600">'+esc(f[1])+'</div></div>';}).join('');
+  var gps=txt(v['الإحداثيات']);
+  var mp=gps?'<a href="https://maps.google.com/?q='+encodeURIComponent(gps)+'" target="_blank" style="color:var(--amb);font-weight:700;font-size:11.5px;text-decoration:none">📍 الموقع</a>':'';
+  var notes=txt(v['ملاحظات']);
+  return '<div class="card" style="margin-top:8px"><div style="margin-bottom:8px"><b style="color:var(--navy);font-size:13px">'+esc(txt(v['العميل'])||'—')+'</b> '+repBadge(txt(v['المندوب']))+'<div style="color:var(--mut);font-size:10px;margin-top:2px">⏱ '+esc(txt(v['الوقت']))+'</div></div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px">'+rows+'</div>'+
+    (notes?'<div style="margin-top:8px;background:var(--bg);border-radius:8px;padding:7px 9px;font-size:12px">'+esc(notes)+'</div>':'')+
+    (mp?'<div style="margin-top:7px">'+mp+'</div>':'')+'</div>';
+}
+function renderArchive(){
+  var el=document.getElementById('archive-content');
+  if(!el)return;
+  var dEl=document.getElementById('arch-date'),qEl=document.getElementById('arch-q');
+  var df=dEl?dEl.value:'';
+  var q=(qEl?qEl.value:'').trim().toLowerCase();
+  var list=DATA.visits.filter(function(v){
+    if(_archRep!=='all'&&txt(v['المندوب'])!==_archRep)return false;
+    if(df&&dstr(v['التاريخ'])!==df)return false;
+    if(q&&txt(v['العميل']).toLowerCase().indexOf(q)===-1)return false;
+    return true;
+  });
+  if(!list.length){el.innerHTML='<div class="card"><div style="text-align:center;padding:30px;color:var(--mut)"><div style="font-size:34px;margin-bottom:8px">🗂️</div><div style="font-size:13px;font-weight:700">لا توجد زيارات</div></div></div>';return;}
+  var by={};list.forEach(function(v){var d=dstr(v['التاريخ'])||'—';(by[d]=by[d]||[]).push(v);});
+  var dates=Object.keys(by).sort(function(a,b){return a<b?1:-1;});
+  var head='<div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap">'+
+    '<div class="card" style="margin:0;flex:1;text-align:center;min-width:90px"><div style="font-size:22px;font-weight:900;color:var(--navy)">'+list.length+'</div><div style="font-size:10px;color:var(--mut)">زيارة</div></div>'+
+    '<div class="card" style="margin:0;flex:1;text-align:center;min-width:90px"><div style="font-size:22px;font-weight:900;color:var(--amb)">'+dates.length+'</div><div style="font-size:10px;color:var(--mut)">يوم</div></div></div>';
+  var html=dates.map(function(d){
+    var items=by[d].sort(function(a,b){return txt(b['الوقت']).localeCompare(txt(a['الوقت']));});
+    return '<div style="margin-bottom:16px"><div style="background:var(--navy);color:#fff;padding:8px 14px;border-radius:10px;font-weight:800;display:flex;justify-content:space-between;align-items:center;font-size:13px"><span>'+prettyDate(d)+'</span><span style="background:var(--gold);color:var(--navy);border-radius:20px;padding:1px 9px;font-size:11px">'+items.length+'</span></div>'+
+      items.map(archCard).join('')+'</div>';
+  }).join('');
+  el.innerHTML=head+html;
 }
 
 // auto-focus PIN
