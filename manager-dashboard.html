@@ -1,753 +1,491 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<meta name="theme-color" content="#1B2A4A" />
 <title>BuildHop — Manager Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Cairo:wght@600;700;800&display=swap" rel="stylesheet" />
 <style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'Cairo',sans-serif;background:#F0EDE8;color:#0D1117;min-height:100vh}
-:root{
-  --navy:#1B2A4A;--navy-l:#E8EDF8;--navy-d:#111C33;
-  --gold:#E8A320;--gold-l:#FDF0D5;
-  --green:#0A6640;--green-l:#E3F5EC;
-  --red:#B91C1C;--red-l:#FEF2F2;
-  --amb:#D97706;--amb-l:#FFFBEB;
-  --pu:#7C3AED;--pu-l:#F5F3FF;
-  --bg:#F0EDE8;--mut:#7C849A;--ink:#0D1117;
-  --ln:#DDD9D2;--ln2:#EAE7E1;
-  --sidebar:240px;
-}
-input,select,button,textarea{font-family:'Cairo',sans-serif}
+  :root{
+    --navy:#243760; --navy-2:#1B2A4A; --navy-l:#EAEEF6;
+    --gold:#C9A227; --gold-2:#E8A320; --gold-l:#FBF3D9;
+    --bg:#F4F6FB; --card:#FFFFFF; --ln:#E6E9F0; --ln2:#EFF1F6;
+    --ink:#1F2937; --mut:#6B7280;
+    --green:#0A8A4F; --green-l:#E4F6EC;
+    --red:#C0392B; --red-l:#FCEDEB;
+    --amb:#9A6B00; --amb-l:#FBF3D9;
+    --pu:#5B3FA0; --pu-l:#F0EBFA;
+    --r:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5}
+  .ar{font-family:'Cairo',sans-serif}
+  small.sub{display:block;font-size:9.5px;color:var(--mut);font-weight:600}
+  b,strong{font-weight:700}
 
-/* ══ LAYOUT ══════════════════════════════════════════════════ */
-.hdr{background:var(--navy-d);padding:0 24px;height:58px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50;border-bottom:1px solid rgba(255,255,255,.07)}
-.layout{display:flex;min-height:calc(100vh - 58px)}
-.sidebar{width:var(--sidebar);background:#fff;border-left:1px solid var(--ln);padding:14px 0;flex-shrink:0;position:sticky;top:58px;height:calc(100vh - 58px);overflow-y:auto;display:flex;flex-direction:column}
-.main{flex:1;padding:22px 24px;overflow-y:auto;max-width:1200px}
-.page{display:none}.page.active{display:block}
+  #login{position:fixed;inset:0;background:linear-gradient(135deg,var(--navy-2),#0f1830);display:flex;align-items:center;justify-content:center;z-index:100}
+  .login-card{background:#fff;border-radius:20px;padding:34px 30px;width:320px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+  .login-logo{width:52px;height:52px;background:var(--gold);border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;color:var(--navy-2);margin:0 auto 14px}
+  .login-card h1{font-size:18px;font-weight:800;color:var(--navy)}
+  .login-card p{font-size:11px;color:var(--mut);margin-bottom:18px}
+  #pin{width:100%;padding:13px;border:1.5px solid var(--ln);border-radius:12px;text-align:center;font-size:22px;letter-spacing:8px;font-weight:700}
+  #pin:focus{outline:none;border-color:var(--gold)}
+  #pin-err{color:var(--red);font-size:12px;margin-top:10px;min-height:16px}
 
-/* ══ SIDEBAR NAV ════════════════════════════════════════════ */
-.snav{padding:10px 14px;margin:1px 8px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:9px;font-size:12px;font-weight:700;color:var(--mut);border:none;background:transparent;width:calc(100% - 16px);text-align:right;transition:all .15s;direction:rtl}
-.snav:hover{background:var(--bg);color:var(--ink)}
-.snav.on{background:var(--navy-l);color:var(--navy)}
-.snav .si{font-size:16px;flex-shrink:0}
-.snav-label{flex:1;text-align:right}
-.snav-cnt{background:var(--red);color:#fff;border-radius:20px;font-size:9px;font-weight:800;padding:1px 7px;min-width:20px;text-align:center}
-.sidebar-section{padding:8px 16px 6px;font-size:9px;font-weight:800;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;margin-top:6px}
-.sidebar-footer{margin-top:auto;padding:14px 12px;border-top:1px solid var(--ln)}
+  .layout{display:flex;min-height:100vh}
+  .side{width:240px;background:var(--navy-2);color:#fff;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;flex-shrink:0}
+  .brand{padding:20px 18px;display:flex;align-items:center;gap:11px;border-bottom:1px solid rgba(255,255,255,.08)}
+  .brand .logo{width:38px;height:38px;background:var(--gold);border-radius:11px;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--navy-2)}
+  .brand .bt{font-size:15px;font-weight:800;line-height:1.1}
+  .brand .bd{font-size:10px;color:rgba(255,255,255,.5)}
+  .nav{padding:12px 10px;flex:1;overflow-y:auto}
+  .nav .lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.35);padding:8px 12px 6px;font-weight:700}
+  .ni{display:flex;align-items:center;gap:11px;width:100%;border:none;background:transparent;color:rgba(255,255,255,.72);padding:10px 12px;border-radius:10px;cursor:pointer;font-size:13.5px;font-weight:600;text-align:left;margin-bottom:2px;font-family:inherit}
+  .ni:hover{background:rgba(255,255,255,.06);color:#fff}
+  .ni.on{background:var(--gold);color:var(--navy-2);font-weight:800}
+  .ni .ic{font-size:16px;width:20px;text-align:center}
+  .ni .cnt{margin-left:auto;background:var(--red);color:#fff;font-size:10px;font-weight:800;border-radius:20px;padding:1px 7px}
+  .side-foot{padding:14px;border-top:1px solid rgba(255,255,255,.08);font-size:11px}
+  .side-foot .sf-t{font-size:9.5px;text-transform:uppercase;letter-spacing:.8px;color:rgba(255,255,255,.4);margin-bottom:8px}
+  .rep-stat{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .rep-stat .dotg{width:8px;height:8px;border-radius:50%;background:var(--green)}
+  .rep-stat .rn{font-weight:700;font-size:12px}
+  .rep-stat .rt{font-size:9px;color:rgba(255,255,255,.45)}
 
-/* ══ CARDS ════════════════════════════════════════════════════ */
-.card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.06);margin-bottom:14px}
-.card-dark{background:var(--navy-d);border-radius:14px;padding:18px;margin-bottom:14px}
-.kgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
-.kcard{background:#fff;border-radius:13px;padding:16px 14px;box-shadow:0 2px 8px rgba(0,0,0,.06);position:relative;overflow:hidden}
-.kcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
-.kcard-navy::before{background:var(--navy)}
-.kcard-green::before{background:var(--green)}
-.kcard-gold::before{background:var(--gold)}
-.kcard-red::before{background:var(--red)}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
-.rep-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
-.rep-card{background:#fff;border-radius:15px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.07)}
-.shdr{font-size:12px;font-weight:800;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:.3px}
-.badge{display:inline-flex;align-items:center;font-size:9px;font-weight:800;padding:2px 9px;border-radius:20px}
+  .main{flex:1;min-width:0;display:flex;flex-direction:column}
+  .topbar{background:#fff;border-bottom:1px solid var(--ln);padding:14px 26px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:30}
+  .topbar .tt{font-size:13px;color:var(--mut)}
+  .refresh{display:flex;align-items:center;gap:10px}
+  .refresh .st{font-size:11px;color:var(--mut)}
+  .refresh button{background:var(--navy);color:#fff;border:none;border-radius:10px;padding:9px 16px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
+  .refresh button:hover{background:var(--navy-2)}
+  .content{padding:26px;max-width:1280px;width:100%}
 
-/* ══ TABLES ══════════════════════════════════════════════════ */
-.tbl{width:100%;border-collapse:collapse;font-size:12px}
-.tbl th{padding:9px 11px;text-align:right;color:var(--mut);font-weight:700;background:var(--bg);border-bottom:1px solid var(--ln);font-size:10px;white-space:nowrap}
-.tbl td{padding:9px 11px;border-bottom:1px solid var(--ln2);vertical-align:middle}
-.tbl tr:hover td{background:#fafaf8}
+  .page{display:none}.page.active{display:block}
+  .ph{margin-bottom:20px}
+  .ph h2{font-size:21px;font-weight:800;color:var(--navy)}
+  .ph p{font-size:12px;color:var(--mut)}
 
-/* ══ BARS ════════════════════════════════════════════════════ */
-.bar-t{height:6px;background:#EAE7E1;border-radius:3px;overflow:hidden;margin-top:5px}
-.bar-f{height:100%;border-radius:3px;transition:width .5s ease}
+  .kgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+  .kcard{background:#fff;border:1px solid var(--ln);border-radius:var(--r);padding:16px;border-top:3px solid var(--navy)}
+  .kcard.k-green{border-top-color:var(--green)} .kcard.k-gold{border-top-color:var(--gold)} .kcard.k-red{border-top-color:var(--red)}
+  .kcard .ki{font-size:20px;margin-bottom:6px}
+  .kcard .kv{font-size:27px;font-weight:900;color:var(--navy);line-height:1}
+  .kcard .kl{font-size:12px;font-weight:700;margin-top:5px}
+  .kcard .kx{font-size:10px;color:var(--mut);margin-top:5px}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+  .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+  .card{background:#fff;border:1px solid var(--ln);border-radius:var(--r);padding:16px;margin-bottom:14px}
+  .shdr{font-size:14px;font-weight:800;color:var(--navy);margin-bottom:12px}
+  .abox{display:flex;align-items:center;justify-content:space-between;border-radius:11px;padding:11px 14px;margin-bottom:8px}
+  .abox .at{font-size:12px;font-weight:800} .abox .av{font-size:26px;font-weight:900}
 
-/* ══ STATUS ══════════════════════════════════════════════════ */
-.sdot{width:9px;height:9px;border-radius:50%;flex-shrink:0;transition:background .3s}
-.sdot-on{background:var(--green)!important;box-shadow:0 0 6px var(--green)}.sdot-off{background:#DDD9D2!important}
+  .pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+  .pill{border:1px solid var(--ln);background:#fff;border-radius:20px;padding:7px 14px;font-size:12.5px;font-weight:700;cursor:pointer;color:var(--navy);font-family:inherit}
+  .pill.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .ctrl{padding:9px 12px;border:1px solid var(--ln);border-radius:10px;font-size:13px;font-family:inherit}
 
-/* ══ VISIT ITEM ══════════════════════════════════════════════ */
-.vli{display:flex;justify-content:space-between;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--ln2)}
-.vli:last-child{border-bottom:none}
+  table{width:100%;border-collapse:collapse}
+  th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--mut);font-weight:700;padding:10px 12px;border-bottom:2px solid var(--ln)}
+  td{padding:11px 12px;border-bottom:1px solid var(--ln2);font-size:13px;vertical-align:top}
+  .badge{display:inline-block;font-size:10.5px;font-weight:800;padding:2px 9px;border-radius:20px}
+  .b-new{background:var(--navy-l);color:var(--navy)} .b-exist{background:var(--green-l);color:var(--green)}
+  .b-abd{background:var(--gold-l);color:var(--amb)} .b-has{background:var(--navy-l);color:var(--navy)}
 
-/* ══ PRIORITY COLORS ════════════════════════════════════════ */
-.pri-hot{color:#DC2626}.pri-active{color:#2563EB}.pri-warm{color:var(--amb)}.pri-cold{color:#94A3B8}
+  .rep-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .rcard{background:#fff;border:1px solid var(--ln);border-radius:16px;padding:18px;border-top:4px solid var(--gold)}
+  .rcard .rhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .rcard .rav{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;color:#fff;background:var(--navy)}
+  .rcard.abd .rav{background:var(--gold);color:var(--navy-2)} .rcard.abd{border-top-color:var(--navy)}
+  .rcard .rname{font-size:16px;font-weight:800;color:var(--navy)}
+  .rcard .rsub{font-size:10px;color:var(--mut)}
+  .rcard .rpts{font-size:24px;font-weight:900;color:var(--gold-2);text-align:right}
+  .rcard .rpts small{display:block;font-size:9px;color:var(--mut);font-weight:600}
+  .rstats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+  .rstat{background:var(--bg);border-radius:10px;padding:11px 6px;text-align:center}
+  .rstat .n{font-size:19px;font-weight:900} .rstat .l{font-size:9px;color:var(--mut)}
+  .rmonth{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;border-top:1px solid var(--ln);padding-top:10px}
+  .rmonth .rstat{background:var(--navy-l)}
 
-/* ══ SPINNER ══════════════════════════════════════════════════ */
-.spin-wrap{text-align:center;padding:40px;color:var(--mut)}
-.spin{display:inline-block;width:28px;height:28px;border:3px solid var(--ln);border-top-color:var(--navy);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:10px}
-@keyframes spin{to{transform:rotate(360deg)}}
+  .daybar{display:flex;align-items:center;justify-content:space-between;background:var(--navy);color:#fff;padding:9px 14px;border-radius:10px;font-weight:800;font-size:13px;margin-bottom:8px}
+  .daybar .c{background:var(--gold);color:var(--navy-2);border-radius:20px;padding:1px 9px;font-size:11px}
+  .acard{background:#fff;border:1px solid var(--ln);border-radius:12px;padding:13px 15px;margin-bottom:8px}
+  .acard .atop{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:9px}
+  .acard .acl{font-weight:800;color:var(--navy);font-size:14px}
+  .afields{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .af .k{color:var(--mut);font-size:10px} .af .v{font-weight:600;font-size:12.5px}
+  .anote{margin-top:9px;background:var(--bg);border-radius:9px;padding:8px 11px;font-size:12.5px}
+  .map{color:var(--gold-2);font-weight:700;font-size:12px;text-decoration:none;margin-top:8px;display:inline-block}
 
-/* ══ ALERTS / BOXES ═════════════════════════════════════════ */
-.abox{border-radius:12px;padding:13px 16px;margin-bottom:9px;display:flex;justify-content:space-between;align-items:center}
+  .empty{text-align:center;padding:42px 20px;color:var(--mut)}
+  .empty .ei{font-size:34px;margin-bottom:8px}.empty b{display:block;color:var(--navy);font-size:15px}
+  .spin{width:30px;height:30px;border:3px solid var(--ln);border-top-color:var(--gold);border-radius:50%;animation:sp 1s linear infinite;margin:30px auto}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--navy-2);color:#fff;padding:11px 20px;border-radius:10px;font-size:13px;font-weight:600;display:none;z-index:90}
 
-/* ══ FILTER PILLS ════════════════════════════════════════════ */
-.fpill{border:1.5px solid var(--ln);border-radius:20px;padding:6px 14px;font-size:10px;font-weight:700;cursor:pointer;background:#fff;color:var(--mut);transition:all .15s}
-.fpill.on,.fpill:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
-
-/* ══ REFRESH BTN ═════════════════════════════════════════════ */
-.refresh-btn{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.15);border-radius:9px;padding:7px 14px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s}
-.refresh-btn:hover{background:rgba(255,255,255,.2)}
-.refresh-btn.spinning .refresh-icon{display:inline-block;animation:spin .7s linear infinite}
-
-/* ══ MOBILE TAB BAR ══════════════════════════════════════════ */
-.mob-tbar{display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:2px solid var(--ln);z-index:100;box-shadow:0 -2px 14px rgba(0,0,0,.1)}
-.mob-tab{flex:1;padding:9px 2px 7px;border:none;background:transparent;cursor:pointer;font-size:7px;font-weight:700;color:var(--mut);display:flex;flex-direction:column;align-items:center;gap:2px}
-.mob-tab span{font-size:18px}.mob-tab.on{color:var(--navy)}
-
-/* ══ TOAST ════════════════════════════════════════════════════ */
-.toast-msg{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 20px;border-radius:20px;font-size:12px;font-weight:700;display:none;z-index:999;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.2)}
-
-/* ══ GAS SETUP MODAL ════════════════════════════════════════ */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
-.modal-bg.show{display:flex}
-.modal-box{background:#fff;border-radius:18px;padding:24px;max-width:560px;width:100%;max-height:85vh;overflow-y:auto}
-.code-block{background:#1B2533;color:#A8D8A8;border-radius:10px;padding:13px;font-size:10px;font-family:monospace;line-height:1.7;overflow-x:auto;white-space:pre;direction:ltr;text-align:left;margin:8px 0}
-
-/* ══ LOGIN SCREEN ════════════════════════════════════════════ */
-#login-screen{position:fixed;inset:0;background:linear-gradient(150deg,#0D1626 0%,#1B2A4A 60%,#111C33 100%);display:flex;align-items:center;justify-content:center;z-index:500}
-.login-box{width:340px;text-align:center}
-.pin-input{width:100%;padding:16px;font-size:32px;letter-spacing:18px;text-align:center;border:2px solid rgba(255,255,255,.15);border-radius:14px;outline:none;font-family:'Cairo',sans-serif;margin:20px 0 8px;background:rgba(255,255,255,.08);color:#fff;caret-color:var(--gold)}
-.pin-input:focus{border-color:var(--gold)}
-.pin-input::placeholder{letter-spacing:normal;font-size:16px;color:rgba(255,255,255,.3)}
-.login-btn{width:100%;padding:14px;background:var(--gold);color:var(--ink);border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;margin-top:8px;font-family:'Cairo',sans-serif;transition:opacity .15s}
-.login-btn:hover{opacity:.9}
-
-/* ══ RESPONSIVE ══════════════════════════════════════════════ */
-@media(max-width:900px){
-  .sidebar{display:none}
-  .main{padding:14px;padding-bottom:80px}
-  .kgrid{grid-template-columns:1fr 1fr}
-  .rep-grid{grid-template-columns:1fr}
-  .g2{grid-template-columns:1fr}
-  .g3{grid-template-columns:1fr}
-  .mob-tbar{display:flex}
-}
-@media(max-width:480px){.kgrid{grid-template-columns:1fr 1fr}}
+  .mtabs{display:none}
+  @media(max-width:860px){
+    .side{display:none} .content{padding:16px}
+    .kgrid{grid-template-columns:1fr 1fr} .g2,.g3,.rep-grid{grid-template-columns:1fr}
+    .afields{grid-template-columns:1fr 1fr}
+    .mtabs{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--ln);z-index:40;overflow-x:auto}
+    .mtab{flex:1;min-width:64px;border:none;background:none;padding:8px 4px;font-size:9.5px;font-weight:700;color:var(--mut);cursor:pointer;font-family:inherit}
+    .mtab.on{color:var(--navy)} .mtab .mi{display:block;font-size:17px}
+    .content{padding-bottom:70px}
+  }
 </style>
 </head>
 <body>
 
-<!-- ══ LOGIN ════════════════════════════════════════════════ -->
-<div id="login-screen">
-  <div class="login-box">
-    <div style="background:var(--gold);width:64px;height:64px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:24px;color:var(--ink);margin:0 auto 18px;box-shadow:0 8px 24px rgba(232,163,32,.4)">BH</div>
-    <div style="font-size:22px;font-weight:900;color:#fff;margin-bottom:4px">Manager Dashboard</div>
-    <div style="font-size:12px;color:rgba(255,255,255,.4);margin-bottom:4px">BuildHop · لوحة تحكم المدير</div>
-    <div style="font-size:11px;color:rgba(255,255,255,.25);margin-bottom:2px">محمد إبراهيم سليمان</div>
-    <input class="pin-input" type="password" id="pin-inp" placeholder="أدخل الرقم السري" maxlength="4" inputmode="numeric" oninput="onPinInput()" onkeydown="if(event.key==='Enter')doLogin()"/>
-    <div id="pin-err" style="font-size:11px;color:#FCA5A5;min-height:18px;margin-bottom:8px"></div>
-    <button class="login-btn" onclick="doLogin()">دخول →</button>
+<div id="login">
+  <div class="login-card">
+    <div class="login-logo">B</div>
+    <h1>BuildHop Manager</h1>
+    <p class="ar">لوحة المدير — أدخل الرقم السري</p>
+    <input id="pin" type="password" inputmode="numeric" maxlength="4" placeholder="••••" oninput="onPin()" />
+    <div id="pin-err"></div>
   </div>
 </div>
 
-<!-- ══ HEADER ════════════════════════════════════════════════ -->
-<div class="hdr">
-  <div style="display:flex;align-items:center;gap:11px">
-    <div style="background:var(--gold);border-radius:9px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:var(--ink);flex-shrink:0">BH</div>
-    <div>
-      <div style="font-size:14px;font-weight:900;color:#fff">BuildHop — Manager</div>
-      <div style="font-size:9px;color:rgba(255,255,255,.35)" id="hdr-date">—</div>
+<div class="layout" style="display:none" id="app">
+  <aside class="side">
+    <div class="brand">
+      <div class="logo">B</div>
+      <div><div class="bt">BuildHop</div><div class="bd">Manager Dashboard</div></div>
     </div>
-  </div>
-  <div style="display:flex;gap:10px;align-items:center">
-    <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.5)" id="sync-status"></div>
-    <button class="refresh-btn" id="refresh-btn" onclick="loadAllData()">
-      <span class="refresh-icon">🔄</span> <span>تحديث</span>
-    </button>
-  </div>
-</div>
+    <nav class="nav" id="nav">
+      <div class="lbl">Menu</div>
+      <button class="ni on" onclick="go('overview')"><span class="ic">📊</span>Overview<small class="sub ar">نظرة عامة</small></button>
+      <button class="ni" onclick="go('reps')"><span class="ic">👥</span>Rep Performance<small class="sub ar">أداء المناديب</small></button>
+      <button class="ni" onclick="go('activity')"><span class="ic">📍</span>Field Activity<small class="sub ar">النشاط الميداني</small></button>
+      <button class="ni" onclick="go('requests')"><span class="ic">📦</span>Product Requests<small class="sub ar">طلبات المنتجات</small><span class="cnt" id="c-rq" style="display:none">0</span></button>
+      <button class="ni" onclick="go('followups')"><span class="ic">🔔</span>Follow-ups<small class="sub ar">المتابعات</small><span class="cnt" id="c-fu" style="display:none">0</span></button>
+      <button class="ni" onclick="go('reports')"><span class="ic">📋</span>Daily Reports<small class="sub ar">التقارير اليومية</small></button>
+      <button class="ni" onclick="go('archive')"><span class="ic">🗂️</span>Visit Archive<small class="sub ar">سجل الزيارات</small></button>
+    </nav>
+    <div class="side-foot" id="side-foot"></div>
+  </aside>
 
-<div class="layout">
+  <div class="main">
+    <div class="topbar">
+      <div class="tt" id="topdate">—</div>
+      <div class="refresh"><span class="st" id="sync">Not synced</span><button onclick="loadAll()">↻ Refresh</button></div>
+    </div>
+    <div class="content">
 
-<!-- ══ SIDEBAR ══════════════════════════════════════════════ -->
-<div class="sidebar">
-  <div style="padding:10px 14px 8px">
-    <div style="font-size:9px;font-weight:800;color:var(--mut);text-transform:uppercase;letter-spacing:.5px">القائمة</div>
-  </div>
-  <button class="snav on" onclick="goPage('overview')"><span class="si">📊</span><span class="snav-label">النظرة العامة</span></button>
-  <button class="snav" onclick="goPage('reps')"><span class="si">👥</span><span class="snav-label">أداء المناديب</span></button>
-  <button class="snav" onclick="goPage('visits')"><span class="si">📍</span><span class="snav-label">النشاط الميداني</span></button>
-  <button class="snav" onclick="goPage('requests')"><span class="si">📦</span><span class="snav-label">طلبات المنتجات</span><span class="snav-cnt" id="sb-rq-cnt" style="display:none">0</span></button>
-  <button class="snav" onclick="goPage('followups')"><span class="si">🔔</span><span class="snav-label">المتابعات</span><span class="snav-cnt" id="sb-fu-cnt" style="display:none">0</span></button>
-  <button class="snav" onclick="goPage('reports')"><span class="si">📋</span><span class="snav-label">التقارير اليومية</span></button>
-  <button class="snav" onclick="goPage('archive')"><span class="si">🗂️</span><span class="snav-label">سجل الزيارات</span></button>
-
-  <div class="sidebar-footer">
-    <div style="font-size:9px;font-weight:800;color:var(--mut);margin-bottom:10px;text-transform:uppercase">حالة المناديب</div>
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-      <div class="sdot sdot-off" id="st-a"></div>
-      <div>
-        <div style="font-size:11px;font-weight:700">عبدالرزاق</div>
-        <div style="font-size:9px;color:var(--mut)" id="a-sync">لم يرسل بعد</div>
+      <div class="page active" id="p-overview">
+        <div class="ph"><h2>Overview</h2><p class="ar">النظرة العامة · <span id="ov-date"></span></p></div>
+        <div class="kgrid">
+          <div class="kcard"><div class="ki">📍</div><div class="kv" id="k-v">—</div><div class="kl">Visits today <small class="sub ar">زيارات اليوم</small></div><div class="kx">Abdulrazak <b id="k-va">—</b> · Hassan <b id="k-vh">—</b></div></div>
+          <div class="kcard k-green"><div class="ki">🎯</div><div class="kv" id="k-prospect">—</div><div class="kl">Prospect visits <small class="sub ar">زيارات محتملين</small></div><div class="kx">New <b id="k-new">—</b> · Existing <b id="k-exist">—</b></div></div>
+          <div class="kcard k-gold"><div class="ki">⭐</div><div class="kv" id="k-score">—</div><div class="kl">Points today <small class="sub ar">نقاط اليوم</small></div><div class="kx">A <b id="k-sa">—</b> · H <b id="k-sh">—</b></div></div>
+          <div class="kcard k-red"><div class="ki">🔔</div><div class="kv" id="k-fu">—</div><div class="kl">Follow-ups today <small class="sub ar">متابعات اليوم</small></div><div class="kx" id="k-od"></div></div>
+        </div>
+        <div class="g2">
+          <div class="card">
+            <div class="shdr">Today's visit mix <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">توزيع زيارات اليوم</span></div>
+            <div id="ov-split"><div class="spin"></div></div>
+          </div>
+          <div class="card">
+            <div class="shdr">Follow-up alerts <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">تنبيهات المتابعات</span></div>
+            <div class="abox" style="background:var(--red-l)"><div><div class="at" style="color:var(--red)">Overdue</div><div style="font-size:9px;color:var(--red)" class="ar">متأخرة</div></div><div class="av" style="color:var(--red)" id="al-od">—</div></div>
+            <div class="abox" style="background:var(--gold-l)"><div><div class="at" style="color:var(--amb)">Today</div><div style="font-size:9px;color:var(--amb)" class="ar">اليوم</div></div><div class="av" style="color:var(--amb)" id="al-td">—</div></div>
+            <div class="abox" style="background:var(--green-l)"><div><div class="at" style="color:var(--green)">This week</div><div style="font-size:9px;color:var(--green)" class="ar">هذا الأسبوع</div></div><div class="av" style="color:var(--green)" id="al-wk">—</div></div>
+          </div>
+        </div>
+        <div class="g3">
+          <div class="card"><div class="shdr">Top visited clients <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">أبرز العملاء</span></div><div id="ov-clients"><div class="empty" style="padding:14px">No data yet</div></div></div>
+          <div class="card"><div class="shdr">Requested materials <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">المواد المطلوبة</span></div><div id="ov-mats"><div class="empty" style="padding:14px">No data yet</div></div></div>
+          <div class="card"><div class="shdr">Smart insights <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">توصيات</span></div><div id="ov-insights"><div class="empty" style="padding:14px">Refresh to load</div></div></div>
+        </div>
       </div>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
-      <div class="sdot sdot-off" id="st-h"></div>
-      <div>
-        <div style="font-size:11px;font-weight:700">الحسن</div>
-        <div style="font-size:9px;color:var(--mut)" id="h-sync">لم يرسل بعد</div>
+
+      <div class="page" id="p-reps">
+        <div class="ph"><h2>Rep Performance</h2><p class="ar">أداء المناديب</p></div>
+        <div class="rep-grid" id="reps-grid"><div class="spin"></div></div>
       </div>
-    </div>
-    <div style="font-size:9px;color:var(--mut);margin-bottom:10px" id="last-sync">لم يتم التزامن</div>
-    <button onclick="clearView()" style="width:100%;background:var(--red-l);color:var(--red);border:2px solid #FECACA;border-radius:9px;padding:9px;font-size:11px;font-weight:800;cursor:pointer">🗑 مسح العرض</button>
-  </div>
-</div>
 
-<!-- ══ MAIN ═══════════════════════════════════════════════════ -->
-<div class="main">
-
-<!-- ── OVERVIEW ─────────────────────────────────────────── -->
-<div class="page active" id="page-overview">
-  <div style="margin-bottom:18px">
-    <div style="font-size:19px;font-weight:900;color:var(--navy)">النظرة العامة</div>
-    <div style="font-size:11px;color:var(--mut)" id="ov-date">—</div>
-  </div>
-  <div class="kgrid">
-    <div class="kcard kcard-navy">
-      <div style="font-size:22px;margin-bottom:5px">📍</div>
-      <div style="font-size:28px;font-weight:900;color:var(--navy)" id="kpi-v">—</div>
-      <div style="font-size:11px;font-weight:700">زيارات اليوم</div>
-      <div style="font-size:9px;color:var(--mut);margin-top:5px">عبدالرزاق <b id="kpi-va">—</b> · الحسن <b id="kpi-vh">—</b></div>
-    </div>
-    <div class="kcard kcard-green">
-      <div style="font-size:22px;margin-bottom:5px">🎯</div>
-      <div style="font-size:28px;font-weight:900;color:var(--green)" id="kpi-prospect">—</div>
-      <div style="font-size:11px;font-weight:700">زيارات محتملين</div>
-      <div style="font-size:9px;color:var(--mut);margin-top:5px">حاليين <b id="kpi-exist">—</b> · جدد <b id="kpi-new">—</b></div>
-    </div>
-    <div class="kcard kcard-gold">
-      <div style="font-size:22px;margin-bottom:5px">⭐</div>
-      <div style="font-size:28px;font-weight:900;color:var(--amb)" id="kpi-score">—</div>
-      <div style="font-size:11px;font-weight:700">إجمالي النقاط اليوم</div>
-      <div style="font-size:9px;color:var(--mut);margin-top:5px">A: <b id="kpi-sa">—</b> · H: <b id="kpi-sh">—</b></div>
-    </div>
-    <div class="kcard kcard-red">
-      <div style="font-size:22px;margin-bottom:5px">🔔</div>
-      <div style="font-size:28px;font-weight:900;color:var(--red)" id="kpi-fu">—</div>
-      <div style="font-size:11px;font-weight:700">متابعات اليوم</div>
-      <div style="font-size:9px;color:var(--mut);margin-top:5px" id="kpi-overdue-lbl"></div>
-    </div>
-  </div>
-  <div class="g2">
-    <div class="card">
-      <div class="shdr">📊 توزيع زيارات اليوم</div>
-      <div id="ov-split"><div class="spin-wrap"><div class="spin"></div><div>انتظر الإرسال...</div></div></div>
-    </div>
-    <div class="card">
-      <div class="shdr">🔔 تنبيهات المتابعات</div>
-      <div class="abox" style="background:var(--red-l)">
-        <div><div style="font-size:11px;font-weight:800;color:var(--red)">🔴 متأخرة</div><div style="font-size:9px;color:var(--red)">Overdue</div></div>
-        <div style="font-size:30px;font-weight:900;color:var(--red)" id="al-od">—</div>
+      <div class="page" id="p-activity">
+        <div class="ph"><h2>Field Activity</h2><p class="ar">النشاط الميداني</p></div>
+        <div class="pills">
+          <button class="pill on" id="vf-all" onclick="setVf('all')">All</button>
+          <button class="pill" id="vf-abd" onclick="setVf('عبدالرزاق محمد')">Abdulrazak</button>
+          <button class="pill" id="vf-has" onclick="setVf('الحسن موسى')">Hassan</button>
+          <button class="pill" id="vf-new" onclick="setVf('new')">New clients</button>
+          <button class="pill" id="vf-today" onclick="setVf('today')">Today only</button>
+        </div>
+        <div class="card" style="overflow-x:auto" id="activity-content"><div class="spin"></div></div>
       </div>
-      <div class="abox" style="background:var(--gold-l)">
-        <div><div style="font-size:11px;font-weight:800;color:var(--amb)">🟡 اليوم</div><div style="font-size:9px;color:var(--amb)">Today</div></div>
-        <div style="font-size:30px;font-weight:900;color:var(--amb)" id="al-td">—</div>
+
+      <div class="page" id="p-requests">
+        <div class="ph"><h2>Product Requests</h2><p class="ar">طلبات المنتجات</p></div>
+        <div class="card" style="overflow-x:auto" id="requests-content"><div class="spin"></div></div>
       </div>
-      <div class="abox" style="background:var(--green-l)">
-        <div><div style="font-size:11px;font-weight:800;color:var(--green)">🟢 هذا الأسبوع</div><div style="font-size:9px;color:var(--green)">This week</div></div>
-        <div style="font-size:30px;font-weight:900;color:var(--green)" id="al-up">—</div>
+
+      <div class="page" id="p-followups">
+        <div class="ph"><h2>Follow-ups</h2><p class="ar">المتابعات القادمة</p></div>
+        <div class="kgrid" style="grid-template-columns:repeat(3,1fr)">
+          <div class="kcard k-red" style="text-align:center"><div class="kv" style="color:var(--red)" id="fu-od">0</div><div class="kl">Overdue <small class="sub ar">متأخرة</small></div></div>
+          <div class="kcard k-gold" style="text-align:center"><div class="kv" style="color:var(--amb)" id="fu-td">0</div><div class="kl">Today <small class="sub ar">اليوم</small></div></div>
+          <div class="kcard k-green" style="text-align:center"><div class="kv" style="color:var(--green)" id="fu-wk">0</div><div class="kl">This week <small class="sub ar">هذا الأسبوع</small></div></div>
+        </div>
+        <div id="fu-list"><div class="spin"></div></div>
       </div>
+
+      <div class="page" id="p-reports">
+        <div class="ph"><h2>Daily Reports</h2><p class="ar">سجل التقارير المرسلة</p></div>
+        <div class="card" style="overflow-x:auto" id="reports-content"><div class="spin"></div></div>
+      </div>
+
+      <div class="page" id="p-archive">
+        <div class="ph"><h2>Visit Archive</h2><p class="ar">سجل الزيارات الكامل — مرجع للرجوع لأي يوم</p></div>
+        <div class="pills">
+          <button class="pill on" id="af-all" onclick="setArch('all')">All</button>
+          <button class="pill" id="af-abd" onclick="setArch('عبدالرزاق محمد')">Abdulrazak</button>
+          <button class="pill" id="af-has" onclick="setArch('الحسن موسى')">Hassan</button>
+          <input type="date" id="arch-date" class="ctrl" onchange="renderArchive()" />
+          <input type="search" id="arch-q" class="ctrl" style="flex:1;min-width:140px" placeholder="Search client / بحث" oninput="renderArchive()" />
+          <button class="pill" onclick="clearArch()">Clear</button>
+        </div>
+        <div id="archive-content"><div class="spin"></div></div>
+      </div>
+
     </div>
   </div>
-  <div class="g3">
-    <div class="card"><div class="shdr">⭐ أبرز العملاء زيارةً</div><div id="ov-clients"><div style="font-size:11px;color:var(--mut);text-align:center;padding:10px">لا بيانات بعد</div></div></div>
-    <div class="card"><div class="shdr">📦 المواد المطلوبة</div><div id="ov-mats"><div style="font-size:11px;color:var(--mut);text-align:center;padding:10px">لا بيانات بعد</div></div></div>
-    <div class="card"><div class="shdr">💡 التوصيات الذكية</div><div id="ov-insights"><div style="font-size:11px;color:var(--mut);text-align:center;padding:10px">اضغط تحديث لتحميل البيانات</div></div></div>
-  </div>
 </div>
 
-<!-- ── REP PERFORMANCE ───────────────────────────────────── -->
-<div class="page" id="page-reps">
-  <div style="font-size:19px;font-weight:900;color:var(--navy);margin-bottom:18px">أداء المناديب</div>
-  <div class="rep-grid" id="reps-grid">
-    <div class="spin-wrap"><div class="spin"></div><div>انتظر الإرسال...</div></div>
-  </div>
+<div class="mtabs" id="mtabs">
+  <button class="mtab on" onclick="go('overview')"><span class="mi">📊</span>Overview</button>
+  <button class="mtab" onclick="go('reps')"><span class="mi">👥</span>Reps</button>
+  <button class="mtab" onclick="go('activity')"><span class="mi">📍</span>Activity</button>
+  <button class="mtab" onclick="go('requests')"><span class="mi">📦</span>Requests</button>
+  <button class="mtab" onclick="go('followups')"><span class="mi">🔔</span>Follow</button>
+  <button class="mtab" onclick="go('reports')"><span class="mi">📋</span>Reports</button>
+  <button class="mtab" onclick="go('archive')"><span class="mi">🗂️</span>Archive</button>
 </div>
 
-<!-- ── FIELD ACTIVITY ─────────────────────────────────────── -->
-<div class="page" id="page-visits">
-  <div style="font-size:19px;font-weight:900;color:var(--navy);margin-bottom:4px">النشاط الميداني</div>
-  <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
-    <button class="fpill on" id="vf-all" onclick="setVisitFilter('all')">الكل</button>
-    <button class="fpill" id="vf-abd" onclick="setVisitFilter('عبدالرزاق محمد')">عبدالرزاق</button>
-    <button class="fpill" id="vf-has" onclick="setVisitFilter('الحسن موسى')">الحسن</button>
-    <button class="fpill" id="vf-new" onclick="setVisitFilter('new')">✨ عملاء جدد</button>
-    <button class="fpill" id="vf-today" onclick="setVisitFilter('today')">📅 اليوم فقط</button>
-  </div>
-  <div id="visits-content"><div class="spin-wrap"><div class="spin"></div><div>انتظر الإرسال...</div></div></div>
-</div>
-
-<!-- ── PRODUCT REQUESTS ───────────────────────────────────── -->
-<div class="page" id="page-requests">
-  <div style="font-size:19px;font-weight:900;color:var(--navy);margin-bottom:4px">📦 طلبات المنتجات</div>
-  <div style="font-size:11px;color:var(--mut);margin-bottom:16px">المنتجات التي طلبها العملاء عبر المناديب</div>
-  <div id="requests-content"><div class="spin-wrap"><div class="spin"></div><div>انتظر الإرسال...</div></div></div>
-</div>
-
-<!-- ── FOLLOW-UPS ─────────────────────────────────────────── -->
-<div class="page" id="page-followups">
-  <div style="font-size:19px;font-weight:900;color:var(--navy);margin-bottom:4px">المتابعات</div>
-  <div style="font-size:11px;color:var(--mut);margin-bottom:16px">المتابعات القادمة لكل المناديب</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
-    <div class="card" style="margin:0;text-align:center;border-top:3px solid var(--red)"><div style="font-size:24px;font-weight:900;color:var(--red)" id="fu-od">0</div><div style="font-size:10px;font-weight:700">🔴 متأخرة</div></div>
-    <div class="card" style="margin:0;text-align:center;border-top:3px solid var(--amb)"><div style="font-size:24px;font-weight:900;color:var(--amb)" id="fu-td">0</div><div style="font-size:10px;font-weight:700">🟡 اليوم</div></div>
-    <div class="card" style="margin:0;text-align:center;border-top:3px solid var(--green)"><div style="font-size:24px;font-weight:900;color:var(--green)" id="fu-wk">0</div><div style="font-size:10px;font-weight:700">🟢 هذا الأسبوع</div></div>
-  </div>
-  <div id="fu-list"><div class="spin-wrap"><div class="spin"></div><div>انتظر الإرسال...</div></div></div>
-</div>
-
-<!-- ── REPORTS ─────────────────────────────────────────────── -->
-<div class="page" id="page-reports">
-  <div style="font-size:19px;font-weight:900;color:var(--navy);margin-bottom:4px">📋 التقارير اليومية</div>
-  <div style="font-size:11px;color:var(--mut);margin-bottom:16px">سجل التقارير المرسلة من المناديب</div>
-  <div id="reports-content"><div class="spin-wrap"><div class="spin"></div><div>انتظر الإرسال...</div></div></div>
-</div>
-
-<!-- ── ARCHIVE (سجل الزيارات) ─────────────────────────────── -->
-<div class="page" id="page-archive">
-  <div style="font-size:19px;font-weight:900;color:var(--navy);margin-bottom:4px">🗂️ سجل الزيارات</div>
-  <div style="font-size:11px;color:var(--mut);margin-bottom:14px">السجل الكامل لكل الزيارات مرتّبة بالتاريخ — مرجع دائم للرجوع لأي يوم</div>
-  <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
-    <button class="fpill on" id="af-all" onclick="setArchRep('all')">الكل</button>
-    <button class="fpill" id="af-abd" onclick="setArchRep('عبدالرزاق محمد')">عبدالرزاق</button>
-    <button class="fpill" id="af-has" onclick="setArchRep('الحسن موسى')">الحسن</button>
-    <input type="date" id="arch-date" onchange="renderArchive()" style="padding:8px 10px;border:1px solid var(--ln2);border-radius:10px;font-size:13px">
-    <input type="search" id="arch-q" oninput="renderArchive()" placeholder="بحث باسم العميل" style="flex:1;min-width:140px;padding:8px 12px;border:1px solid var(--ln2);border-radius:10px;font-size:13px">
-    <button class="fpill" onclick="document.getElementById('arch-date').value='';document.getElementById('arch-q').value='';renderArchive()">عرض الكل</button>
-  </div>
-  <div id="archive-content"><div class="spin-wrap"><div class="spin"></div><div>انتظر الإرسال...</div></div></div>
-</div>
-
-</div><!-- /layout -->
-
-<!-- ══ MOBILE TAB BAR ════════════════════════════════════════ -->
-<div class="mob-tbar">
-  <button class="mob-tab on" onclick="goPage('overview')"><span>📊</span>عام</button>
-  <button class="mob-tab" onclick="goPage('reps')"><span>👥</span>مناديب</button>
-  <button class="mob-tab" onclick="goPage('visits')"><span>📍</span>زيارات</button>
-  <button class="mob-tab" onclick="goPage('requests')"><span>📦</span>طلبات</button>
-  <button class="mob-tab" onclick="goPage('followups')"><span>🔔</span>متابعات</button>
-  <button class="mob-tab" onclick="goPage('reports')"><span>📋</span>تقارير</button>
-  <button class="mob-tab" onclick="goPage('archive')"><span>🗂️</span>السجل</button>
-</div>
-
-<div class="toast-msg" id="toast"></div>
+<div class="toast" id="toast"></div>
 
 <script>
-// ══ CONFIG ════════════════════════════════════════════════════
-var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyTBRrJRoukyyt-4c9f9H3_6DfoPVidMvB4sH7gkpFSY4wcgZuGCLSaePCFqJl5-GzBGw/exec';
-var PIN        = '1234';
-var REPS       = ['عبدالرزاق محمد','الحسن موسى'];
+var SCRIPT_URL='https://script.google.com/macros/s/AKfycbyTBRrJRoukyyt-4c9f9H3_6DfoPVidMvB4sH7gkpFSY4wcgZuGCLSaePCFqJl5-GzBGw/exec';
+var PIN='1234';
+var REPS=['عبدالرزاق محمد','الحسن موسى'];
+var REP_EN={'عبدالرزاق محمد':'Abdulrazak','الحسن موسى':'Hassan'};
+var PAGES=['overview','reps','activity','requests','followups','reports','archive'];
+var DATA={summary:[],recentReports:[],visits:[],requests:[]};
+var _vf='all', _arch='all';
 
-// ══ DATA (from backend v4: visit-based) ══════════════════════
-var DATA = { summary:[], recentReports:[], visits:[], requests:[] };
-var _visitFilter = 'all';
-var PAGES = ['overview','reps','visits','requests','followups','reports','archive'];
-var _archRep = 'all';
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function num(v){return Number(String(v==null?'':v).replace(/,/g,''))||0;}
+function txt(v){return v==null?'':String(v);}
+function set(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+function repEN(r){return REP_EN[r]||String(r||'').split(' ')[0];}
+function dstr(v){var s=txt(v);if(!s)return '';if(s.indexOf('T')>-1){var d=new Date(s);if(!isNaN(d.getTime()))return new Date(d.getTime()+180*60000).toISOString().slice(0,10);}return s.slice(0,10);}
+function today(){return new Date(Date.now()+180*60000).toISOString().slice(0,10);}
+function weekEnd(){var r=new Date(Date.now()+180*60000);r.setDate(r.getDate()+7);return r.toISOString().slice(0,10);}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(function(){t.style.display='none';},2200);}
+function repBadge(r){var a=String(r).indexOf('عبدالرزاق')===0;return '<span class="badge '+(a?'b-abd':'b-has')+'">'+esc(repEN(r))+'</span>';}
+function prettyDate(d){if(!/^\d{4}-\d{2}-\d{2}$/.test(d))return d;var dt=new Date(d+'T00:00:00');return dt.toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});}
 
-// ══ UTILS ═════════════════════════════════════════════════════
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function n(v){return Number(String(v||'').replace(/,/g,''))||0;}
-function txt(v){return (v===undefined||v===null)?'':String(v);}
-function setText(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
-function today(){return new Date(Date.now()+180*60000).toISOString().split('T')[0];}
-function weekEnd(){var r=new Date(Date.now()+180*60000);r.setDate(r.getDate()+7);return r.toISOString().split('T')[0];}
-function dstr(v){var s=txt(v);return s?s.substring(0,10):'';}
-function toast(m,d){var t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(function(){t.style.display='none';},d||2500);}
-function shortRep(rep){return rep.split(' ')[0];}
-function repBadge(rep){var isA=rep.indexOf('عبدالرزاق')===0;return '<span class="badge" style="background:'+(isA?'var(--gold-l)':'var(--navy-l)')+';color:'+(isA?'var(--amb)':'var(--navy)')+'">'+esc(shortRep(rep))+'</span>';}
+function repSummary(r){var rows=DATA.summary.filter(function(x){return txt(x['المندوب'])===r;});return rows.length?rows[rows.length-1]:null;}
+function repVisits(r){return DATA.visits.filter(function(v){return txt(v['المندوب'])===r;});}
+function todayVisits(){var td=today();return DATA.visits.filter(function(v){return dstr(v['التاريخ'])===td;});}
+function allFollowups(){return DATA.visits.filter(function(v){var nd=dstr(v['تاريخ المتابعة']);var na=txt(v['الخطوة القادمة']);return nd&&na&&na!=='لا توجد متابعة';}).sort(function(a,b){return dstr(a['تاريخ المتابعة']).localeCompare(dstr(b['تاريخ المتابعة']));});}
 
-// ══ DATA HELPERS ══════════════════════════════════════════════
-function repSummary(rep){
-  var rows=DATA.summary.filter(function(r){return txt(r['المندوب'])===rep;});
-  return rows.length?rows[rows.length-1]:null;
-}
-function repVisits(rep){return DATA.visits.filter(function(v){return txt(v['المندوب'])===rep;});}
-function repTodayVisits(rep){var td=today();return repVisits(rep).filter(function(v){return dstr(v['التاريخ'])===td;});}
-function allFollowups(){
-  return DATA.visits.filter(function(v){
-    var nd=dstr(v['تاريخ المتابعة']);var na=txt(v['الخطوة القادمة']);
-    return nd&&na&&na!=='لا توجد متابعة';
-  }).sort(function(a,b){return dstr(a['تاريخ المتابعة']).localeCompare(dstr(b['تاريخ المتابعة']));});
-}
-
-// ══ PIN / LOGIN ════════════════════════════════════════════════
-function onPinInput(){
-  var v=document.getElementById('pin-inp').value;
-  document.getElementById('pin-err').textContent='';
-  if(v.length===4){setTimeout(doLogin,80);}
-}
+function onPin(){var v=document.getElementById('pin').value;document.getElementById('pin-err').textContent='';if(v.length===4)setTimeout(doLogin,60);}
 function doLogin(){
-  var v=document.getElementById('pin-inp').value;
-  if(v===PIN){
-    document.getElementById('login-screen').style.display='none';
+  if(document.getElementById('pin').value===PIN){
+    document.getElementById('login').style.display='none';
+    document.getElementById('app').style.display='flex';
     var now=new Date();
-    var dateStr=now.toLocaleDateString('ar-SA',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-    setText('hdr-date',dateStr);setText('ov-date','تقرير '+dateStr);
-    loadAllData();
-  } else {
-    document.getElementById('pin-err').textContent='❌ الرقم السري غير صحيح';
-    document.getElementById('pin-inp').value='';
-    setTimeout(function(){document.getElementById('pin-err').textContent='';},2500);
+    set('topdate',now.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'}));
+    set('ov-date',now.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}));
+    loadAll();
+  }else{
+    document.getElementById('pin-err').textContent='Incorrect PIN';
+    document.getElementById('pin').value='';
   }
 }
 
-// ══ NAVIGATION ════════════════════════════════════════════════
-function goPage(id){
-  PAGES.forEach(function(p){var el=document.getElementById('page-'+p);if(el)el.classList.remove('active');});
-  var el=document.getElementById('page-'+id);if(el)el.classList.add('active');
-  document.querySelectorAll('.snav').forEach(function(b,i){b.classList.remove('on');if(PAGES[i]===id)b.classList.add('on');});
-  document.querySelectorAll('.mob-tab').forEach(function(b,i){b.classList.remove('on');if(PAGES[i]===id)b.classList.add('on');});
-  if(id==='visits')renderVisits();
+function go(id){
+  PAGES.forEach(function(p){var e=document.getElementById('p-'+p);if(e)e.classList.remove('active');});
+  var e=document.getElementById('p-'+id);if(e)e.classList.add('active');
+  document.querySelectorAll('.ni').forEach(function(b,i){b.classList.toggle('on',PAGES[i]===id);});
+  document.querySelectorAll('.mtab').forEach(function(b,i){b.classList.toggle('on',PAGES[i]===id);});
+  if(id==='activity')renderActivity();
   if(id==='requests')renderRequests();
-  if(id==='followups')renderFollowupsPage();
+  if(id==='followups')renderFollowups();
   if(id==='reports')renderReports();
   if(id==='archive')renderArchive();
 }
 
-// ══ DATA LOADING (JSONP — bypasses CORS) ═════════════════════
-function loadAllData(){
-  var btn=document.getElementById('refresh-btn');if(btn)btn.classList.add('spinning');
-  setText('sync-status','جاري المزامنة...');
-  var cb='bh_'+Date.now();
-  window[cb]=function(res){
-    if(res&&res.status==='success'){
-      DATA.summary=res.summary||[];
-      DATA.recentReports=res.recentReports||[];
-      DATA.visits=res.visits||[];
-      DATA.requests=res.requests||[];
-      setText('sync-status','✓ تم التحديث');
-    } else {
-      setText('sync-status','⚠️ لا توجد بيانات');
-    }
-    renderAll();
-    if(btn)btn.classList.remove('spinning');
+function loadAll(){
+  set('sync','Syncing…');
+  var cb='__bh'+Date.now();
+  window[cb]=function(resp){
     delete window[cb];
+    if(resp&&resp.status==='success'){
+      DATA.summary=resp.summary||[];DATA.recentReports=resp.recentReports||[];
+      DATA.visits=resp.visits||[];DATA.requests=resp.requests||[];
+      set('sync','✓ Synced');renderAll();
+    }else{set('sync','⚠ Sync error');}
   };
   var s=document.createElement('script');
   s.src=SCRIPT_URL+'?callback='+cb+'&t='+Date.now();
-  s.onerror=function(){
-    setText('sync-status','⚠️ تعذّر الاتصال');
-    if(btn)btn.classList.remove('spinning');
-    renderAll();
-  };
-  document.body.appendChild(s);
+  s.onerror=function(){set('sync','⚠ Connection failed');};
+  document.head.appendChild(s);
 }
 
-function clearView(){
-  DATA={summary:[],recentReports:[],visits:[],requests:[]};
-  renderAll();
-  toast('🗑 تم مسح العرض');
-}
-
-// ══ RENDER ════════════════════════════════════════════════════
 function renderAll(){
-  renderStatus();
-  renderOverview();
-  renderReps();
-  renderVisits();
-  renderRequests();
-  renderFollowupsPage();
-  renderReports();
-  renderArchive();
-  updateSidebarCounts();
+  renderOverview();renderReps();renderActivity();renderRequests();
+  renderFollowups();renderReports();renderArchive();renderSidebar();renderCounts();
 }
-
-function renderStatus(){
-  var map={'عبدالرزاق محمد':{dot:'st-a',sync:'a-sync'},'الحسن موسى':{dot:'st-h',sync:'h-sync'}};
-  REPS.forEach(function(rep){
-    var s=repSummary(rep);var ids=map[rep];if(!ids)return;
-    var dot=document.getElementById(ids.dot);
-    if(s){
-      if(dot){dot.classList.remove('sdot-off');dot.classList.add('sdot-on');}
-      setText(ids.sync, txt(s['آخر تحديث'])||'تم الإرسال');
-    } else {
-      if(dot){dot.classList.add('sdot-off');dot.classList.remove('sdot-on');}
-      setText(ids.sync,'لم يرسل بعد');
-    }
-  });
-  var anyReport=DATA.summary.length>0;
-  setText('last-sync', anyReport?('آخر تزامن: '+new Date().toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'})):'لم يتم التزامن');
+function renderCounts(){
+  var rq=DATA.requests.length, fu=allFollowups().filter(function(v){return dstr(v['تاريخ المتابعة'])<=weekEnd();}).length;
+  var a=document.getElementById('c-rq'),b=document.getElementById('c-fu');
+  if(rq){a.style.display='';a.textContent=rq;}else a.style.display='none';
+  if(fu){b.style.display='';b.textContent=fu;}else b.style.display='none';
 }
-
-function updateSidebarCounts(){
-  var fu=allFollowups();var td=today();
-  var due=fu.filter(function(v){return dstr(v['تاريخ المتابعة'])<=td;}).length;
-  var fuEl=document.getElementById('sb-fu-cnt');
-  if(due>0){fuEl.style.display='';fuEl.textContent=due;}else{fuEl.style.display='none';}
-  var rqEl=document.getElementById('sb-rq-cnt');
-  if(DATA.requests.length>0){rqEl.style.display='';rqEl.textContent=DATA.requests.length;}else{rqEl.style.display='none';}
+function renderSidebar(){
+  var h='<div class="sf-t">Reps status</div>';
+  REPS.forEach(function(r){var s=repSummary(r);h+='<div class="rep-stat"><span class="dotg"></span><div><div class="rn">'+esc(repEN(r))+'</div><div class="rt">'+(s?esc(txt(s['آخر تحديث'])):'—')+'</div></div></div>';});
+  document.getElementById('side-foot').innerHTML=h;
 }
 
 function renderOverview(){
-  var td=today();
-  var todayV=DATA.visits.filter(function(v){return dstr(v['التاريخ'])===td;});
-  var tV=todayV.length;
-  var tNew=todayV.filter(function(v){return txt(v['النوع'])==='New';}).length;
-  var tExist=todayV.filter(function(v){return txt(v['النوع'])==='Existing';}).length;
-  var tProspect=todayV.filter(function(v){return txt(v['تصنيف العميل'])==='prospect';}).length;
-  var visByRep={},scoreByRep={},tScore=0;
-  REPS.forEach(function(rep){
-    visByRep[rep]=todayV.filter(function(v){return txt(v['المندوب'])===rep;}).length;
-    var s=repSummary(rep);
-    var pts=(s&&dstr(s['آخر تحديث'])===td)?n(s['النقاط']):0;  // نقاط اليوم فقط
-    scoreByRep[rep]=pts;tScore+=pts;
+  var td=today(), tv=todayVisits();
+  var nNew=tv.filter(function(v){return txt(v['النوع'])==='New';}).length;
+  var nEx=tv.filter(function(v){return txt(v['النوع'])==='Existing';}).length;
+  var nPr=tv.filter(function(v){return txt(v['تصنيف العميل'])==='prospect';}).length;
+  var byRep={},score={},tScore=0;
+  REPS.forEach(function(r){
+    byRep[r]=tv.filter(function(v){return txt(v['المندوب'])===r;}).length;
+    var s=repSummary(r);var p=(s&&dstr(s['آخر تحديث'])===td)?num(s['النقاط']):0;score[r]=p;tScore+=p;
   });
-  setText('kpi-v',tV);
-  setText('kpi-va',visByRep['عبدالرزاق محمد']||0);
-  setText('kpi-vh',visByRep['الحسن موسى']||0);
-  setText('kpi-prospect',tProspect);
-  setText('kpi-exist',tExist);
-  setText('kpi-new',tNew);
-  setText('kpi-score',tScore);
-  setText('kpi-sa',scoreByRep['عبدالرزاق محمد']||0);
-  setText('kpi-sh',scoreByRep['الحسن موسى']||0);
+  set('k-v',tv.length);set('k-va',byRep['عبدالرزاق محمد']||0);set('k-vh',byRep['الحسن موسى']||0);
+  set('k-prospect',nPr);set('k-new',nNew);set('k-exist',nEx);
+  set('k-score',tScore);set('k-sa',score['عبدالرزاق محمد']||0);set('k-sh',score['الحسن موسى']||0);
 
-  // Follow-up alerts
-  var fu=allFollowups(),td=today(),we=weekEnd();
-  var od=0,tdc=0,up=0;
-  fu.forEach(function(v){var d=dstr(v['تاريخ المتابعة']);if(d<td)od++;else if(d===td)tdc++;else if(d<=we)up++;});
-  setText('al-od',od);setText('al-td',tdc);setText('al-up',up);
-  setText('kpi-fu',od+tdc);
-  setText('kpi-overdue-lbl', od>0?('منها '+od+' متأخرة'):'');
+  var el=document.getElementById('ov-split');
+  if(tv.length){
+    var seg=[{l:'Existing',la:'حاليين',v:nEx,c:'var(--green)'},{l:'New',la:'جديد',v:nNew,c:'var(--navy)'}];
+    el.innerHTML=seg.map(function(s){var pct=Math.round(s.v/tv.length*100);return '<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span><b>'+s.l+'</b> <span class="ar" style="color:var(--mut);font-size:10px">'+s.la+'</span></span><span style="font-weight:700">'+s.v+' ('+pct+'%)</span></div><div style="height:9px;background:var(--ln2);border-radius:6px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:'+s.c+'"></div></div></div>';}).join('');
+  }else el.innerHTML='<div class="empty" style="padding:20px">No visits today <span class="ar">لا زيارات اليوم</span></div>';
 
-  // Today split bar
-  var splitEl=document.getElementById('ov-split');
-  if(tV>0){
-    var seg=[{l:'حاليين',v:tExist,c:'var(--green)'},{l:'جدد',v:tNew,c:'var(--navy)'}];
-    splitEl.innerHTML=seg.map(function(s){
-      var pct=tV?Math.round(s.v/tV*100):0;
-      return '<div style="margin-bottom:11px"><div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;margin-bottom:3px"><span>'+s.l+'</span><span>'+s.v+' ('+pct+'%)</span></div>'+
-        '<div class="bar-t"><div class="bar-f" style="width:'+pct+'%;background:'+s.c+'"></div></div></div>';
-    }).join('');
-  } else {
-    splitEl.innerHTML='<div style="font-size:11px;color:var(--mut);text-align:center;padding:18px">لا زيارات اليوم بعد</div>';
-  }
+  var fu=allFollowups(),we=weekEnd();
+  var od=fu.filter(function(v){return dstr(v['تاريخ المتابعة'])<td;}).length;
+  var tdc=fu.filter(function(v){return dstr(v['تاريخ المتابعة'])===td;}).length;
+  var wk=fu.filter(function(v){var d=dstr(v['تاريخ المتابعة']);return d>td&&d<=we;}).length;
+  set('al-od',od);set('al-td',tdc);set('al-wk',wk);set('k-fu',tdc);set('k-od',od?(od+' overdue'):'');
 
-  // Top clients by visit count
-  var cCount={};
-  DATA.visits.forEach(function(v){var c=txt(v['العميل']);if(c)cCount[c]=(cCount[c]||0)+1;});
-  var topC=Object.keys(cCount).map(function(k){return {name:k,c:cCount[k]};}).sort(function(a,b){return b.c-a.c;}).slice(0,5);
-  document.getElementById('ov-clients').innerHTML = topC.length?topC.map(function(c){
-    return '<div class="vli"><div style="font-size:11px;font-weight:700">'+esc(c.name)+'</div><div style="font-size:11px;font-weight:800;color:var(--navy)">'+c.c+' زيارة</div></div>';
-  }).join(''):'<div style="font-size:11px;color:var(--mut);text-align:center;padding:10px">لا بيانات بعد</div>';
+  var cc={};DATA.visits.forEach(function(v){var c=txt(v['العميل']);if(c)cc[c]=(cc[c]||0)+1;});
+  var top=Object.keys(cc).map(function(k){return [k,cc[k]];}).sort(function(a,b){return b[1]-a[1];}).slice(0,5);
+  document.getElementById('ov-clients').innerHTML=top.length?top.map(function(t){return '<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--ln2);font-size:13px"><span class="ar">'+esc(t[0])+'</span><b>'+t[1]+'</b></div>';}).join(''):'<div class="empty" style="padding:14px">No data yet</div>';
 
-  // Materials requested
-  var mCount={};
-  DATA.requests.forEach(function(r){
-    txt(r['المنتجات المطلوبة']).split(',').forEach(function(p){p=p.trim();if(p)mCount[p]=(mCount[p]||0)+1;});
-  });
-  var topM=Object.keys(mCount).map(function(k){return {name:k,c:mCount[k]};}).sort(function(a,b){return b.c-a.c;}).slice(0,5);
-  document.getElementById('ov-mats').innerHTML = topM.length?topM.map(function(m){
-    return '<div class="vli"><div style="font-size:11px;font-weight:700">'+esc(m.name)+'</div><div style="font-size:11px;font-weight:800;color:var(--amb)">'+m.c+'</div></div>';
-  }).join(''):'<div style="font-size:11px;color:var(--mut);text-align:center;padding:10px">لا بيانات بعد</div>';
+  var mm={};DATA.requests.forEach(function(r){String(txt(r['المنتجات المطلوبة'])).split(/[,،]/).forEach(function(p){p=p.trim();if(p)mm[p]=(mm[p]||0)+1;});});
+  var mat=Object.keys(mm).map(function(k){return [k,mm[k]];}).sort(function(a,b){return b[1]-a[1];}).slice(0,5);
+  document.getElementById('ov-mats').innerHTML=mat.length?mat.map(function(t){return '<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--ln2);font-size:13px"><span class="ar">'+esc(t[0])+'</span><b>'+t[1]+'</b></div>';}).join(''):'<div class="empty" style="padding:14px">No requests yet</div>';
 
-  // Smart insights
   var ins=[];
-  if(od>0)ins.push({i:'🔴',t:od+' متابعة متأخرة تحتاج إجراء فوري'});
-  if(tProspect>0)ins.push({i:'🎯',t:tProspect+' زيارة لعملاء محتملين اليوم — فرص نمو'});
-  if(topM.length)ins.push({i:'📦',t:'أكثر منتج مطلوب: '+topM[0].name});
-  if(topC.length)ins.push({i:'⭐',t:'أكثر عميل زيارةً: '+topC[0].name});
-  var lead=null,leadScore=-1;
-  REPS.forEach(function(rep){if((scoreByRep[rep]||0)>leadScore){leadScore=scoreByRep[rep]||0;lead=rep;}});
-  if(lead&&leadScore>0)ins.push({i:'🏆',t:shortRep(lead)+' الأعلى أداءً اليوم بـ '+leadScore+' نقطة'});
-  document.getElementById('ov-insights').innerHTML = ins.length?ins.map(function(o){
-    return '<div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:9px"><span style="font-size:14px">'+o.i+'</span><span style="font-size:11px;font-weight:600;line-height:1.5">'+esc(o.t)+'</span></div>';
-  }).join(''):'<div style="font-size:11px;color:var(--mut);text-align:center;padding:10px">لا توصيات بعد</div>';
+  if(nPr)ins.push('🎯 '+nPr+' prospect visit(s) today — growth opportunity.');
+  if(top.length)ins.push('⭐ Most visited: '+top[0][0]+' ('+top[0][1]+').');
+  var best=REPS.map(function(r){var s=repSummary(r);return {r:r,p:(s&&dstr(s['آخر تحديث'])===td)?num(s['النقاط']):0};}).sort(function(a,b){return b.p-a.p;})[0];
+  if(best&&best.p)ins.push('🏆 Top today: '+repEN(best.r)+' with '+best.p+' pts.');
+  document.getElementById('ov-insights').innerHTML=ins.length?ins.map(function(i){return '<div style="padding:7px 0;border-bottom:1px solid var(--ln2);font-size:12.5px">'+esc(i)+'</div>';}).join(''):'<div class="empty" style="padding:14px">No insights yet</div>';
 }
 
 function renderReps(){
-  var grid=document.getElementById('reps-grid');
-  var colors={'عبدالرزاق محمد':'var(--gold)','الحسن موسى':'var(--navy)'};
-  var avatarColor={'عبدالرزاق محمد':'var(--gold)','الحسن موسى':'var(--navy)'};
-  var avatarText={'عبدالرزاق محمد':'#ink','الحسن موسى':'#fff'};
-  grid.innerHTML=REPS.map(function(rep){
-    var s=repSummary(rep);
-    var isA=rep.indexOf('عبدالرزاق')===0;
-    var tv=repTodayVisits(rep);
-    var initial=isA?'A':'H';
-    return '<div class="rep-card" style="border-top:4px solid '+colors[rep]+'">'+
-      '<div style="display:flex;align-items:center;gap:11px;margin-bottom:16px">'+
-        '<div style="background:'+colors[rep]+';width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:'+(isA?'var(--ink)':'#fff')+';font-size:18px;font-weight:900;flex-shrink:0">'+initial+'</div>'+
-        '<div><div style="font-size:15px;font-weight:900;color:var(--navy)">'+esc(shortRep(rep))+'</div>'+
-        '<div style="font-size:10px;color:var(--mut)">'+(s?esc(txt(s['آخر تحديث'])):'لم يرسل بعد')+'</div></div>'+
-        '<div style="margin-right:auto;text-align:center"><div style="font-size:26px;font-weight:900;color:var(--gold)">'+(s?n(s['النقاط']):0)+'</div><div style="font-size:9px;color:var(--mut)">نقطة</div></div>'+
-      '</div>'+
-      '<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:9px;margin-bottom:14px">'+
-        '<div style="background:var(--bg);border-radius:10px;padding:12px 6px;text-align:center"><div style="font-size:20px;font-weight:900;color:var(--navy)">'+tv.length+'</div><div style="font-size:9px;color:var(--mut)">زيارات</div></div>'+
-        '<div style="background:var(--bg);border-radius:10px;padding:12px 6px;text-align:center"><div style="font-size:20px;font-weight:900;color:var(--green)">'+tv.filter(function(v){return txt(v['النوع'])==='Existing';}).length+'</div><div style="font-size:9px;color:var(--mut)">حاليين</div></div>'+
-        '<div style="background:var(--bg);border-radius:10px;padding:12px 6px;text-align:center"><div style="font-size:20px;font-weight:900;color:var(--amb)">'+tv.filter(function(v){return txt(v['تصنيف العميل'])==='prospect';}).length+'</div><div style="font-size:9px;color:var(--mut)">محتملين</div></div>'+
-        '<div style="background:var(--bg);border-radius:10px;padding:12px 6px;text-align:center"><div style="font-size:20px;font-weight:900;color:var(--pu)">'+tv.filter(function(v){return txt(v['النوع'])==='New';}).length+'</div><div style="font-size:9px;color:var(--mut)">جدد</div></div>'+
-      '</div>'+
-      '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:14px">'+
-        '<div style="background:var(--navy-l);border-radius:10px;padding:10px 6px;text-align:center"><div style="font-size:16px;font-weight:900;color:var(--navy)">'+(s?n(s['عملاء جدد (الشهر)']):0)+'</div><div style="font-size:9px;color:var(--mut)">عملاء جدد/شهر</div></div>'+
-        '<div style="background:var(--navy-l);border-radius:10px;padding:10px 6px;text-align:center"><div style="font-size:16px;font-weight:900;color:var(--navy)">'+(s?n(s['فرص (الشهر)']):0)+'</div><div style="font-size:9px;color:var(--mut)">فرص/شهر</div></div>'+
-        '<div style="background:var(--navy-l);border-radius:10px;padding:10px 6px;text-align:center"><div style="font-size:16px;font-weight:900;color:var(--navy)">'+(s?n(s['عروض (الشهر)']):0)+'</div><div style="font-size:9px;color:var(--mut)">عروض/شهر</div></div>'+
-      '</div>'+
-      '<div style="font-size:11px;font-weight:800;color:var(--navy);margin-bottom:8px;border-top:1px solid var(--ln2);padding-top:12px">زيارات اليوم ('+tv.length+')</div>'+
-      '<div>'+ (tv.length?tv.slice(0,5).map(function(v){
-        return '<div class="vli"><div style="min-width:0"><div style="font-size:11px;font-weight:700">'+esc(txt(v['العميل']))+'</div><div style="font-size:9px;color:var(--mut)">'+esc(txt(v['هدف الزيارة'])||'—')+(txt(v['الحي'])?' · '+esc(txt(v['الحي'])):'')+'</div></div><div style="font-size:9px;color:var(--mut);white-space:nowrap">'+esc(txt(v['الوقت']))+'</div></div>';
-      }).join('') : '<div style="font-size:11px;color:var(--mut)">لا زيارات بعد</div>') + '</div>'+
-      '</div>';
+  document.getElementById('reps-grid').innerHTML=REPS.map(function(r){
+    var s=repSummary(r),tv=repVisits(r).filter(function(v){return dstr(v['التاريخ'])===today();});
+    var ex=tv.filter(function(v){return txt(v['النوع'])==='Existing';}).length;
+    var nw=tv.filter(function(v){return txt(v['النوع'])==='New';}).length;
+    var pr=tv.filter(function(v){return txt(v['تصنيف العميل'])==='prospect';}).length;
+    var abd=String(r).indexOf('عبدالرزاق')===0;
+    var list=tv.length?tv.map(function(v){return '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--ln2);font-size:12px"><span class="ar">'+esc(txt(v['العميل']))+'</span><span style="color:var(--mut)">'+esc(txt(v['الوقت']))+'</span></div>';}).join(''):'<div style="font-size:12px;color:var(--mut);padding:8px 0">No visits today</div>';
+    return '<div class="rcard '+(abd?'abd':'')+'"><div class="rhead"><div style="display:flex;align-items:center;gap:11px"><div class="rav">'+esc(repEN(r)[0])+'</div><div><div class="rname">'+esc(repEN(r))+'</div><div class="rsub ar">'+(s?esc(txt(s['آخر تحديث'])):'—')+'</div></div></div><div class="rpts">'+(s?num(s['النقاط']):0)+'<small>points</small></div></div>'+
+      '<div class="rstats"><div class="rstat"><div class="n" style="color:var(--navy)">'+tv.length+'</div><div class="l">Visits</div></div><div class="rstat"><div class="n" style="color:var(--green)">'+ex+'</div><div class="l">Existing</div></div><div class="rstat"><div class="n" style="color:var(--amb)">'+pr+'</div><div class="l">Prospect</div></div><div class="rstat"><div class="n" style="color:var(--pu)">'+nw+'</div><div class="l">New</div></div></div>'+
+      '<div class="rmonth"><div class="rstat"><div class="n" style="color:var(--navy)">'+(s?num(s['عملاء جدد (الشهر)']):0)+'</div><div class="l">New / month</div></div><div class="rstat"><div class="n" style="color:var(--navy)">'+(s?num(s['فرص (الشهر)']):0)+'</div><div class="l">Opps / month</div></div><div class="rstat"><div class="n" style="color:var(--navy)">'+(s?num(s['عروض (الشهر)']):0)+'</div><div class="l">Quotes / month</div></div></div>'+
+      '<div style="margin-top:12px;font-size:12px;font-weight:700;color:var(--navy)">Today\'s visits ('+tv.length+')</div>'+list+'</div>';
   }).join('');
 }
 
-function setVisitFilter(f){
-  _visitFilter=f;
-  document.querySelectorAll('#page-visits .fpill').forEach(function(b){b.classList.remove('on');});
-  var map={'all':'vf-all','عبدالرزاق محمد':'vf-abd','الحسن موسى':'vf-has','new':'vf-new','today':'vf-today'};
-  var el=document.getElementById(map[f]);if(el)el.classList.add('on');
-  renderVisits();
-}
-
-function renderVisits(){
-  var list=DATA.visits.slice();
-  var td=today();
-  if(_visitFilter==='new')list=list.filter(function(v){return txt(v['النوع'])==='New';});
-  else if(_visitFilter==='today')list=list.filter(function(v){return dstr(v['التاريخ'])===td;});
-  else if(_visitFilter!=='all')list=list.filter(function(v){return txt(v['المندوب'])===_visitFilter;});
-  document.getElementById('visits-content').innerHTML=visitsTable(list);
-}
-
-function visitsTable(list){
-  if(!list||!list.length)return '<div class="card"><div style="text-align:center;padding:30px;color:var(--mut)"><div style="font-size:34px;margin-bottom:8px">📍</div><div style="font-size:13px;font-weight:700">لا توجد زيارات</div></div></div>';
+function setVf(f){_vf=f;document.querySelectorAll('#p-activity .pill').forEach(function(b){b.classList.remove('on');});var m={'all':'vf-all','عبدالرزاق محمد':'vf-abd','الحسن موسى':'vf-has','new':'vf-new','today':'vf-today'};var e=document.getElementById(m[f]);if(e)e.classList.add('on');renderActivity();}
+function renderActivity(){
+  var list=DATA.visits.slice(),td=today();
+  if(_vf==='new')list=list.filter(function(v){return txt(v['النوع'])==='New';});
+  else if(_vf==='today')list=list.filter(function(v){return dstr(v['التاريخ'])===td;});
+  else if(_vf!=='all')list=list.filter(function(v){return txt(v['المندوب'])===_vf;});
+  list.sort(function(a,b){var d=dstr(b['التاريخ']).localeCompare(dstr(a['التاريخ']));return d!==0?d:txt(b['الوقت']).localeCompare(txt(a['الوقت']));});
+  var el=document.getElementById('activity-content');
+  if(!list.length){el.innerHTML='<div class="empty"><div class="ei">📍</div><b>No visits</b></div>';return;}
   var rows=list.map(function(v){
-    var type=txt(v['النوع']);
-    var typeChip=type==='New'?'<span class="badge" style="background:var(--navy-l);color:var(--navy)">✨ جديد</span>':'<span class="badge" style="background:var(--green-l);color:var(--green)">🏢 حالي</span>';
-    var result=txt(v['نتيجة الزيارة']);
-    var gps=txt(v['الإحداثيات']);
-    var gpsLink=gps?' <a href="https://maps.google.com/?q='+encodeURIComponent(gps)+'" target="_blank" style="text-decoration:none">📍</a>':'';
+    var t=txt(v['النوع'])==='New'?'<span class="badge b-new">New</span>':'<span class="badge b-exist">Existing</span>';
+    var gps=txt(v['الإحداثيات']);var g=gps?' <a href="https://maps.google.com/?q='+encodeURIComponent(gps)+'" target="_blank">📍</a>':'';
     var nd=dstr(v['تاريخ المتابعة']);
-    return '<tr>'+
-      '<td style="white-space:nowrap">'+dstr(v['التاريخ'])+'<div style="color:var(--mut);font-size:9px">'+esc(txt(v['الوقت']))+'</div></td>'+
-      '<td>'+repBadge(txt(v['المندوب']))+'</td>'+
-      '<td><b style="font-size:12px">'+esc(txt(v['العميل']))+'</b><div style="margin-top:3px">'+typeChip+'</div></td>'+
-      '<td>'+esc(txt(v['هدف الزيارة'])||'—')+(result?'<div style="margin-top:3px"><span class="badge" style="background:var(--ln2);color:var(--mut)">'+esc(result)+'</span></div>':'')+'</td>'+
-      '<td>'+esc(txt(v['الحي'])||'—')+gpsLink+'</td>'+
-      '<td>'+esc(txt(v['الخطوة القادمة'])||'—')+(nd?'<div style="margin-top:3px"><span class="badge" style="background:var(--gold-l);color:var(--amb)">'+nd+'</span></div>':'')+'</td>'+
-      '<td style="max-width:200px;font-size:11px;color:var(--mut)">'+esc(txt(v['ملاحظات'])||'—')+'</td>'+
-      '</tr>';
+    return '<tr><td style="white-space:nowrap">'+dstr(v['التاريخ'])+'<div style="color:var(--mut);font-size:10px" class="ar">'+esc(txt(v['الوقت']))+'</div></td><td>'+repBadge(txt(v['المندوب']))+'</td><td><b class="ar">'+esc(txt(v['العميل']))+'</b><div style="margin-top:3px">'+t+'</div></td><td class="ar">'+esc(txt(v['هدف الزيارة'])||'—')+(txt(v['نتيجة الزيارة'])?'<div style="font-size:11px;color:var(--mut);margin-top:2px">'+esc(txt(v['نتيجة الزيارة']))+'</div>':'')+'</td><td class="ar">'+esc(txt(v['الحي'])||'—')+g+'</td><td class="ar">'+esc(txt(v['الخطوة القادمة'])||'—')+(nd?'<div style="margin-top:3px"><span class="badge b-abd">'+nd+'</span></div>':'')+'</td></tr>';
   }).join('');
-  return '<div class="card" style="overflow-x:auto"><table class="tbl"><thead><tr>'+
-    '<th>التاريخ</th><th>المندوب</th><th>العميل</th><th>الهدف/النتيجة</th><th>الموقع</th><th>المتابعة</th><th>ملاحظات</th>'+
-    '</tr></thead><tbody>'+rows+'</tbody></table></div>';
+  el.innerHTML='<table><thead><tr><th>Date</th><th>Rep</th><th>Client</th><th>Purpose / Result</th><th>Area</th><th>Follow-up</th></tr></thead><tbody>'+rows+'</tbody></table>';
 }
 
 function renderRequests(){
-  var list=DATA.requests;
-  var el=document.getElementById('requests-content');
-  if(!list||!list.length){el.innerHTML='<div class="card"><div style="text-align:center;padding:30px;color:var(--mut)"><div style="font-size:34px;margin-bottom:8px">📦</div><div style="font-size:13px;font-weight:700">لا توجد طلبات منتجات</div></div></div>';return;}
-  var rows=list.map(function(r){
-    return '<tr>'+
-      '<td style="white-space:nowrap">'+dstr(r['التاريخ'])+'<div style="color:var(--mut);font-size:9px">'+esc(txt(r['الوقت']))+'</div></td>'+
-      '<td>'+repBadge(txt(r['المندوب']))+'</td>'+
-      '<td><b style="font-size:12px">'+esc(txt(r['العميل']))+'</b></td>'+
-      '<td>'+esc(txt(r['المنتجات المطلوبة'])||'—')+'</td>'+
-      '<td style="font-size:11px;color:var(--mut)">'+esc(txt(r['ملاحظات'])||'—')+'</td>'+
-      '</tr>';
-  }).join('');
-  el.innerHTML='<div class="card" style="overflow-x:auto"><table class="tbl"><thead><tr>'+
-    '<th>التاريخ</th><th>المندوب</th><th>العميل</th><th>المنتجات المطلوبة</th><th>ملاحظات</th>'+
-    '</tr></thead><tbody>'+rows+'</tbody></table></div>';
+  var el=document.getElementById('requests-content'),list=DATA.requests;
+  if(!list.length){el.innerHTML='<div class="empty"><div class="ei">📦</div><b>No product requests</b></div>';return;}
+  var rows=list.map(function(r){return '<tr><td style="white-space:nowrap">'+dstr(r['التاريخ'])+'<div style="color:var(--mut);font-size:10px" class="ar">'+esc(txt(r['الوقت']))+'</div></td><td>'+repBadge(txt(r['المندوب']))+'</td><td class="ar"><b>'+esc(txt(r['العميل']))+'</b></td><td class="ar">'+esc(txt(r['المنتجات المطلوبة'])||'—')+'</td><td class="ar" style="color:var(--mut)">'+esc(txt(r['ملاحظات'])||'—')+'</td></tr>';}).join('');
+  el.innerHTML='<table><thead><tr><th>Date</th><th>Rep</th><th>Client</th><th>Requested products</th><th>Notes</th></tr></thead><tbody>'+rows+'</tbody></table>';
 }
 
-function renderFollowupsPage(){
+function renderFollowups(){
   var fu=allFollowups(),td=today(),we=weekEnd();
   var od=fu.filter(function(v){return dstr(v['تاريخ المتابعة'])<td;});
   var tdc=fu.filter(function(v){return dstr(v['تاريخ المتابعة'])===td;});
   var wk=fu.filter(function(v){var d=dstr(v['تاريخ المتابعة']);return d>td&&d<=we;});
-  setText('fu-od',od.length);setText('fu-td',tdc.length);setText('fu-wk',wk.length);
-
-  var groups=[{t:'🔴 متأخرة',list:od,c:'var(--red)'},{t:'🟡 اليوم',list:tdc,c:'var(--amb)'},{t:'🟢 هذا الأسبوع',list:wk,c:'var(--green)'}];
-  var html=groups.filter(function(g){return g.list.length;}).map(function(g){
-    return '<div class="card"><div class="shdr" style="color:'+g.c+'">'+g.t+' ('+g.list.length+')</div>'+
-      g.list.map(function(v){
-        return '<div class="vli"><div style="min-width:0"><div style="font-size:12px;font-weight:700">'+esc(txt(v['العميل']))+' '+repBadge(txt(v['المندوب']))+'</div>'+
-          '<div style="font-size:10px;color:var(--mut)">'+esc(txt(v['الخطوة القادمة']))+(txt(v['هدف الزيارة'])?' · '+esc(txt(v['هدف الزيارة'])):'')+'</div></div>'+
-          '<div style="font-size:11px;font-weight:800;color:'+g.c+';white-space:nowrap">'+dstr(v['تاريخ المتابعة'])+'</div></div>';
-      }).join('')+'</div>';
+  set('fu-od',od.length);set('fu-td',tdc.length);set('fu-wk',wk.length);
+  var groups=[{t:'Overdue',c:'var(--red)',list:od},{t:'Today',c:'var(--amb)',list:tdc},{t:'This week',c:'var(--green)',list:wk}];
+  var h=groups.filter(function(g){return g.list.length;}).map(function(g){
+    return '<div class="card"><div class="shdr" style="color:'+g.c+'">'+g.t+' ('+g.list.length+')</div>'+g.list.map(function(v){return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--ln2)"><div><div style="font-size:13px;font-weight:700"><span class="ar">'+esc(txt(v['العميل']))+'</span> '+repBadge(txt(v['المندوب']))+'</div><div class="ar" style="font-size:11px;color:var(--mut)">'+esc(txt(v['الخطوة القادمة']))+'</div></div><div style="font-weight:800;color:'+g.c+';white-space:nowrap">'+dstr(v['تاريخ المتابعة'])+'</div></div>';}).join('')+'</div>';
   }).join('');
-  document.getElementById('fu-list').innerHTML = html || '<div class="card"><div style="text-align:center;padding:30px;color:var(--mut)"><div style="font-size:34px;margin-bottom:8px">✅</div><div style="font-size:13px;font-weight:700">لا متابعات مستحقة</div></div></div>';
+  document.getElementById('fu-list').innerHTML=h||'<div class="empty"><div class="ei">✅</div><b>No pending follow-ups</b></div>';
 }
 
 function renderReports(){
-  var list=DATA.recentReports;
-  var el=document.getElementById('reports-content');
-  if(!list||!list.length){el.innerHTML='<div class="card"><div style="text-align:center;padding:30px;color:var(--mut)"><div style="font-size:34px;margin-bottom:8px">📋</div><div style="font-size:13px;font-weight:700">لا توجد تقارير</div></div></div>';return;}
-  var rows=list.map(function(r){
-    return '<tr>'+
-      '<td style="white-space:nowrap">'+dstr(r['التاريخ'])+'</td>'+
-      '<td>'+repBadge(txt(r['المندوب']))+'</td>'+
-      '<td style="text-align:center"><b>'+n(r['إجمالي الزيارات'])+'</b></td>'+
-      '<td style="text-align:center">'+n(r['زيارات حاليين'])+'</td>'+
-      '<td style="text-align:center">'+n(r['زيارات محتملين'])+'</td>'+
-      '<td style="text-align:center">'+n(r['عملاء جدد'])+'</td>'+
-      '<td style="text-align:center"><span class="badge" style="background:var(--gold-l);color:var(--amb)">⭐ '+n(r['نقاط الأداء'])+'</span></td>'+
-      '<td style="text-align:center">'+n(r['طلبات منتجات اليوم'])+'</td>'+
-      '<td style="color:var(--mut);font-size:9px;white-space:nowrap">'+esc(txt(r['وقت الإرسال']))+'</td>'+
-      '</tr>';
-  }).join('');
-  el.innerHTML='<div class="card" style="overflow-x:auto"><table class="tbl"><thead><tr>'+
-    '<th>التاريخ</th><th>المندوب</th><th>الزيارات</th><th>حاليين</th><th>محتملين</th><th>جدد</th><th>النقاط</th><th>طلبات</th><th>الإرسال</th>'+
-    '</tr></thead><tbody>'+rows+'</tbody></table></div>';
+  var el=document.getElementById('reports-content'),list=DATA.recentReports;
+  if(!list.length){el.innerHTML='<div class="empty"><div class="ei">📋</div><b>No reports</b></div>';return;}
+  var rows=list.map(function(r){return '<tr><td style="white-space:nowrap">'+dstr(r['التاريخ'])+'</td><td>'+repBadge(txt(r['المندوب']))+'</td><td style="text-align:center"><b>'+num(r['إجمالي الزيارات'])+'</b></td><td style="text-align:center">'+num(r['زيارات حاليين'])+'</td><td style="text-align:center">'+num(r['عملاء جدد'])+'</td><td style="text-align:center"><span class="badge b-abd">⭐ '+num(r['نقاط الأداء'])+'</span></td><td style="text-align:center">'+num(r['طلبات منتجات اليوم'])+'</td><td style="color:var(--mut);font-size:10px;white-space:nowrap">'+esc(txt(r['وقت الإرسال']))+'</td></tr>';}).join('');
+  el.innerHTML='<table><thead><tr><th>Date</th><th>Rep</th><th>Visits</th><th>Existing</th><th>New</th><th>Points</th><th>Requests</th><th>Submitted</th></tr></thead><tbody>'+rows+'</tbody></table>';
 }
 
-function setArchRep(r){
-  _archRep=r;
-  document.querySelectorAll('#page-archive .fpill').forEach(function(b){b.classList.remove('on');});
-  var map={'all':'af-all','عبدالرزاق محمد':'af-abd','الحسن موسى':'af-has'};
-  var el=document.getElementById(map[r]);if(el)el.classList.add('on');
-  renderArchive();
-}
-function prettyDate(d){
-  if(!/^\d{4}-\d{2}-\d{2}$/.test(d))return d;
-  var dt=new Date(d+'T00:00:00');
-  var days=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-  return days[dt.getDay()]+' · '+dt.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
-}
+function setArch(r){_arch=r;document.querySelectorAll('#p-archive .pill').forEach(function(b){if(b.id&&b.id.indexOf('af-')===0)b.classList.remove('on');});var m={'all':'af-all','عبدالرزاق محمد':'af-abd','الحسن موسى':'af-has'};var e=document.getElementById(m[r]);if(e)e.classList.add('on');renderArchive();}
+function clearArch(){document.getElementById('arch-date').value='';document.getElementById('arch-q').value='';renderArchive();}
 function archCard(v){
-  var fields=[['النوع',txt(v['النوع'])],['المنطقة',txt(v['المنطقة'])],['الحي',txt(v['الحي'])],['الغرض',txt(v['هدف الزيارة'])],['النتيجة',txt(v['نتيجة الزيارة'])],['التصنيف',txt(v['تصنيف العميل'])],['جهة الاتصال',txt(v['جهة الاتصال'])],['الهاتف',txt(v['الهاتف'])],['نوع المشروع',txt(v['نوع المشروع'])],['مرحلة المشروع',txt(v['مرحلة المشروع'])],['الخطوة القادمة',txt(v['الخطوة القادمة'])],['تاريخ المتابعة',dstr(v['تاريخ المتابعة'])],['حالة العرض',txt(v['حالة العرض'])],['المدة',txt(v['المدة (د)'])]];
-  var rows=fields.filter(function(f){return f[1];}).map(function(f){return '<div style="font-size:11.5px"><span style="color:var(--mut);font-size:10px">'+f[0]+'</span><div style="font-weight:600">'+esc(f[1])+'</div></div>';}).join('');
-  var gps=txt(v['الإحداثيات']);
-  var mp=gps?'<a href="https://maps.google.com/?q='+encodeURIComponent(gps)+'" target="_blank" style="color:var(--amb);font-weight:700;font-size:11.5px;text-decoration:none">📍 الموقع</a>':'';
+  var F=[['Type','النوع'],['Region','المنطقة'],['Area','الحي'],['Purpose','هدف الزيارة'],['Result','نتيجة الزيارة'],['Class','تصنيف العميل'],['Contact','جهة الاتصال'],['Phone','الهاتف'],['Project','نوع المشروع'],['Stage','مرحلة المشروع'],['Next action','الخطوة القادمة'],['Next date','تاريخ المتابعة'],['Quote','حالة العرض'],['Duration','المدة (د)']];
+  var rows=F.map(function(f){var val=f[1]==='تاريخ المتابعة'?dstr(v[f[1]]):txt(v[f[1]]);if(!val)return '';return '<div class="af"><div class="k">'+f[0]+'</div><div class="v ar">'+esc(val)+'</div></div>';}).join('');
+  var gps=txt(v['الإحداثيات']);var mp=gps?'<a class="map" href="https://maps.google.com/?q='+encodeURIComponent(gps)+'" target="_blank">📍 Location</a>':'';
   var notes=txt(v['ملاحظات']);
-  return '<div class="card" style="margin-top:8px"><div style="margin-bottom:8px"><b style="color:var(--navy);font-size:13px">'+esc(txt(v['العميل'])||'—')+'</b> '+repBadge(txt(v['المندوب']))+'<div style="color:var(--mut);font-size:10px;margin-top:2px">⏱ '+esc(txt(v['الوقت']))+'</div></div>'+
-    '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px">'+rows+'</div>'+
-    (notes?'<div style="margin-top:8px;background:var(--bg);border-radius:8px;padding:7px 9px;font-size:12px">'+esc(notes)+'</div>':'')+
-    (mp?'<div style="margin-top:7px">'+mp+'</div>':'')+'</div>';
+  return '<div class="acard"><div class="atop"><div><span class="acl ar">'+esc(txt(v['العميل'])||'—')+'</span> '+repBadge(txt(v['المندوب']))+'<div style="color:var(--mut);font-size:10px;margin-top:2px" class="ar">⏱ '+esc(txt(v['الوقت']))+'</div></div></div><div class="afields">'+rows+'</div>'+(notes?'<div class="anote ar">'+esc(notes)+'</div>':'')+(mp?'<div>'+mp+'</div>':'')+'</div>';
 }
 function renderArchive(){
-  var el=document.getElementById('archive-content');
-  if(!el)return;
-  var dEl=document.getElementById('arch-date'),qEl=document.getElementById('arch-q');
-  var df=dEl?dEl.value:'';
-  var q=(qEl?qEl.value:'').trim().toLowerCase();
+  var el=document.getElementById('archive-content');if(!el)return;
+  var df=(document.getElementById('arch-date')||{}).value||'';
+  var q=((document.getElementById('arch-q')||{}).value||'').trim().toLowerCase();
   var list=DATA.visits.filter(function(v){
-    if(_archRep!=='all'&&txt(v['المندوب'])!==_archRep)return false;
+    if(_arch!=='all'&&txt(v['المندوب'])!==_arch)return false;
     if(df&&dstr(v['التاريخ'])!==df)return false;
     if(q&&txt(v['العميل']).toLowerCase().indexOf(q)===-1)return false;
     return true;
   });
-  if(!list.length){el.innerHTML='<div class="card"><div style="text-align:center;padding:30px;color:var(--mut)"><div style="font-size:34px;margin-bottom:8px">🗂️</div><div style="font-size:13px;font-weight:700">لا توجد زيارات</div></div></div>';return;}
+  if(!list.length){el.innerHTML='<div class="empty"><div class="ei">🗂️</div><b>No visits found</b></div>';return;}
   var by={};list.forEach(function(v){var d=dstr(v['التاريخ'])||'—';(by[d]=by[d]||[]).push(v);});
   var dates=Object.keys(by).sort(function(a,b){return a<b?1:-1;});
-  var head='<div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap">'+
-    '<div class="card" style="margin:0;flex:1;text-align:center;min-width:90px"><div style="font-size:22px;font-weight:900;color:var(--navy)">'+list.length+'</div><div style="font-size:10px;color:var(--mut)">زيارة</div></div>'+
-    '<div class="card" style="margin:0;flex:1;text-align:center;min-width:90px"><div style="font-size:22px;font-weight:900;color:var(--amb)">'+dates.length+'</div><div style="font-size:10px;color:var(--mut)">يوم</div></div></div>';
-  var html=dates.map(function(d){
+  var head='<div class="kgrid" style="grid-template-columns:1fr 1fr;margin-bottom:14px"><div class="kcard" style="text-align:center"><div class="kv">'+list.length+'</div><div class="kl">Visits</div></div><div class="kcard k-gold" style="text-align:center"><div class="kv" style="color:var(--amb)">'+dates.length+'</div><div class="kl">Days</div></div></div>';
+  var h=dates.map(function(d){
     var items=by[d].sort(function(a,b){return txt(b['الوقت']).localeCompare(txt(a['الوقت']));});
-    return '<div style="margin-bottom:16px"><div style="background:var(--navy);color:#fff;padding:8px 14px;border-radius:10px;font-weight:800;display:flex;justify-content:space-between;align-items:center;font-size:13px"><span>'+prettyDate(d)+'</span><span style="background:var(--gold);color:var(--navy);border-radius:20px;padding:1px 9px;font-size:11px">'+items.length+'</span></div>'+
-      items.map(archCard).join('')+'</div>';
+    return '<div style="margin-bottom:16px"><div class="daybar"><span>'+prettyDate(d)+'</span><span class="c">'+items.length+'</span></div>'+items.map(archCard).join('')+'</div>';
   }).join('');
-  el.innerHTML=head+html;
+  el.innerHTML=head+h;
 }
 
-// auto-focus PIN
-document.getElementById('pin-inp').focus();
+document.getElementById('pin').focus();
 </script>
 </body>
 </html>
