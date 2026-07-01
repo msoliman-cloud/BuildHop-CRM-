@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<meta name="theme-color" content="#1B2A4A" />
+<title>BuildHop — Manager Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Cairo:wght@600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --navy:#243760; --navy-2:#1B2A4A; --navy-l:#EAEEF6;
+    --gold:#C9A227; --gold-2:#E8A320; --gold-l:#FBF3D9;
+    --bg:#F4F6FB; --card:#FFFFFF; --ln:#E6E9F0; --ln2:#EFF1F6;
+    --ink:#1F2937; --mut:#6B7280;
+    --green:#0A8A4F; --green-l:#E4F6EC;
+    --red:#C0392B; --red-l:#FCEDEB;
+    --amb:#9A6B00; --amb-l:#FBF3D9;
+    --pu:#5B3FA0; --pu-l:#F0EBFA;
+    --r:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5}
+  .ar{font-family:'Cairo',sans-serif}
+  small.sub{display:block;font-size:9.5px;color:var(--mut);font-weight:600}
+  b,strong{font-weight:700}
+
+  #login{position:fixed;inset:0;background:linear-gradient(135deg,var(--navy-2),#0f1830);display:flex;align-items:center;justify-content:center;z-index:100}
+  .login-card{background:#fff;border-radius:20px;padding:34px 30px;width:320px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+  .login-logo{width:52px;height:52px;background:var(--gold);border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;color:var(--navy-2);margin:0 auto 14px}
+  .login-card h1{font-size:18px;font-weight:800;color:var(--navy)}
+  .login-card p{font-size:11px;color:var(--mut);margin-bottom:18px}
+  #pin{width:100%;padding:13px;border:1.5px solid var(--ln);border-radius:12px;text-align:center;font-size:22px;letter-spacing:8px;font-weight:700}
+  #pin:focus{outline:none;border-color:var(--gold)}
+  #pin-err{color:var(--red);font-size:12px;margin-top:10px;min-height:16px}
+
+  .layout{display:flex;min-height:100vh}
+  .side{width:240px;background:var(--navy-2);color:#fff;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;flex-shrink:0}
+  .brand{padding:20px 18px;display:flex;align-items:center;gap:11px;border-bottom:1px solid rgba(255,255,255,.08)}
+  .brand .logo{width:38px;height:38px;background:var(--gold);border-radius:11px;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--navy-2)}
+  .brand .bt{font-size:15px;font-weight:800;line-height:1.1}
+  .brand .bd{font-size:10px;color:rgba(255,255,255,.5)}
+  .nav{padding:12px 10px;flex:1;overflow-y:auto}
+  .nav .lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.35);padding:8px 12px 6px;font-weight:700}
+  .ni{display:flex;align-items:center;gap:11px;width:100%;border:none;background:transparent;color:rgba(255,255,255,.72);padding:10px 12px;border-radius:10px;cursor:pointer;font-size:13.5px;font-weight:600;text-align:left;margin-bottom:2px;font-family:inherit}
+  .ni:hover{background:rgba(255,255,255,.06);color:#fff}
+  .ni.on{background:var(--gold);color:var(--navy-2);font-weight:800}
+  .ni .ic{font-size:16px;width:20px;text-align:center}
+  .ni .cnt{margin-left:auto;background:var(--red);color:#fff;font-size:10px;font-weight:800;border-radius:20px;padding:1px 7px}
+  .side-foot{padding:14px;border-top:1px solid rgba(255,255,255,.08);font-size:11px}
+  .side-foot .sf-t{font-size:9.5px;text-transform:uppercase;letter-spacing:.8px;color:rgba(255,255,255,.4);margin-bottom:8px}
+  .rep-stat{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .rep-stat .dotg{width:8px;height:8px;border-radius:50%;background:var(--green)}
+  .rep-stat .rn{font-weight:700;font-size:12px}
+  .rep-stat .rt{font-size:9px;color:rgba(255,255,255,.45)}
+
+  .main{flex:1;min-width:0;display:flex;flex-direction:column}
+  .topbar{background:#fff;border-bottom:1px solid var(--ln);padding:14px 26px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:30}
+  .topbar .tt{font-size:13px;color:var(--mut)}
+  .refresh{display:flex;align-items:center;gap:10px}
+  .refresh .st{font-size:11px;color:var(--mut)}
+  .refresh button{background:var(--navy);color:#fff;border:none;border-radius:10px;padding:9px 16px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
+  .refresh button:hover{background:var(--navy-2)}
+  .content{padding:26px;max-width:1280px;width:100%}
+
+  .page{display:none}.page.active{display:block}
+  .ph{margin-bottom:20px}
+  .ph h2{font-size:21px;font-weight:800;color:var(--navy)}
+  .ph p{font-size:12px;color:var(--mut)}
+
+  .kgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+  .kcard{background:#fff;border:1px solid var(--ln);border-radius:var(--r);padding:16px;border-top:3px solid var(--navy)}
+  .kcard.k-green{border-top-color:var(--green)} .kcard.k-gold{border-top-color:var(--gold)} .kcard.k-red{border-top-color:var(--red)}
+  .kcard .ki{font-size:20px;margin-bottom:6px}
+  .kcard .kv{font-size:27px;font-weight:900;color:var(--navy);line-height:1}
+  .kcard .kl{font-size:12px;font-weight:700;margin-top:5px}
+  .kcard .kx{font-size:10px;color:var(--mut);margin-top:5px}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+  .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+  .card{background:#fff;border:1px solid var(--ln);border-radius:var(--r);padding:16px;margin-bottom:14px}
+  .shdr{font-size:14px;font-weight:800;color:var(--navy);margin-bottom:12px}
+  .abox{display:flex;align-items:center;justify-content:space-between;border-radius:11px;padding:11px 14px;margin-bottom:8px}
+  .abox .at{font-size:12px;font-weight:800} .abox .av{font-size:26px;font-weight:900}
+
+  .pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+  .pill{border:1px solid var(--ln);background:#fff;border-radius:20px;padding:7px 14px;font-size:12.5px;font-weight:700;cursor:pointer;color:var(--navy);font-family:inherit}
+  .pill.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .ctrl{padding:9px 12px;border:1px solid var(--ln);border-radius:10px;font-size:13px;font-family:inherit}
+
+  table{width:100%;border-collapse:collapse}
+  th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--mut);font-weight:700;padding:10px 12px;border-bottom:2px solid var(--ln)}
+  td{padding:11px 12px;border-bottom:1px solid var(--ln2);font-size:13px;vertical-align:top}
+  .badge{display:inline-block;font-size:10.5px;font-weight:800;padding:2px 9px;border-radius:20px}
+  .b-new{background:var(--navy-l);color:var(--navy)} .b-exist{background:var(--green-l);color:var(--green)}
+  .b-abd{background:var(--gold-l);color:var(--amb)} .b-has{background:var(--navy-l);color:var(--navy)}
+
+  .rep-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .rcard{background:#fff;border:1px solid var(--ln);border-radius:16px;padding:18px;border-top:4px solid var(--gold)}
+  .rcard .rhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .rcard .rav{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;color:#fff;background:var(--navy)}
+  .rcard.abd .rav{background:var(--gold);color:var(--navy-2)} .rcard.abd{border-top-color:var(--navy)}
+  .rcard .rname{font-size:16px;font-weight:800;color:var(--navy)}
+  .rcard .rsub{font-size:10px;color:var(--mut)}
+  .rcard .rpts{font-size:24px;font-weight:900;color:var(--gold-2);text-align:right}
+  .rcard .rpts small{display:block;font-size:9px;color:var(--mut);font-weight:600}
+  .rstats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+  .rstat{background:var(--bg);border-radius:10px;padding:11px 6px;text-align:center}
+  .rstat .n{font-size:19px;font-weight:900} .rstat .l{font-size:9px;color:var(--mut)}
+  .rmonth{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;border-top:1px solid var(--ln);padding-top:10px}
+  .rmonth .rstat{background:var(--navy-l)}
+
+  .daybar{display:flex;align-items:center;justify-content:space-between;background:var(--navy);color:#fff;padding:9px 14px;border-radius:10px;font-weight:800;font-size:13px;margin-bottom:8px}
+  .daybar .c{background:var(--gold);color:var(--navy-2);border-radius:20px;padding:1px 9px;font-size:11px}
+  .acard{background:#fff;border:1px solid var(--ln);border-radius:12px;padding:13px 15px;margin-bottom:8px}
+  .acard .atop{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:9px}
+  .acard .acl{font-weight:800;color:var(--navy);font-size:14px}
+  .afields{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .af .k{color:var(--mut);font-size:10px} .af .v{font-weight:600;font-size:12.5px}
+  .anote{margin-top:9px;background:var(--bg);border-radius:9px;padding:8px 11px;font-size:12.5px}
+  .map{color:var(--gold-2);font-weight:700;font-size:12px;text-decoration:none;margin-top:8px;display:inline-block}
+
+  .empty{text-align:center;padding:42px 20px;color:var(--mut)}
+  .empty .ei{font-size:34px;margin-bottom:8px}.empty b{display:block;color:var(--navy);font-size:15px}
+  .spin{width:30px;height:30px;border:3px solid var(--ln);border-top-color:var(--gold);border-radius:50%;animation:sp 1s linear infinite;margin:30px auto}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--navy-2);color:#fff;padding:11px 20px;border-radius:10px;font-size:13px;font-weight:600;display:none;z-index:90}
+
+  .mtabs{display:none}
+  @media(max-width:860px){
+    .side{display:none} .content{padding:16px}
+    .kgrid{grid-template-columns:1fr 1fr} .g2,.g3,.rep-grid{grid-template-columns:1fr}
+    .afields{grid-template-columns:1fr 1fr}
+    .mtabs{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--ln);z-index:40;overflow-x:auto}
+    .mtab{flex:1;min-width:64px;border:none;background:none;padding:8px 4px;font-size:9.5px;font-weight:700;color:var(--mut);cursor:pointer;font-family:inherit}
+    .mtab.on{color:var(--navy)} .mtab .mi{display:block;font-size:17px}
+    .content{padding-bottom:70px}
+  }
+</style>
+</head>
+<body>
+
+<div id="login">
+  <div class="login-card">
+    <div class="login-logo">B</div>
+    <h1>BuildHop Manager</h1>
+    <p class="ar">لوحة المدير — أدخل الرقم السري</p>
+    <input id="pin" type="password" inputmode="numeric" maxlength="4" placeholder="••••" oninput="onPin()" />
+    <div id="pin-err"></div>
+  </div>
+</div>
+
+<div class="layout" style="display:none" id="app">
+  <aside class="side">
+    <div class="brand">
+      <div class="logo">B</div>
+      <div><div class="bt">BuildHop</div><div class="bd">Manager Dashboard</div></div>
+    </div>
+    <nav class="nav" id="nav">
+      <div class="lbl">Menu</div>
+      <button class="ni on" onclick="go('overview')"><span class="ic">📊</span>Overview<small class="sub ar">نظرة عامة</small></button>
+      <button class="ni" onclick="go('analytics')"><span class="ic">📈</span>Analytics<small class="sub ar">التحليلات</small></button>
+      <button class="ni" onclick="go('reps')"><span class="ic">👥</span>Rep Performance<small class="sub ar">أداء المناديب</small></button>
+      <button class="ni" onclick="go('activity')"><span class="ic">📍</span>Field Activity<small class="sub ar">النشاط الميداني</small></button>
+      <button class="ni" onclick="go('followups')"><span class="ic">🔔</span>Follow-ups<small class="sub ar">المتابعات</small><span class="cnt" id="c-fu" style="display:none">0</span></button>
+      <button class="ni" onclick="go('reports')"><span class="ic">📋</span>Daily Reports<small class="sub ar">التقارير اليومية</small></button>
+      <button class="ni" onclick="go('archive')"><span class="ic">🗂️</span>Visit Archive<small class="sub ar">سجل الزيارات</small></button>
+    </nav>
+    <div class="side-foot" id="side-foot"></div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="tt" id="topdate">—</div>
+      <div class="refresh"><span class="st" id="sync">Not synced</span><button onclick="loadAll()">↻ Refresh</button></div>
+    </div>
+    <div class="content">
+
+      <div class="page active" id="p-overview">
+        <div class="ph"><h2>Overview</h2><p class="ar">النظرة العامة · <span id="ov-date"></span></p></div>
+        <div class="kgrid">
+          <div class="kcard"><div class="ki">📍</div><div class="kv" id="k-v">—</div><div class="kl">Visits today <small class="sub ar">زيارات اليوم</small></div><div class="kx">Abdulrazak <b id="k-va">—</b> · Hassan <b id="k-vh">—</b></div></div>
+          <div class="kcard k-green"><div class="ki">🎯</div><div class="kv" id="k-prospect">—</div><div class="kl">Prospect visits <small class="sub ar">زيارات محتملين</small></div><div class="kx">New <b id="k-new">—</b> · Existing <b id="k-exist">—</b></div></div>
+          <div class="kcard k-gold"><div class="ki">⭐</div><div class="kv" id="k-score">—</div><div class="kl">Points today <small class="sub ar">نقاط اليوم</small></div><div class="kx">A <b id="k-sa">—</b> · H <b id="k-sh">—</b></div></div>
+          <div class="kcard k-red"><div class="ki">🔔</div><div class="kv" id="k-fu">—</div><div class="kl">Follow-ups today <small class="sub ar">متابعات اليوم</small></div><div class="kx" id="k-od"></div></div>
+        </div>
+        <div class="kgrid">
+          <div class="kcard k-gold" onclick="go('analytics')" style="cursor:pointer"><div class="ki">📈</div><div class="kv" id="ovq-conv">—</div><div class="kl">Conversion rate <small class="sub ar">معدل التحويل</small></div><div class="kx">Tap for details →</div></div>
+          <div class="kcard k-red" onclick="go('analytics')" style="cursor:pointer"><div class="ki">⚠</div><div class="kv" id="ovq-forgot">—</div><div class="kl">Forgotten clients <small class="sub ar">عملاء منسيون</small></div><div class="kx">Tap for details →</div></div>
+          <div class="kcard" onclick="go('analytics')" style="cursor:pointer"><div class="ki">🔻</div><div class="kv" id="ovq-gap">—</div><div class="kl">Quotes issued <small class="sub ar">عروض الأسعار</small></div><div class="kx">Tap for details →</div></div>
+          <div class="kcard k-green"><div class="ki">🗓️</div><div class="kv" id="ov-cum-total">—</div><div class="kl">Total visits (all-time) <small class="sub ar">الإجمالي التراكمي</small></div><div class="kx">Abdulrazak <b id="ov-cum-abd">—</b> · Hassan <b id="ov-cum-has">—</b> · ⭐ <b id="ov-cum-points">—</b></div></div>
+        </div>
+        <div class="g2">
+          <div class="card">
+            <div class="shdr">Today's visit mix <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">توزيع زيارات اليوم</span></div>
+            <div id="ov-split"><div class="spin"></div></div>
+          </div>
+          <div class="card">
+            <div class="shdr">Follow-up alerts <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">تنبيهات المتابعات</span></div>
+            <div class="abox" style="background:var(--red-l)"><div><div class="at" style="color:var(--red)">Overdue</div><div style="font-size:9px;color:var(--red)" class="ar">متأخرة</div></div><div class="av" style="color:var(--red)" id="al-od">—</div></div>
+            <div class="abox" style="background:var(--gold-l)"><div><div class="at" style="color:var(--amb)">Today</div><div style="font-size:9px;color:var(--amb)" class="ar">اليوم</div></div><div class="av" style="color:var(--amb)" id="al-td">—</div></div>
+            <div class="abox" style="background:var(--green-l)"><div><div class="at" style="color:var(--green)">This week</div><div style="font-size:9px;color:var(--green)" class="ar">هذا الأسبوع</div></div><div class="av" style="color:var(--green)" id="al-wk">—</div></div>
+          </div>
+        </div>
+        <div class="g2">
+          <div class="card"><div class="shdr">🏆 Leaderboard <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">لوحة الصدارة</span></div><div id="ov-leader"></div></div>
+          <div class="card"><div class="shdr">Visits trend · last 14 days <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">اتجاه الزيارات</span></div><div id="ov-trend"></div></div>
+        </div>
+        <div class="g2">
+          <div class="card"><div class="shdr">Top visited clients <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">أبرز العملاء</span></div><div id="ov-clients"><div class="empty" style="padding:14px">No data yet</div></div></div>
+          <div class="card"><div class="shdr">Smart insights <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">توصيات</span></div><div id="ov-insights"><div class="empty" style="padding:14px">Refresh to load</div></div></div>
+        </div>
+      </div>
+
+      <div class="page" id="p-reps">
+        <div class="ph"><h2>Rep Performance</h2><p class="ar">أداء المناديب</p></div>
+        <div class="rep-grid" id="reps-grid"><div class="spin"></div></div>
+      </div>
+
+      <div class="page" id="p-activity">
+        <div class="ph"><h2>Field Activity</h2><p class="ar">النشاط الميداني</p></div>
+        <div class="pills">
+          <button class="pill on" id="vf-all" onclick="setVf('all')">All</button>
+          <button class="pill" id="vf-abd" onclick="setVf('عبدالرزاق محمد')">Abdulrazak</button>
+          <button class="pill" id="vf-has" onclick="setVf('الحسن موسى')">Hassan</button>
+          <button class="pill" id="vf-new" onclick="setVf('new')">New clients</button>
+          <button class="pill" id="vf-today" onclick="setVf('today')">Today only</button>
+        </div>
+        <div class="pills">
+          <span style="font-size:11px;color:var(--mut);font-weight:700">📅 <span class="ar">من</span></span>
+          <input type="date" id="vf-from" class="ctrl" onchange="renderActivity()" />
+          <span style="font-size:11px;color:var(--mut);font-weight:700"><span class="ar">إلى</span></span>
+          <input type="date" id="vf-to" class="ctrl" onchange="renderActivity()" />
+          <input type="search" id="vf-q" class="ctrl" style="flex:1;min-width:140px" placeholder="Search client / بحث" oninput="renderActivity()" />
+          <button class="pill" onclick="clearVf()">Clear dates</button>
+        </div>
+        <div class="card" style="overflow-x:auto" id="activity-content"><div class="spin"></div></div>
+      </div>
+
+      <div class="page" id="p-requests">
+        <div class="ph"><h2>Product Requests</h2><p class="ar">طلبات المنتجات</p></div>
+        <div class="card" style="overflow-x:auto" id="requests-content"><div class="spin"></div></div>
+      </div>
+
+      <div class="page" id="p-followups">
+        <div class="ph"><h2>Follow-ups</h2><p class="ar">المتابعات القادمة</p></div>
+        <div class="kgrid" style="grid-template-columns:repeat(3,1fr)">
+          <div class="kcard k-red" style="text-align:center"><div class="kv" style="color:var(--red)" id="fu-od">0</div><div class="kl">Overdue <small class="sub ar">متأخرة</small></div></div>
+          <div class="kcard k-gold" style="text-align:center"><div class="kv" style="color:var(--amb)" id="fu-td">0</div><div class="kl">Today <small class="sub ar">اليوم</small></div></div>
+          <div class="kcard k-green" style="text-align:center"><div class="kv" style="color:var(--green)" id="fu-wk">0</div><div class="kl">This week <small class="sub ar">هذا الأسبوع</small></div></div>
+        </div>
+        <div id="fu-list"><div class="spin"></div></div>
+      </div>
+
+      <div class="page" id="p-reports">
+        <div class="ph"><h2>Daily Reports</h2><p class="ar">سجل التقارير المرسلة</p></div>
+        <div class="card" style="overflow-x:auto" id="reports-content"><div class="spin"></div></div>
+      </div>
+
+      <div class="page" id="p-archive">
+        <div class="ph"><h2>Visit Archive</h2><p class="ar">سجل الزيارات الكامل — مرجع للرجوع لأي يوم</p></div>
+        <div class="pills">
+          <button class="pill on" id="af-all" onclick="setArch('all')">All</button>
+          <button class="pill" id="af-abd" onclick="setArch('عبدالرزاق محمد')">Abdulrazak</button>
+          <button class="pill" id="af-has" onclick="setArch('الحسن موسى')">Hassan</button>
+          <input type="date" id="arch-date" class="ctrl" onchange="renderArchive()" />
+          <input type="search" id="arch-q" class="ctrl" style="flex:1;min-width:140px" placeholder="Search client / بحث" oninput="renderArchive()" />
+          <button class="pill" onclick="clearArch()">Clear</button>
+        </div>
+        <div id="archive-content"><div class="spin"></div></div>
+      </div>
+
+      <div class="page" id="p-analytics">
+        <div class="ph"><h2>Analytics</h2><p class="ar">تحليلات الأداء والتغطية — من البيانات الحالية</p></div>
+        <div class="kgrid" id="an-kpi"></div>
+        <div class="g2">
+          <div class="card"><div class="shdr">Conversion rate <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">معدل التحويل لعروض</span></div><div id="an-conv"><div class="spin"></div></div></div>
+          <div class="card"><div class="shdr">Visit coverage by area <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">تغطية المناطق</span></div><div id="an-area"></div></div>
+        </div>
+        <div class="g2">
+          <div class="card"><div class="shdr">⚠ Forgotten clients (30d+) <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">عملاء لم يُزاروا +٣٠ يوم</span></div><div id="an-forgot"></div></div>
+          <div class="card"><div class="shdr">🔻 Sales funnel <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">قمع المبيعات</span></div><div id="an-funnel"></div></div>
+        </div>
+        <div class="card"><div class="shdr">Most visited clients (all-time) <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">أكثر العملاء زيارةً · مؤشر الولاء</span></div><div id="an-loyal"></div></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="mtabs" id="mtabs">
+  <button class="mtab on" onclick="go('overview')"><span class="mi">📊</span>Overview</button>
+  <button class="mtab" onclick="go('analytics')"><span class="mi">📈</span>Analytics</button>
+  <button class="mtab" onclick="go('reps')"><span class="mi">👥</span>Reps</button>
+  <button class="mtab" onclick="go('activity')"><span class="mi">📍</span>Activity</button>
+  <button class="mtab" onclick="go('followups')"><span class="mi">🔔</span>Follow</button>
+  <button class="mtab" onclick="go('reports')"><span class="mi">📋</span>Reports</button>
+  <button class="mtab" onclick="go('archive')"><span class="mi">🗂️</span>Archive</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SCRIPT_URL='https://script.google.com/macros/s/AKfycbyTBRrJRoukyyt-4c9f9H3_6DfoPVidMvB4sH7gkpFSY4wcgZuGCLSaePCFqJl5-GzBGw/exec';
+var PIN='1234';
+var REPS=['عبدالرزاق محمد','الحسن موسى'];
+var REP_EN={'عبدالرزاق محمد':'Abdulrazak','الحسن موسى':'Hassan'};
+var PAGES=['overview','analytics','reps','activity','followups','reports','archive'];
+var DATA={summary:[],recentReports:[],visits:[],requests:[]};
+var _vf='all', _arch='all';
+
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function num(v){return Number(String(v==null?'':v).replace(/,/g,''))||0;}
+function txt(v){return v==null?'':String(v);}
+function set(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+function repEN(r){return REP_EN[r]||String(r||'').split(' ')[0];}
+function dstr(v){var s=txt(v);if(!s)return '';if(s.indexOf('T')>-1){var d=new Date(s);if(!isNaN(d.getTime()))return new Date(d.getTime()+180*60000).toISOString().slice(0,10);}return s.slice(0,10);}
+function today(){return new Date(Date.now()+180*60000).toISOString().slice(0,10);}
+function weekEnd(){var r=new Date(Date.now()+180*60000);r.setDate(r.getDate()+7);return r.toISOString().slice(0,10);}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(function(){t.style.display='none';},2200);}
+function repBadge(r){var a=String(r).indexOf('عبدالرزاق')===0;return '<span class="badge '+(a?'b-abd':'b-has')+'">'+esc(repEN(r))+'</span>';}
+function prettyDate(d){if(!/^\d{4}-\d{2}-\d{2}$/.test(d))return d;var dt=new Date(d+'T00:00:00');return dt.toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});}
+
+function repSummary(r){var rows=DATA.summary.filter(function(x){return txt(x['المندوب'])===r;});return rows.length?rows[rows.length-1]:null;}
+function repVisits(r){return DATA.visits.filter(function(v){return txt(v['المندوب'])===r;});}
+function todayVisits(){var td=today();return DATA.visits.filter(function(v){return dstr(v['التاريخ'])===td;});}
+function allFollowups(){return DATA.visits.filter(function(v){var nd=dstr(v['تاريخ المتابعة']);var na=txt(v['الخطوة القادمة']);return nd&&na&&na!=='لا توجد متابعة';}).sort(function(a,b){return dstr(a['تاريخ المتابعة']).localeCompare(dstr(b['تاريخ المتابعة']));});}
+
+function onPin(){var v=document.getElementById('pin').value;document.getElementById('pin-err').textContent='';if(v.length===4)setTimeout(doLogin,60);}
+function doLogin(){
+  if(document.getElementById('pin').value===PIN){
+    document.getElementById('login').style.display='none';
+    document.getElementById('app').style.display='flex';
+    var now=new Date();
+    set('topdate',now.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'}));
+    set('ov-date',now.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}));
+    loadAll();
+  }else{
+    document.getElementById('pin-err').textContent='Incorrect PIN';
+    document.getElementById('pin').value='';
+  }
+}
+
+function go(id){
+  PAGES.forEach(function(p){var e=document.getElementById('p-'+p);if(e)e.classList.remove('active');});
+  var e=document.getElementById('p-'+id);if(e)e.classList.add('active');
+  document.querySelectorAll('.ni').forEach(function(b,i){b.classList.toggle('on',PAGES[i]===id);});
+  document.querySelectorAll('.mtab').forEach(function(b,i){b.classList.toggle('on',PAGES[i]===id);});
+  if(id==='activity')renderActivity();
+  if(id==='requests')renderRequests();
+  if(id==='followups')renderFollowups();
+  if(id==='reports')renderReports();
+  if(id==='archive')renderArchive();
+  if(id==='analytics')renderAnalytics();
+}
+
+function loadAll(){
+  set('sync','Syncing…');
+  var cb='__bh'+Date.now();
+  window[cb]=function(resp){
+    delete window[cb];
+    if(resp&&resp.status==='success'){
+      DATA.summary=resp.summary||[];DATA.recentReports=resp.recentReports||[];
+      DATA.visits=resp.visits||[];DATA.requests=resp.requests||[];
+      set('sync','✓ Synced');renderAll();
+    }else{set('sync','⚠ Sync error');}
+  };
+  var s=document.createElement('script');
+  s.src=SCRIPT_URL+'?callback='+cb+'&t='+Date.now();
+  s.onerror=function(){set('sync','⚠ Connection failed');};
+  document.head.appendChild(s);
+}
+
+function renderAll(){
+  renderOverview();renderReps();renderActivity();renderRequests();
+  renderFollowups();renderReports();renderArchive();renderAnalytics();renderSidebar();renderCounts();
+}
+function renderCounts(){
+  var fu=allFollowups().filter(function(v){return dstr(v['تاريخ المتابعة'])<=weekEnd();}).length;
+  var b=document.getElementById('c-fu');
+  if(b){if(fu){b.style.display='';b.textContent=fu;}else b.style.display='none';}
+}
+function renderSidebar(){
+  var h='<div class="sf-t">Reps status</div>';
+  REPS.forEach(function(r){var s=repSummary(r);h+='<div class="rep-stat"><span class="dotg"></span><div><div class="rn">'+esc(repEN(r))+'</div><div class="rt">'+(s?esc(txt(s['آخر تحديث'])):'—')+'</div></div></div>';});
+  document.getElementById('side-foot').innerHTML=h;
+}
+
+function renderOverview(){
+  var td=today(), tv=todayVisits();
+  var nNew=tv.filter(function(v){return txt(v['النوع'])==='New';}).length;
+  var nEx=tv.filter(function(v){return txt(v['النوع'])==='Existing';}).length;
+  var nPr=tv.filter(function(v){return txt(v['تصنيف العميل'])==='prospect';}).length;
+  var byRep={},score={},tScore=0;
+  REPS.forEach(function(r){
+    byRep[r]=tv.filter(function(v){return txt(v['المندوب'])===r;}).length;
+    var s=repSummary(r);var p=(s&&dstr(s['آخر تحديث'])===td)?num(s['النقاط']):0;score[r]=p;tScore+=p;
+  });
+  set('k-v',tv.length);set('k-va',byRep['عبدالرزاق محمد']||0);set('k-vh',byRep['الحسن موسى']||0);
+  set('k-prospect',nPr);set('k-new',nNew);set('k-exist',nEx);
+  set('k-score',tScore);set('k-sa',score['عبدالرزاق محمد']||0);set('k-sh',score['الحسن موسى']||0);
+
+  var el=document.getElementById('ov-split');
+  if(tv.length){
+    var seg=[{l:'Existing',la:'حاليين',v:nEx,c:'var(--green)'},{l:'New',la:'جديد',v:nNew,c:'var(--navy)'}];
+    el.innerHTML=seg.map(function(s){var pct=Math.round(s.v/tv.length*100);return '<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span><b>'+s.l+'</b> <span class="ar" style="color:var(--mut);font-size:10px">'+s.la+'</span></span><span style="font-weight:700">'+s.v+' ('+pct+'%)</span></div><div style="height:9px;background:var(--ln2);border-radius:6px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:'+s.c+'"></div></div></div>';}).join('');
+  }else el.innerHTML='<div class="empty" style="padding:20px">No visits today <span class="ar">لا زيارات اليوم</span></div>';
+
+  var fu=allFollowups(),we=weekEnd();
+  var od=fu.filter(function(v){return dstr(v['تاريخ المتابعة'])<td;}).length;
+  var tdc=fu.filter(function(v){return dstr(v['تاريخ المتابعة'])===td;}).length;
+  var wk=fu.filter(function(v){var d=dstr(v['تاريخ المتابعة']);return d>td&&d<=we;}).length;
+  set('al-od',od);set('al-td',tdc);set('al-wk',wk);set('k-fu',tdc);set('k-od',od?(od+' overdue'):'');
+
+  var cc={};DATA.visits.forEach(function(v){var c=txt(v['العميل']);if(c)cc[c]=(cc[c]||0)+1;});
+  var top=Object.keys(cc).map(function(k){return [k,cc[k]];}).sort(function(a,b){return b[1]-a[1];}).slice(0,5);
+  document.getElementById('ov-clients').innerHTML=top.length?top.map(function(t){return '<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--ln2);font-size:13px"><span class="ar">'+esc(t[0])+'</span><b>'+t[1]+'</b></div>';}).join(''):'<div class="empty" style="padding:14px">No data yet</div>';
+
+  var ins=[];
+  if(nPr)ins.push('🎯 '+nPr+' prospect visit(s) today — growth opportunity.');
+  if(top.length)ins.push('⭐ Most visited: '+top[0][0]+' ('+top[0][1]+').');
+  var best=REPS.map(function(r){var s=repSummary(r);return {r:r,p:(s&&dstr(s['آخر تحديث'])===td)?num(s['النقاط']):0};}).sort(function(a,b){return b.p-a.p;})[0];
+  if(best&&best.p)ins.push('🏆 Top today: '+repEN(best.r)+' with '+best.p+' pts.');
+  document.getElementById('ov-insights').innerHTML=ins.length?ins.map(function(i){return '<div style="padding:7px 0;border-bottom:1px solid var(--ln2);font-size:12.5px">'+esc(i)+'</div>';}).join(''):'<div class="empty" style="padding:14px">No insights yet</div>';
+
+  // ---- cumulative totals (all-time) ----
+  set('ov-cum-total',DATA.visits.length);
+  set('ov-cum-abd',repVisits('عبدالرزاق محمد').length);
+  set('ov-cum-has',repVisits('الحسن موسى').length);
+  var totalPts=DATA.recentReports.reduce(function(s,r){return s+num(r['نقاط الأداء']);},0);
+  set('ov-cum-points',totalPts);
+
+  // ---- quick insights (from analytics) ----
+  var conv=DATA.visits.filter(isConverted).length;
+  set('ovq-conv',(DATA.visits.length?Math.round(conv/DATA.visits.length*100):0)+'%');
+  var lastV={},clsV={};
+  DATA.visits.forEach(function(v){var c=txt(v['العميل']);if(!c)return;var d=dstr(v['التاريخ']);if(!lastV[c]||d>lastV[c]){lastV[c]=d;clsV[c]=txt(v['تصنيف العميل']);}});
+  set('ovq-forgot',Object.keys(lastV).filter(function(c){var k=clsV[c];return (k==='active'||k==='strategic')&&daysSince(lastV[c])>30;}).length);
+  var vis2={};DATA.visits.forEach(function(v){var c=txt(v['العميل']);if(c)vis2[c]=1;});
+  var quotesN=DATA.visits.filter(function(v){return txt(v['حالة العرض'])||txt(v['رقم العرض'])||/عرض|سعر|quote/i.test(txt(v['نتيجة الزيارة']));}).length;
+  set('ovq-gap',quotesN);
+
+  // ---- leaderboard (rank by all-time visits, tiebreak points) ----
+  var board=REPS.map(function(r){var s=repSummary(r);return {r:r,v:repVisits(r).length,p:s?num(s['النقاط']):0};}).sort(function(a,b){return b.v-a.v||b.p-a.p;});
+  var medal=['🥇','🥈','🥉'];
+  document.getElementById('ov-leader').innerHTML=board.map(function(b,i){
+    return '<div style="display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--ln2)"><div style="font-size:20px;width:26px">'+(medal[i]||(i+1))+'</div><div style="flex:1"><div style="font-weight:800;color:var(--navy)">'+esc(repEN(b.r))+'</div><div style="font-size:11px;color:var(--mut)">'+b.v+' visits · ⭐ '+b.p+' pts</div></div><div style="font-size:22px;font-weight:900;color:var(--gold-2)">'+b.v+'</div></div>';
+  }).join('');
+
+  // ---- 14-day visits trend ----
+  var days=[];for(var i=13;i>=0;i--){var d=new Date(Date.now()+180*60000);d.setDate(d.getDate()-i);days.push(d.toISOString().slice(0,10));}
+  var cnt={};DATA.visits.forEach(function(v){var d=dstr(v['التاريخ']);if(d)cnt[d]=(cnt[d]||0)+1;});
+  var mx=Math.max(1,Math.max.apply(null,days.map(function(d){return cnt[d]||0;})));
+  document.getElementById('ov-trend').innerHTML='<div style="display:flex;align-items:flex-end;gap:4px;height:120px;padding-top:6px">'+days.map(function(d){
+    var c=cnt[d]||0;var h=Math.round(c/mx*100);var lbl=d.slice(8,10);var isToday=d===td;
+    return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;height:100%"><div style="flex:1;width:100%;display:flex;align-items:flex-end"><div title="'+d+': '+c+'" style="width:100%;background:'+(isToday?'var(--gold)':'var(--navy)')+';border-radius:4px 4px 0 0;height:'+(c?Math.max(h,6):2)+'%;opacity:'+(c?1:.25)+'"></div></div><div style="font-size:8.5px;color:var(--mut)">'+lbl+'</div></div>';
+  }).join('')+'</div><div style="font-size:10px;color:var(--mut);text-align:center;margin-top:4px">Peak: '+mx+' visits/day</div>';
+}
+
+function renderReps(){
+  document.getElementById('reps-grid').innerHTML=REPS.map(function(r){
+    var s=repSummary(r),tv=repVisits(r).filter(function(v){return dstr(v['التاريخ'])===today();});
+    var ex=tv.filter(function(v){return txt(v['النوع'])==='Existing';}).length;
+    var nw=tv.filter(function(v){return txt(v['النوع'])==='New';}).length;
+    var pr=tv.filter(function(v){return txt(v['تصنيف العميل'])==='prospect';}).length;
+    var abd=String(r).indexOf('عبدالرزاق')===0;
+    var list=tv.length?tv.map(function(v){return '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--ln2);font-size:12px"><span class="ar">'+esc(txt(v['العميل']))+'</span><span style="color:var(--mut)">'+esc(txt(v['الوقت']))+'</span></div>';}).join(''):'<div style="font-size:12px;color:var(--mut);padding:8px 0">No visits today</div>';
+    return '<div class="rcard '+(abd?'abd':'')+'"><div class="rhead"><div style="display:flex;align-items:center;gap:11px"><div class="rav">'+esc(repEN(r)[0])+'</div><div><div class="rname">'+esc(repEN(r))+'</div><div class="rsub ar">'+(s?esc(txt(s['آخر تحديث'])):'—')+'</div></div></div><div class="rpts">'+(s?num(s['النقاط']):0)+'<small>points</small></div></div>'+
+      '<div class="rstats"><div class="rstat"><div class="n" style="color:var(--navy)">'+tv.length+'</div><div class="l">Visits</div></div><div class="rstat"><div class="n" style="color:var(--green)">'+ex+'</div><div class="l">Existing</div></div><div class="rstat"><div class="n" style="color:var(--amb)">'+pr+'</div><div class="l">Prospect</div></div><div class="rstat"><div class="n" style="color:var(--pu)">'+nw+'</div><div class="l">New</div></div></div>'+
+      '<div class="rmonth"><div class="rstat"><div class="n" style="color:var(--navy)">'+(s?num(s['عملاء جدد (الشهر)']):0)+'</div><div class="l">New / month</div></div><div class="rstat"><div class="n" style="color:var(--navy)">'+(s?num(s['فرص (الشهر)']):0)+'</div><div class="l">Opps / month</div></div><div class="rstat"><div class="n" style="color:var(--navy)">'+(s?num(s['عروض (الشهر)']):0)+'</div><div class="l">Quotes / month</div></div></div>'+
+      '<div style="margin-top:12px;font-size:12px;font-weight:700;color:var(--navy)">Today\'s visits ('+tv.length+')</div>'+list+'</div>';
+  }).join('');
+}
+
+function setVf(f){_vf=f;document.querySelectorAll('#p-activity .pill').forEach(function(b){b.classList.remove('on');});var m={'all':'vf-all','عبدالرزاق محمد':'vf-abd','الحسن موسى':'vf-has','new':'vf-new','today':'vf-today'};var e=document.getElementById(m[f]);if(e)e.classList.add('on');renderActivity();}
+function clearVf(){document.getElementById('vf-from').value='';document.getElementById('vf-to').value='';document.getElementById('vf-q').value='';renderActivity();}
+function renderActivity(){
+  var list=DATA.visits.slice(),td=today();
+  if(_vf==='new')list=list.filter(function(v){return txt(v['النوع'])==='New';});
+  else if(_vf==='today')list=list.filter(function(v){return dstr(v['التاريخ'])===td;});
+  else if(_vf!=='all')list=list.filter(function(v){return txt(v['المندوب'])===_vf;});
+  var from=(document.getElementById('vf-from')||{}).value||'';
+  var to=(document.getElementById('vf-to')||{}).value||'';
+  var q=((document.getElementById('vf-q')||{}).value||'').trim().toLowerCase();
+  if(from)list=list.filter(function(v){return dstr(v['التاريخ'])>=from;});
+  if(to)list=list.filter(function(v){return dstr(v['التاريخ'])<=to;});
+  if(q)list=list.filter(function(v){return txt(v['العميل']).toLowerCase().indexOf(q)>-1;});
+  list.sort(function(a,b){var d=dstr(b['التاريخ']).localeCompare(dstr(a['التاريخ']));return d!==0?d:txt(b['الوقت']).localeCompare(txt(a['الوقت']));});
+  var el=document.getElementById('activity-content');
+  if(!list.length){el.innerHTML='<div class="empty"><div class="ei">📍</div><b>No visits</b></div>';return;}
+  var rows=list.map(function(v){
+    var t=txt(v['النوع'])==='New'?'<span class="badge b-new">New</span>':'<span class="badge b-exist">Existing</span>';
+    var gps=txt(v['الإحداثيات']);var g=gps?' <a href="https://maps.google.com/?q='+encodeURIComponent(gps)+'" target="_blank">📍</a>':'';
+    var nd=dstr(v['تاريخ المتابعة']);
+    return '<tr><td style="white-space:nowrap">'+dstr(v['التاريخ'])+'<div style="color:var(--mut);font-size:10px" class="ar">'+esc(txt(v['الوقت']))+'</div></td><td>'+repBadge(txt(v['المندوب']))+'</td><td><b class="ar">'+esc(txt(v['العميل']))+'</b><div style="margin-top:3px">'+t+'</div></td><td class="ar">'+esc(txt(v['هدف الزيارة'])||'—')+(txt(v['نتيجة الزيارة'])?'<div style="font-size:11px;color:var(--mut);margin-top:2px">'+esc(txt(v['نتيجة الزيارة']))+'</div>':'')+'</td><td class="ar">'+esc(txt(v['الحي'])||'—')+g+'</td><td class="ar">'+esc(txt(v['الخطوة القادمة'])||'—')+(nd?'<div style="margin-top:3px"><span class="badge b-abd">'+nd+'</span></div>':'')+'</td></tr>';
+  }).join('');
+  el.innerHTML='<table><thead><tr><th>Date</th><th>Rep</th><th>Client</th><th>Purpose / Result</th><th>Area</th><th>Follow-up</th></tr></thead><tbody>'+rows+'</tbody></table>';
+}
+
+function renderRequests(){
+  var el=document.getElementById('requests-content'),list=DATA.requests;
+  if(!list.length){el.innerHTML='<div class="empty"><div class="ei">📦</div><b>No product requests</b></div>';return;}
+  var rows=list.map(function(r){return '<tr><td style="white-space:nowrap">'+dstr(r['التاريخ'])+'<div style="color:var(--mut);font-size:10px" class="ar">'+esc(txt(r['الوقت']))+'</div></td><td>'+repBadge(txt(r['المندوب']))+'</td><td class="ar"><b>'+esc(txt(r['العميل']))+'</b></td><td class="ar">'+esc(txt(r['المنتجات المطلوبة'])||'—')+'</td><td class="ar" style="color:var(--mut)">'+esc(txt(r['ملاحظات'])||'—')+'</td></tr>';}).join('');
+  el.innerHTML='<table><thead><tr><th>Date</th><th>Rep</th><th>Client</th><th>Requested products</th><th>Notes</th></tr></thead><tbody>'+rows+'</tbody></table>';
+}
+
+function renderFollowups(){
+  var fu=allFollowups(),td=today(),we=weekEnd();
+  var od=fu.filter(function(v){return dstr(v['تاريخ المتابعة'])<td;});
+  var tdc=fu.filter(function(v){return dstr(v['تاريخ المتابعة'])===td;});
+  var wk=fu.filter(function(v){var d=dstr(v['تاريخ المتابعة']);return d>td&&d<=we;});
+  set('fu-od',od.length);set('fu-td',tdc.length);set('fu-wk',wk.length);
+  var groups=[{t:'Overdue',c:'var(--red)',list:od},{t:'Today',c:'var(--amb)',list:tdc},{t:'This week',c:'var(--green)',list:wk}];
+  var h=groups.filter(function(g){return g.list.length;}).map(function(g){
+    return '<div class="card"><div class="shdr" style="color:'+g.c+'">'+g.t+' ('+g.list.length+')</div>'+g.list.map(function(v){return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--ln2)"><div><div style="font-size:13px;font-weight:700"><span class="ar">'+esc(txt(v['العميل']))+'</span> '+repBadge(txt(v['المندوب']))+'</div><div class="ar" style="font-size:11px;color:var(--mut)">'+esc(txt(v['الخطوة القادمة']))+'</div></div><div style="font-weight:800;color:'+g.c+';white-space:nowrap">'+dstr(v['تاريخ المتابعة'])+'</div></div>';}).join('')+'</div>';
+  }).join('');
+  document.getElementById('fu-list').innerHTML=h||'<div class="empty"><div class="ei">✅</div><b>No pending follow-ups</b></div>';
+}
+
+function renderReports(){
+  var el=document.getElementById('reports-content'),list=DATA.recentReports;
+  if(!list.length){el.innerHTML='<div class="empty"><div class="ei">📋</div><b>No reports</b></div>';return;}
+  var rows=list.map(function(r){return '<tr><td style="white-space:nowrap">'+dstr(r['التاريخ'])+'</td><td>'+repBadge(txt(r['المندوب']))+'</td><td style="text-align:center"><b>'+num(r['إجمالي الزيارات'])+'</b></td><td style="text-align:center">'+num(r['زيارات حاليين'])+'</td><td style="text-align:center">'+num(r['عملاء جدد'])+'</td><td style="text-align:center"><span class="badge b-abd">⭐ '+num(r['نقاط الأداء'])+'</span></td><td style="text-align:center">'+num(r['طلبات منتجات اليوم'])+'</td><td style="color:var(--mut);font-size:10px;white-space:nowrap">'+esc(txt(r['وقت الإرسال']))+'</td></tr>';}).join('');
+  el.innerHTML='<table><thead><tr><th>Date</th><th>Rep</th><th>Visits</th><th>Existing</th><th>New</th><th>Points</th><th>Requests</th><th>Submitted</th></tr></thead><tbody>'+rows+'</tbody></table>';
+}
+
+function setArch(r){_arch=r;document.querySelectorAll('#p-archive .pill').forEach(function(b){if(b.id&&b.id.indexOf('af-')===0)b.classList.remove('on');});var m={'all':'af-all','عبدالرزاق محمد':'af-abd','الحسن موسى':'af-has'};var e=document.getElementById(m[r]);if(e)e.classList.add('on');renderArchive();}
+function clearArch(){document.getElementById('arch-date').value='';document.getElementById('arch-q').value='';renderArchive();}
+function archCard(v){
+  var F=[['Type','النوع'],['Region','المنطقة'],['Area','الحي'],['Purpose','هدف الزيارة'],['Result','نتيجة الزيارة'],['Class','تصنيف العميل'],['Contact','جهة الاتصال'],['Phone','الهاتف'],['Project','نوع المشروع'],['Stage','مرحلة المشروع'],['Next action','الخطوة القادمة'],['Next date','تاريخ المتابعة'],['Quote','حالة العرض'],['Duration','المدة (د)']];
+  var rows=F.map(function(f){var val=f[1]==='تاريخ المتابعة'?dstr(v[f[1]]):txt(v[f[1]]);if(!val)return '';return '<div class="af"><div class="k">'+f[0]+'</div><div class="v ar">'+esc(val)+'</div></div>';}).join('');
+  var gps=txt(v['الإحداثيات']);var mp=gps?'<a class="map" href="https://maps.google.com/?q='+encodeURIComponent(gps)+'" target="_blank">📍 Location</a>':'';
+  var notes=txt(v['ملاحظات']);
+  return '<div class="acard"><div class="atop"><div><span class="acl ar">'+esc(txt(v['العميل'])||'—')+'</span> '+repBadge(txt(v['المندوب']))+'<div style="color:var(--mut);font-size:10px;margin-top:2px" class="ar">⏱ '+esc(txt(v['الوقت']))+'</div></div></div><div class="afields">'+rows+'</div>'+(notes?'<div class="anote ar">'+esc(notes)+'</div>':'')+(mp?'<div>'+mp+'</div>':'')+'</div>';
+}
+function renderArchive(){
+  var el=document.getElementById('archive-content');if(!el)return;
+  var df=(document.getElementById('arch-date')||{}).value||'';
+  var q=((document.getElementById('arch-q')||{}).value||'').trim().toLowerCase();
+  var list=DATA.visits.filter(function(v){
+    if(_arch!=='all'&&txt(v['المندوب'])!==_arch)return false;
+    if(df&&dstr(v['التاريخ'])!==df)return false;
+    if(q&&txt(v['العميل']).toLowerCase().indexOf(q)===-1)return false;
+    return true;
+  });
+  if(!list.length){el.innerHTML='<div class="empty"><div class="ei">🗂️</div><b>No visits found</b></div>';return;}
+  var by={};list.forEach(function(v){var d=dstr(v['التاريخ'])||'—';(by[d]=by[d]||[]).push(v);});
+  var dates=Object.keys(by).sort(function(a,b){return a<b?1:-1;});
+  var head='<div class="kgrid" style="grid-template-columns:1fr 1fr;margin-bottom:14px"><div class="kcard" style="text-align:center"><div class="kv">'+list.length+'</div><div class="kl">Visits</div></div><div class="kcard k-gold" style="text-align:center"><div class="kv" style="color:var(--amb)">'+dates.length+'</div><div class="kl">Days</div></div></div>';
+  var h=dates.map(function(d){
+    var items=by[d].sort(function(a,b){return txt(b['الوقت']).localeCompare(txt(a['الوقت']));});
+    return '<div style="margin-bottom:16px"><div class="daybar"><span>'+prettyDate(d)+'</span><span class="c">'+items.length+'</span></div>'+items.map(archCard).join('')+'</div>';
+  }).join('');
+  el.innerHTML=head+h;
+}
+
+function daysSince(d){if(!/^\d{4}-\d{2}-\d{2}$/.test(d))return 9999;return Math.floor((Date.parse(today()+'T00:00:00')-Date.parse(d+'T00:00:00'))/86400000);}
+function isConverted(v){if(txt(v['حالة العرض'])||txt(v['رقم العرض']))return true;var s=txt(v['نتيجة الزيارة'])+' '+txt(v['هدف الزيارة']);return /عرض|فرص|سعر|quote/i.test(s);}
+function bars(items,color){
+  if(!items.length)return '<div class="empty" style="padding:14px">No data</div>';
+  var max=Math.max.apply(null,items.map(function(i){return i[1];}))||1;
+  return items.map(function(i){var pct=Math.round(i[1]/max*100);return '<div style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span class="ar">'+esc(i[0])+'</span><b>'+i[1]+'</b></div><div style="height:8px;background:var(--ln2);border-radius:5px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:'+(color||'var(--navy)')+'"></div></div></div>';}).join('');
+}
+function renderAnalytics(){
+  var V=DATA.visits, td=today(), mon=td.slice(0,7);
+  // KPIs
+  var conv=V.filter(isConverted).length;
+  var convRate=V.length?Math.round(conv/V.length*100):0;
+
+  // last visit & class per client
+  var last={},cls={};
+  V.forEach(function(v){var c=txt(v['العميل']);if(!c)return;var d=dstr(v['التاريخ']);if(!last[c]||d>last[c]){last[c]=d;cls[c]=txt(v['تصنيف العميل']);}});
+  var forgot=Object.keys(last).filter(function(c){var k=cls[c];return (k==='active'||k==='strategic')&&daysSince(last[c])>30;}).map(function(c){return [c,daysSince(last[c]),cls[c]];}).sort(function(a,b){return b[1]-a[1];});
+
+  // sales funnel stages (approx from free-text fields)
+  function stg(re,extra){return V.filter(function(v){var s=txt(v['نتيجة الزيارة'])+' '+txt(v['هدف الزيارة'])+' '+txt(v['تصنيف العميل'])+' '+txt(v['حالة العرض']);return re.test(s)||(extra&&extra(v));}).length;}
+  var fIntro=V.length;
+  var fOpp=stg(/فرص|prospect|محتمل|opportunit/i);
+  var fQuote=V.filter(function(v){return txt(v['حالة العرض'])||txt(v['رقم العرض'])||/عرض|سعر|quote/i.test(txt(v['نتيجة الزيارة']));}).length;
+  var fClose=stg(/مقبول|تم|approved|won|إغلاق|عقد|فوز|closed|paid/i,function(v){return txt(v['المبلغ']);});
+  var funnel=[{l:'Introductory',la:'تعريفية',v:fIntro,c:'var(--navy)'},{l:'Opportunity',la:'فرصة',v:fOpp,c:'#3B6BA5'},{l:'Quote',la:'عرض سعر',v:fQuote,c:'var(--gold-2)'},{l:'Closing',la:'إغلاق',v:fClose,c:'var(--green)'}];
+
+  // KPI cards
+  document.getElementById('an-kpi').innerHTML=
+    '<div class="kcard"><div class="ki">📍</div><div class="kv">'+V.length+'</div><div class="kl">Total visits <small class="sub ar">إجمالي الزيارات</small></div></div>'+
+    '<div class="kcard k-green"><div class="ki">📈</div><div class="kv">'+convRate+'%</div><div class="kl">Conversion <small class="sub ar">معدل التحويل</small></div><div class="kx">'+conv+' of '+V.length+'</div></div>'+
+    '<div class="kcard k-red"><div class="ki">⚠</div><div class="kv">'+forgot.length+'</div><div class="kl">Forgotten <small class="sub ar">عملاء منسيون</small></div></div>'+
+    '<div class="kcard k-gold"><div class="ki">🔻</div><div class="kv">'+fQuote+'</div><div class="kl">Quotes <small class="sub ar">عروض أسعار</small></div><div class="kx">'+fClose+' closed</div></div>';
+
+  // conversion per rep
+  document.getElementById('an-conv').innerHTML=REPS.map(function(r){
+    var rv=V.filter(function(v){return txt(v['المندوب'])===r;});var cc=rv.filter(isConverted).length;var pct=rv.length?Math.round(cc/rv.length*100):0;
+    return '<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px"><span><b>'+esc(repEN(r))+'</b></span><span style="font-weight:800">'+pct+'% <span style="color:var(--mut);font-weight:600">('+cc+'/'+rv.length+')</span></span></div><div style="height:9px;background:var(--ln2);border-radius:6px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--green)"></div></div></div>';
+  }).join('')||'<div class="empty" style="padding:14px">No data</div>';
+
+  // area coverage: region -> hoods -> reps
+  var reg={};V.forEach(function(v){var mnt=txt(v['المنطقة'])||'—';var h=txt(v['الحي'])||'—';var rp=repEN(txt(v['المندوب']));reg[mnt]=reg[mnt]||{total:0,hoods:{}};reg[mnt].total++;var hd=reg[mnt].hoods[h]=reg[mnt].hoods[h]||{total:0,reps:{}};hd.total++;hd.reps[rp]=(hd.reps[rp]||0)+1;});
+  var regList=Object.keys(reg).sort(function(a,b){return reg[b].total-reg[a].total;});
+  document.getElementById('an-area').innerHTML=regList.length?regList.map(function(m){
+    var hoods=Object.keys(reg[m].hoods).sort(function(a,b){return reg[m].hoods[b].total-reg[m].hoods[a].total;});
+    return '<details open style="margin-bottom:8px;border-bottom:1px solid var(--ln2)"><summary style="cursor:pointer;font-weight:800;color:var(--navy);padding:7px 0;display:flex;justify-content:space-between;align-items:center;list-style:none"><span class="ar">▸ '+esc(m)+'</span><span class="badge b-has">'+reg[m].total+'</span></summary>'+
+      hoods.map(function(h){var hd=reg[m].hoods[h];var who=Object.keys(hd.reps).map(function(r){return r+' ('+hd.reps[r]+')';}).join('، ');
+        return '<div style="padding:5px 0 5px 14px;border-top:1px dashed var(--ln2)"><div style="display:flex;justify-content:space-between;font-size:12.5px"><span class="ar" style="font-weight:600">'+esc(h)+'</span><b>'+hd.total+'</b></div><div style="font-size:10px;color:var(--mut)" class="ar">'+esc(who)+'</div></div>';
+      }).join('')+'</details>';
+  }).join(''):'<div class="empty" style="padding:14px">No data</div>';
+
+  // forgotten list
+  document.getElementById('an-forgot').innerHTML=forgot.length?forgot.slice(0,10).map(function(f){return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--ln2)"><div><div class="ar" style="font-size:13px;font-weight:700">'+esc(f[0])+'</div><div style="font-size:10px;color:var(--mut)">'+esc(f[2])+' · last '+last[f[0]]+'</div></div><span class="badge" style="background:var(--red-l);color:var(--red)">'+f[1]+'d</span></div>';}).join(''):'<div class="empty" style="padding:14px">✅ None</div>';
+
+  // sales funnel visual
+  var fmax=funnel[0].v||1;
+  document.getElementById('an-funnel').innerHTML=funnel.map(function(st,i){
+    var pctTotal=fIntro?Math.round(st.v/fIntro*100):0;
+    var w=Math.max(fmax?Math.round(st.v/fmax*100):0,6);
+    var drop=i>0&&funnel[i-1].v?Math.round((funnel[i-1].v-st.v)/funnel[i-1].v*100):0;
+    return '<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span><b>'+st.l+'</b> <span class="ar" style="color:var(--mut);font-size:10px">'+st.la+'</span></span><span style="font-weight:800">'+st.v+' <span style="color:var(--mut);font-weight:600">('+pctTotal+'%)</span></span></div><div style="height:22px;background:var(--ln2);border-radius:6px;overflow:hidden"><div style="height:100%;width:'+w+'%;background:'+st.c+';border-radius:6px;transition:width .4s"></div></div>'+(i>0&&drop>0?'<div style="font-size:10px;color:var(--red);margin-top:2px">↓ '+drop+'% leak <span class="ar">تسرّب</span></div>':'')+'</div>';
+  }).join('');
+
+  // loyalty (all-time repeat visits per client, with reps)
+  var freq={},freqReps={};V.forEach(function(v){var c=txt(v['العميل']);if(!c)return;freq[c]=(freq[c]||0)+1;var rp=repEN(txt(v['المندوب']));(freqReps[c]=freqReps[c]||{})[rp]=(freqReps[c][rp]||0)+1;});
+  var loyal=Object.keys(freq).map(function(c){return [c,freq[c]];}).filter(function(i){return i[1]>=2;}).sort(function(a,b){return b[1]-a[1];}).slice(0,15);
+  document.getElementById('an-loyal').innerHTML=loyal.length?loyal.map(function(i){var hi=i[1]>=3;var who=Object.keys(freqReps[i[0]]).map(function(r){return r+' ('+freqReps[i[0]][r]+')';}).join('، ');return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--ln2)"><div><span class="ar" style="font-size:13px;font-weight:700">'+esc(i[0])+'</span><div style="font-size:10px;color:var(--mut)">'+esc(who)+'</div></div><span class="badge" style="background:'+(hi?'var(--gold-l);color:var(--amb)':'var(--navy-l);color:var(--navy)')+'">'+i[1]+' visits'+(hi?' ⭐':'')+'</span></div>';}).join(''):'<div class="empty" style="padding:14px">No repeat visits</div>';
+}
+
+document.getElementById('pin').focus();
+</script>
+</body>
+</html>
