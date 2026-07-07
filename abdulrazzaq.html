@@ -4,48 +4,100 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#1B2A4A" />
-<title>BuildHop — عبدالرزاق محمد</title>
+<title>BuildHop CRM — عبدالرزاق محمد</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --navy:#243760; --navy-2:#1B2A4A; --navy-l:#EAEEF6;
+    --navy:#243760; --navy-2:#1B2A4A; --navy-3:#111a30; --navy-l:#EAEEF6;
     --gold:#C9A227; --gold-2:#E8A320; --gold-l:#FBF3D9;
     --bg:#F4F6FB; --card:#FFFFFF; --ln:#E6E9F0; --ln2:#EFF1F6;
-    --ink:#1F2937; --mut:#6B7280; --green:#0A8A4F; --green-l:#E4F6EC; --red:#C0392B;
+    --ink:#1F2937; --mut:#6B7280; --green:#0A8A4F; --green-l:#E4F6EC;
+    --red:#C0392B; --red-l:#FCEDEB; --amb:#9A6B00; --pu:#5B3FA0;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--ink);font-size:15px;padding-bottom:74px}
-  .wrap{max-width:560px;margin:0 auto;min-height:100vh}
+  body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--ink);font-size:15px;padding-bottom:78px}
+  .wrap{max-width:600px;margin:0 auto;min-height:100vh}
+  b,strong{font-weight:800}
 
-  header{background:linear-gradient(135deg,var(--navy),var(--navy-2));color:#fff;padding:16px 18px;position:sticky;top:0;z-index:30;box-shadow:0 4px 14px rgba(20,30,55,.15)}
-  header .row{display:flex;align-items:center;gap:11px}
-  header .logo{width:40px;height:40px;background:var(--gold);border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--navy-2);font-size:18px}
-  header .ht{font-size:16px;font-weight:800}
-  header .hs{font-size:11px;color:rgba(255,255,255,.6)}
-  header .sync{margin-right:auto;font-size:10px;background:rgba(255,255,255,.12);padding:4px 9px;border-radius:20px}
+  /* HEADER */
+  header{background:linear-gradient(135deg,var(--navy-2),var(--navy-3));color:#fff;padding:12px 16px;position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:12px}
+  header .srch{flex:1;position:relative}
+  header .srch input{width:100%;padding:9px 34px 9px 12px;border-radius:12px;border:none;background:rgba(255,255,255,.1);color:#fff;font-family:inherit;font-size:13px}
+  header .srch input::placeholder{color:rgba(255,255,255,.5)}
+  header .srch .ic{position:absolute;right:11px;top:9px;color:rgba(255,255,255,.6)}
+  header .brand{display:flex;align-items:center;gap:9px}
+  header .brand .t{font-size:15px;font-weight:900}
+  header .brand .av{width:36px;height:36px;background:var(--gold);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--navy-2);font-size:13px}
+  header .trash{background:rgba(255,255,255,.08);border:none;color:rgba(255,255,255,.7);width:34px;height:34px;border-radius:10px;cursor:pointer;font-size:15px}
 
-  .content{padding:14px}
+  .content{padding:16px}
   .page{display:none}.page.active{display:block}
 
-  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
-  .stat{background:#fff;border:1px solid var(--ln);border-radius:13px;padding:12px 6px;text-align:center}
-  .stat .n{font-size:22px;font-weight:900;color:var(--navy)}
-  .stat .l{font-size:10px;color:var(--mut)}
-  .stat.gold .n{color:var(--gold-2)}
+  .card{background:#fff;border:1px solid var(--ln);border-radius:16px;padding:16px;margin-bottom:12px}
+  .dark{background:linear-gradient(135deg,var(--navy),var(--navy-3));color:#fff;border:none}
+  .sec-t{font-size:13px;font-weight:800;color:var(--navy);margin:4px 2px 10px;display:flex;align-items:center;gap:6px}
 
-  .sec-t{font-size:13px;font-weight:800;color:var(--navy);margin:6px 2px 10px;display:flex;align-items:center;gap:6px}
-  .card{background:#fff;border:1px solid var(--ln);border-radius:14px;padding:14px;margin-bottom:10px}
-  .vcard .vtop{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-  .vcard .vc{font-weight:800;color:var(--navy);font-size:14px}
-  .vcard .vmeta{font-size:11px;color:var(--mut);margin-top:3px}
-  .vcard .vtag{font-size:10px;font-weight:800;padding:2px 9px;border-radius:20px}
-  .t-new{background:var(--navy-l);color:var(--navy)} .t-exist{background:var(--green-l);color:var(--green)}
-  .vcard .vdel{background:none;border:none;color:var(--red);font-size:12px;cursor:pointer;font-family:inherit;margin-top:6px;font-weight:700}
+  /* DASHBOARD */
+  .greet .g1{font-size:17px;font-weight:900;color:var(--gold-2)}
+  .greet .g2{font-size:12px;color:rgba(255,255,255,.75);margin-top:4px}
+  .greet .g3{font-size:10px;color:rgba(255,255,255,.5);margin-top:6px}
+  .prog-head{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:800;color:var(--navy)}
+  .prog-bar{height:8px;background:var(--ln2);border-radius:5px;overflow:hidden;margin:10px 0 8px}
+  .prog-bar>div{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-2));border-radius:5px;transition:width .5s}
+  .prog-sub{font-size:11px;color:var(--mut);text-align:center}
+  .pts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 8px}
+  .pts{background:rgba(255,255,255,.06);border-radius:12px;padding:12px 6px;text-align:center}
+  .pts .n{font-size:20px;font-weight:900;color:#fff}
+  .pts .l{font-size:10px;color:rgba(255,255,255,.7);margin-top:2px}
+  .pts .x{font-size:9px;color:var(--gold-2);font-weight:800;margin-top:2px}
+  .pts-formula{font-size:10px;color:rgba(255,255,255,.5);text-align:center}
+  .month-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .month-grid .m{background:linear-gradient(135deg,var(--navy),var(--navy-3));border-radius:12px;padding:12px 6px;text-align:center;color:#fff}
+  .month-grid .m .n{font-size:20px;font-weight:900}
+  .month-grid .m .l{font-size:10px;color:rgba(255,255,255,.7)}
+  .cta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+  .cta .b{border-radius:14px;padding:14px;text-align:center;cursor:pointer;font-weight:800}
+  .cta .b.prim{background:var(--navy);color:#fff}
+  .cta .b.sec{background:#fff;border:1px solid var(--ln);color:var(--navy)}
+  .cta .b .s{font-size:10px;font-weight:600;opacity:.7;display:block;margin-top:3px}
+  .alert-ok{background:var(--green-l);border-radius:12px;padding:12px 14px;font-size:12.5px;font-weight:700;color:var(--green);display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:12px}
 
+  /* CLIENTS */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+  .stat{background:#fff;border:1px solid var(--ln);border-radius:13px;padding:12px 4px;text-align:center}
+  .stat .n{font-size:20px;font-weight:900}
+  .stat .l{font-size:10px;color:var(--mut);margin-top:2px}
+  .pills{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+  .pill{border:1px solid var(--ln);background:#fff;border-radius:20px;padding:6px 13px;font-size:12px;font-weight:700;cursor:pointer;color:var(--navy);font-family:inherit;display:flex;align-items:center;gap:4px}
+  .pill.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .sortrow{display:flex;gap:7px;align-items:center;margin-bottom:12px;font-size:11px;color:var(--mut)}
+  .sortrow .s{border:1px solid var(--ln);background:#fff;border-radius:9px;padding:5px 11px;font-weight:700;cursor:pointer;color:var(--navy);font-family:inherit;font-size:11px}
+  .sortrow .s.on{background:var(--gold-l);border-color:var(--gold);color:var(--amb)}
+  .ccard{background:#fff;border:1px solid var(--ln);border-radius:14px;padding:14px;margin-bottom:9px;cursor:pointer}
+  .ccard .top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+  .ccard .nm{font-weight:800;color:var(--navy);font-size:14px}
+  .ccard .badge{font-size:10px;font-weight:800;padding:2px 9px;border-radius:20px}
+  .ccard .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .ccard .box{background:var(--bg);border-radius:10px;padding:9px;text-align:center}
+  .ccard .box .n{font-size:15px;font-weight:900;color:var(--navy)}
+  .ccard .box .l{font-size:9px;color:var(--mut)}
+
+  /* CALENDAR */
+  .cal-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+  .cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .cal-head button{background:var(--navy-l);border:none;color:var(--navy);width:26px;height:26px;border-radius:8px;cursor:pointer;font-size:13px}
+  .cal-head .mtitle{font-weight:900;color:var(--navy);font-size:13px}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+  .cal-dow{font-size:8px;color:var(--mut);text-align:center;font-weight:700;padding:2px 0}
+  .cal-cell{height:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:7px;font-size:10.5px;font-weight:700;position:relative}
+  .cal-cell.today{background:var(--gold-l);color:var(--amb)}
+  .cal-cell .dot{width:4px;height:4px;border-radius:50%;background:var(--red);position:absolute;bottom:3px}
+
+  /* VISIT FORM & LISTS */
   label{display:block;font-size:12px;font-weight:700;color:var(--navy);margin:10px 2px 5px}
   input,select,textarea{width:100%;padding:11px 12px;border:1.5px solid var(--ln);border-radius:11px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink)}
   input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold)}
-  textarea{min-height:64px;resize:vertical}
+  textarea{min-height:60px;resize:vertical}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .seg{display:flex;gap:8px;margin-top:5px}
   .seg button{flex:1;padding:11px;border:1.5px solid var(--ln);background:#fff;border-radius:11px;font-weight:800;font-size:14px;cursor:pointer;font-family:inherit;color:var(--mut)}
@@ -53,198 +105,483 @@
   .geo{display:flex;align-items:center;gap:8px;margin-top:6px}
   .geo button{background:var(--gold-l);color:var(--navy);border:1px solid var(--gold);border-radius:11px;padding:10px 14px;font-weight:800;font-family:inherit;cursor:pointer;font-size:13px}
   .geo .gv{font-size:11px;color:var(--green);font-weight:700}
-
   .btn{width:100%;padding:14px;border:none;border-radius:13px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit}
-  .btn-gold{background:var(--gold);color:var(--navy-2)}
-  .btn-navy{background:var(--navy);color:#fff}
-  .btn-green{background:var(--green);color:#fff}
-  .btn:active{transform:scale(.99)}
-  .btn[disabled]{opacity:.5}
-
-  .pills{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
-  .pill{border:1px solid var(--ln);background:#fff;border-radius:20px;padding:7px 13px;font-size:12px;font-weight:700;cursor:pointer;color:var(--navy);font-family:inherit}
-  .pill.on{background:var(--navy);color:#fff;border-color:var(--navy)}
-  .ctrl{padding:8px 10px;border:1px solid var(--ln);border-radius:10px;font-size:13px;font-family:inherit;width:auto}
-
-  .daybar{display:flex;justify-content:space-between;align-items:center;background:var(--navy);color:#fff;padding:8px 13px;border-radius:11px;font-weight:800;font-size:12px;margin:14px 0 8px}
-  .daybar .c{background:var(--gold);color:var(--navy-2);border-radius:20px;padding:1px 9px;font-size:11px}
-  .afields{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}
-  .af .k{color:var(--mut);font-size:10px} .af .v{font-weight:700;font-size:12.5px}
-  .src{font-size:9px;font-weight:800;padding:1px 7px;border-radius:10px;margin-right:5px}
-  .s-cloud{background:var(--green-l);color:var(--green)} .s-local{background:var(--gold-l);color:var(--gold-2)}
+  .btn-gold{background:var(--gold);color:var(--navy-2)} .btn-navy{background:var(--navy);color:#fff}
+  .vcard{background:#fff;border:1px solid var(--ln);border-radius:14px;padding:13px;margin-bottom:9px}
+  .vcard .vc{font-weight:800;color:var(--navy);font-size:14px}
+  .vcard .vmeta{font-size:11px;color:var(--mut);margin-top:3px}
+  .vtag{font-size:10px;font-weight:800;padding:2px 9px;border-radius:20px}
+  .t-new{background:var(--navy-l);color:var(--navy)} .t-exist{background:var(--green-l);color:var(--green)}
+  .vdel{background:none;border:none;color:var(--red);font-size:12px;cursor:pointer;font-family:inherit;margin-top:6px;font-weight:700}
 
   .empty{text-align:center;padding:40px 18px;color:var(--mut)}
   .empty .ei{font-size:36px;margin-bottom:8px}.empty b{display:block;color:var(--navy);font-size:15px}
   .spin{width:28px;height:28px;border:3px solid var(--ln);border-top-color:var(--gold);border-radius:50%;animation:sp 1s linear infinite;margin:26px auto}
   @keyframes sp{to{transform:rotate(360deg)}}
+  .toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%);background:var(--navy-2);color:#fff;padding:11px 20px;border-radius:11px;font-size:13px;font-weight:700;display:none;z-index:60;max-width:90%;text-align:center}
 
-  .tabbar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--ln);display:flex;z-index:40;max-width:560px;margin:0 auto}
-  .tab{flex:1;border:none;background:none;padding:8px 2px 7px;font-size:10px;font-weight:700;color:var(--mut);cursor:pointer;font-family:inherit}
-  .tab .ti{display:block;font-size:19px;margin-bottom:1px}
-  .tab.on{color:var(--navy)}
-  .tab.add .ti{background:var(--gold);color:var(--navy-2);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:-14px auto 2px;box-shadow:0 4px 10px rgba(201,162,39,.4)}
+  /* BOTTOM NAV */
+  .tabbar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--ln);display:flex;z-index:40;max-width:600px;margin:0 auto}
+  .tab{flex:1;border:none;background:none;padding:9px 2px 8px;font-size:10px;font-weight:700;color:var(--mut);cursor:pointer;font-family:inherit}
+  .tab .ti{display:block;font-size:18px;margin-bottom:2px}
+  .tab.on{color:var(--navy)} .tab.on .ti{filter:none}
 
-  .toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);background:var(--navy-2);color:#fff;padding:11px 20px;border-radius:11px;font-size:13px;font-weight:700;display:none;z-index:60;max-width:90%;text-align:center}
-  .modal{position:fixed;inset:0;background:rgba(20,30,55,.55);display:none;align-items:flex-end;justify-content:center;z-index:70}
+  /* MODAL */
+  .modal{position:fixed;inset:0;background:rgba(20,30,55,.6);display:none;align-items:flex-end;justify-content:center;z-index:70}
   .modal.on{display:flex}
-  .sheet{background:#fff;width:100%;max-width:560px;border-radius:20px 20px 0 0;padding:22px;text-align:center}
-  .sheet .ico{font-size:46px;margin-bottom:8px}
-  .sheet h3{font-size:18px;color:var(--navy);margin-bottom:6px}
-  .sheet p{font-size:13px;color:var(--mut);margin-bottom:16px}
+  .sheet{background:#fff;width:100%;max-width:600px;border-radius:22px 22px 0 0;padding:20px;max-height:92vh;overflow-y:auto}
+  .sheet .sh-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .sheet .sh-top .x{background:var(--bg);border:none;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:15px}
+  .sheet .sh-top .tt{font-size:16px;font-weight:900;color:var(--navy)}
+  .step-dots{display:flex;gap:5px;margin-bottom:14px}
+  .step-dots i{flex:1;height:4px;border-radius:3px;background:var(--ln2)}
+  .step-dots i.on{background:var(--navy)}
+  .wstep{display:none}.wstep.on{display:block}
+  .icon-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:6px}
+  .icon-grid.g3{grid-template-columns:1fr 1fr 1fr}
+  .icon-btn{border:1.5px solid var(--ln);background:#fff;border-radius:13px;padding:13px 8px;text-align:center;cursor:pointer;font-family:inherit}
+  .icon-btn .ic{font-size:19px;display:block;margin-bottom:4px}
+  .icon-btn .lb{font-size:12px;font-weight:800;color:var(--ink)}
+  .icon-btn.on{background:var(--navy);border-color:var(--navy)}
+  .icon-btn.on .lb{color:#fff}
+  .step-nav{display:flex;gap:9px;margin-top:18px}
+  .step-nav .back{flex:0 0 90px;background:#fff;border:1.5px solid var(--ln);color:var(--navy)}
+  .step-nav .next{flex:1;background:var(--navy);color:#fff}
+  .subfield{background:var(--gold-l);border:1px solid var(--gold);border-radius:12px;padding:12px;margin-top:10px}
+  .subfield label{margin-top:0;color:var(--amb)}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+  .chip{background:var(--navy-l);color:var(--navy);border-radius:20px;padding:6px 10px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px;cursor:pointer}
+  .chip .ed{opacity:.7}
+  .photo-row{display:flex;align-items:center;gap:10px;margin-top:6px}
+  .photo-row button{background:var(--navy-l);color:var(--navy);border:1px solid var(--navy);border-radius:11px;padding:10px 14px;font-weight:800;font-family:inherit;cursor:pointer;font-size:13px}
+  .photo-row .pv{font-size:11px;color:var(--green);font-weight:700}
+  .fab-visit{position:absolute;right:50%;transform:translateX(50%);top:-26px;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-2));border:4px solid var(--bg);box-shadow:0 4px 14px rgba(201,162,39,.5);display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;color:var(--navy-2)}
+  .dup-warn{background:var(--red-l);border:1px solid var(--red);border-radius:12px;padding:11px 13px;margin-top:8px;font-size:12.5px;color:var(--red);cursor:pointer;display:none}
+  .dup-warn b{text-decoration:underline}
+  .srch-wrap{position:relative}
+  .srch-wrap input{padding-left:36px}
+  .srch-ic{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--mut);font-size:14px}
+  .client-suggest{background:#fff;border:1.5px solid var(--ln);border-radius:13px;margin-top:6px;overflow:hidden;display:none;max-height:260px;overflow-y:auto}
+  .client-suggest.on{display:block}
+  .cs-row{padding:12px 14px;font-size:13.5px;font-weight:700;color:var(--navy);border-bottom:1px solid var(--ln2);cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+  .cs-row:last-child{border-bottom:none}
+  .cs-row:active{background:var(--bg)}
+  .cs-row .cs-tag{font-size:9px;font-weight:800;padding:2px 7px;border-radius:20px;flex-shrink:0;margin-right:8px}
+  .cs-empty{padding:14px;text-align:center;color:var(--mut);font-size:12px}
+  .phone-wrap{display:flex;align-items:center;border:1.5px solid var(--ln);border-radius:11px;overflow:hidden;background:#fff}
+  .phone-wrap:focus-within{border-color:var(--gold)}
+  .phone-prefix{background:var(--bg);color:var(--navy);font-weight:800;padding:11px 10px;font-size:14px;border-left:1.5px solid var(--ln)}
+  .phone-wrap input{border:none;flex:1;padding:11px 12px}
+  .phone-wrap input:focus{outline:none}
+  .ccard-actions{display:flex;gap:8px;margin-top:9px}
+  .ccard-actions button{flex:1;border:none;border-radius:10px;padding:9px;font-weight:800;font-size:12px;font-family:inherit;cursor:pointer}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <div class="row">
-      <div class="logo">B</div>
-      <div><div class="ht">BuildHop CRM</div><div class="hs">المندوب: عبدالرزاق محمد</div></div>
-      <div class="sync" id="sync">…</div>
-    </div>
+    <button class="trash" onclick="clearDrafts()" title="مسح المسودات المحلية">🗑</button>
+    <div class="srch"><input id="global-q" placeholder="ابحث..." oninput="onGlobalSearch()" /><span class="ic">🔍</span></div>
+    <div class="brand"><span class="t">BuildHop CRM</span><span class="av">BA</span></div>
   </header>
 
   <div class="content">
 
-    <!-- VISITS TODAY -->
-    <div class="page active" id="p-visits">
-      <div class="stats">
-        <div class="stat"><div class="n" id="st-v">0</div><div class="l">زيارات اليوم</div></div>
-        <div class="stat"><div class="n" id="st-r">0</div><div class="l">طلبات اليوم</div></div>
-        <div class="stat gold"><div class="n" id="st-p">0</div><div class="l">نقاط اليوم</div></div>
+    <!-- DASHBOARD -->
+    <div class="page active" id="p-dash">
+      <div class="card dark greet">
+        <div class="g1">☀️ صباح الخير يا عبدالرزاق محمد</div>
+        <div class="g2">يومك مليء بالفرص! لنبدأ بتسجيل أول زيارة.</div>
+        <div class="g3" id="dash-date"></div>
       </div>
+
+      <div class="card">
+        <div class="prog-head"><span>⚡ إنجاز اليوم</span><span id="prog-count">0 / 5 زيارات</span></div>
+        <div class="prog-bar"><div id="prog-fill" style="width:0%"></div></div>
+        <div class="prog-sub" id="prog-sub">أنت حقّقت 0% من هدفك اليومي — استمر! 💪</div>
+        <div style="text-align:center;font-size:11px;color:var(--mut);margin-top:8px">حاليين <b id="d-exist">0</b> · جدد <b id="d-new">0</b></div>
+      </div>
+
+      <div class="card dark">
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:800;color:var(--gold-2)">⭐ نقاط أدائك اليوم</span><span style="font-size:20px;font-weight:900;color:var(--gold-2)" id="d-points">0</span></div>
+        <div class="pts-grid">
+          <div class="pts"><div class="n" id="d-p-new">0</div><div class="l">عميل جديد</div><div class="x">×20 نقطة</div></div>
+          <div class="pts"><div class="n" id="d-p-prospect">0</div><div class="l">زيارة محتمل</div><div class="x">×10 نقطة</div></div>
+          <div class="pts"><div class="n" id="d-p-exist">0</div><div class="l">زيارة حالي</div><div class="x">×5 نقطة</div></div>
+        </div>
+        <div class="pts-formula" id="d-formula">0 نقطة</div>
+      </div>
+
+      <div class="alert-ok" id="dash-followups">✅ لا توجد متابعات مستحقّة اليوم — يوم خفيف!</div>
+
+      <div class="cta">
+        <div class="b prim" onclick="openVisit()"><div>📍 سجّل زيارة</div><span class="s">اضغط للبدء</span></div>
+        <div class="b sec" onclick="go('followups')"><div>🗓️ <span id="cta-fu">0</span> متابعات قادمة</div><span class="s">عرض الجدول</span></div>
+      </div>
+
+      <button class="btn" style="background:var(--green);color:#fff;margin-bottom:14px" onclick="doSubmit()">☁️ إرسال تقرير اليوم للمدير</button>
+
+      <div class="card dark">
+        <div style="font-weight:800;color:var(--gold-2);margin-bottom:12px">🏆 أرقامك هذا الشهر</div>
+        <div class="month-grid" style="grid-template-columns:repeat(3,1fr)">
+          <div class="m"><div class="n" id="m-new">0</div><div class="l">عملاء جدد</div></div>
+          <div class="m"><div class="n" id="m-opp">0</div><div class="l">فرص جديدة</div></div>
+          <div class="m"><div class="n" id="m-quote">0</div><div class="l">عروض أسعار</div></div>
+        </div>
+      </div>
+
       <div class="sec-t">📍 زيارات اليوم</div>
       <div id="visits-today"></div>
     </div>
 
-    <!-- NEW VISIT -->
-    <div class="page" id="p-new">
-      <div class="sec-t">➕ تسجيل زيارة جديدة</div>
-      <div class="card">
-        <label>اسم العميل *</label>
-        <input id="f-client" placeholder="مثال: شركة كذا للمقاولات" />
+    <!-- CLIENTS -->
+    <div class="page" id="p-clients">
+      <div class="stats">
+        <div class="stat"><div class="n" style="color:var(--pu)" id="c-new">0</div><div class="l">✨ جدد</div></div>
+        <div class="stat"><div class="n" style="color:var(--green)" id="c-active">0</div><div class="l">🟢 نشط</div></div>
+        <div class="stat"><div class="n" style="color:var(--red)" id="c-urgent">0</div><div class="l">🔴 عاجل</div></div>
+        <div class="stat"><div class="n" style="color:var(--navy)" id="c-total">0</div><div class="l">إجمالي</div></div>
+      </div>
+      <div class="pills" id="client-pills">
+        <button class="pill on" onclick="setCF('all',this)">الكل</button>
+        <button class="pill" onclick="setCF('new',this)">✨ جدد</button>
+        <button class="pill" onclick="setCF('prospect',this)">محتملين</button>
+        <button class="pill" onclick="setCF('existing',this)">🟢 حاليين</button>
+        <button class="pill" onclick="setCF('urgent',this)">🔴 متابعة عاجلة</button>
+        <button class="pill" onclick="setCF('archived',this)">🗄️ مؤرشف</button>
+      </div>
+      <div class="sortrow">ترتيب:
+        <button class="s on" id="sort-last" onclick="setSort('last')">آخر زيارة</button>
+        <button class="s" id="sort-most" onclick="setSort('most')">الأكثر زيارة</button>
+        <button class="s" id="sort-name" onclick="setSort('name')">الاسم</button>
+      </div>
+      <div id="clients-list"><div class="spin"></div></div>
+    </div>
 
-        <label>نوع العميل</label>
-        <div class="seg">
-          <button type="button" id="seg-new" class="on" onclick="setType('New')">جديد</button>
-          <button type="button" id="seg-exist" onclick="setType('Existing')">حالي</button>
+    <!-- FOLLOW-UPS + CALENDAR (merged) -->
+    <div class="page" id="p-followups">
+      <div class="cal-stats">
+        <div class="stat"><div class="n" style="color:var(--green)" id="cal-up">0</div><div class="l">🟢 قادمة</div></div>
+        <div class="stat"><div class="n" style="color:var(--gold-2)" id="cal-today">0</div><div class="l">🟡 اليوم</div></div>
+        <div class="stat"><div class="n" style="color:var(--red)" id="cal-over">0</div><div class="l">🔴 متأخرة</div></div>
+        <div class="stat"><div class="n" style="color:var(--amb)" id="cal-nodate">0</div><div class="l">📅 بلا تاريخ</div></div>
+      </div>
+      <div class="card" style="padding:12px 14px;margin-bottom:10px">
+        <div class="cal-head"><button onclick="calMove(-1)">‹</button><span class="mtitle" id="cal-title"></span><button onclick="calMove(1)">›</button></div>
+        <div class="cal-grid" id="cal-dows"></div>
+        <div class="cal-grid" id="cal-body" style="margin-top:2px"></div>
+      </div>
+
+      <div class="card" style="display:flex;justify-content:space-between;align-items:center;padding:13px 16px" id="fu-header">
+        <span style="font-weight:900;color:var(--navy)">🗓️ جدول المتابعات والمهام القادمة</span>
+        <span class="badge" style="background:var(--navy-l);color:var(--navy);font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px" id="fu-count">0 مهمة</span>
+      </div>
+      <div id="followups-list"><div class="spin"></div></div>
+    </div>
+
+    <datalist id="clientList"></datalist>
+  </div>
+</div>
+
+<!-- NEW VISIT MODAL (dynamic steps) -->
+<div class="modal" id="visitModal">
+  <div class="sheet">
+    <div class="sh-top"><span class="tt" id="vm-title">🏢 تسجيل زيارة</span><button class="x" onclick="closeVisit()">✕</button></div>
+    <div class="step-dots" id="step-dots"></div>
+
+    <!-- STEP 1: type + client + location (shared) -->
+    <div class="wstep on" id="wstep-1">
+      <div class="seg">
+        <button type="button" id="seg-new" onclick="setType('New')">✨ عميل جديد</button>
+        <button type="button" id="seg-exist" class="on" onclick="setType('Existing')">🏢 عميل حالي / محتمل</button>
+      </div>
+      <label id="f-client-label">اختر العميل *</label>
+      <div class="srch-wrap">
+        <input id="f-client" placeholder="ابحث عن العميل…" autocomplete="off" oninput="checkDup();renderClientSuggest()" onfocus="renderClientSuggest()" onblur="hideClientSuggest()" />
+        <span class="srch-ic">🔍</span>
+      </div>
+      <div class="dup-warn" id="dup-warn" onclick="useDupMatch()"></div>
+      <div class="client-suggest" id="client-suggest"></div>
+
+      <div class="grid2">
+        <div><label>المنطقة</label>
+          <select id="f-region" onchange="onRegionChange()">
+            <option value="الرياض">الرياض</option><option value="جدة">جدة</option><option value="الدمام">الدمام</option><option value="مكة">مكة</option><option value="أخرى">أخرى</option>
+          </select>
         </div>
-
-        <div class="grid2">
-          <div><label>المنطقة</label><input id="f-region" value="الرياض" /></div>
-          <div><label>الحي</label><input id="f-hood" placeholder="مثال: شرق الرياض" /></div>
+        <div><label>الحي (المنطقة الفرعية)</label>
+          <select id="f-hood">
+            <option value="">— اختر الحي —</option>
+            <optgroup label="شمال الرياض">
+              <option>الملقا</option><option>النرجس</option><option>العارض</option><option>الياسمين</option><option>الصحافة</option><option>العقيق</option><option>القيروان</option><option>حطين</option><option>الربيع</option><option>الغدير</option><option>الندى</option><option>النفل</option><option>الوادي</option><option>الفلاح</option><option>بنبان</option><option>النخيل</option><option>المصيف</option><option>المروج</option><option>الازدهار</option><option>الواحة</option><option>المرسلات</option><option>الورود</option><option>الرائد</option><option>السفارات</option>
+            </optgroup>
+            <optgroup label="شرق الرياض">
+              <option>الرمال</option><option>اليرموك</option><option>النهضة</option><option>إشبيلية</option><option>الخليج</option><option>قرطبة</option><option>الحمراء</option><option>غرناطة</option><option>الروضة</option><option>الريان</option><option>السلي</option><option>النسيم</option><option>القدس</option><option>النظيم</option><option>المغرزات</option><option>الجزيرة</option><option>الرواد</option><option>الربوة</option><option>الشهداء</option><option>المونسية</option><option>القادسية</option><option>السلام</option><option>الأندلس</option><option>الروابي</option>
+            </optgroup>
+            <optgroup label="جنوب الرياض">
+              <option>الشفا</option><option>العزيزية</option><option>منفوحة</option><option>بدر</option><option>عكاظ</option><option>الحزم</option><option>الدار البيضاء</option><option>المصانع</option><option>طيبة</option><option>الفيصلية</option><option>الحائر</option><option>أحد</option><option>عريض</option><option>أم سليم</option><option>غبيراء</option>
+            </optgroup>
+            <optgroup label="غرب الرياض">
+              <option>السويدي</option><option>البديعة</option><option>ظهرة البديعة</option><option>عرقة</option><option>لبن</option><option>العريجاء</option><option>جامعة الملك سعود</option><option>شبرا</option><option>طويق</option><option>نمار</option><option>المهدية</option><option>ديراب</option><option>العوالي</option><option>وادي لبن</option><option>الدرعية</option>
+            </optgroup>
+            <optgroup label="وسط الرياض">
+              <option>المربع</option><option>المرقب</option><option>البطحاء</option><option>الديرة</option><option>الصالحية</option><option>الملز</option><option>الفاخرية</option><option>الوزارات</option><option>الخالدية</option><option>العود</option><option>الشميسي</option>
+            </optgroup>
+            <option value="أخرى">أخرى (خارج القائمة)</option>
+          </select>
         </div>
-
-        <label>تصنيف العميل</label>
-        <select id="f-size">
-          <option value="">— اختر —</option>
-          <option value="prospect">محتمل (prospect)</option>
-          <option value="active">نشط (active)</option>
-          <option value="dormant">خامل (dormant)</option>
-          <option value="strategic">استراتيجي (strategic)</option>
-          <option value="A">A</option><option value="B">B</option><option value="C">C</option>
-        </select>
-
-        <label>هدف الزيارة</label>
-        <input id="f-purpose" placeholder="مثال: متابعة / تعريف / تحصيل" />
-        <label>نتيجة الزيارة</label>
-        <input id="f-result" placeholder="مثال: عرض سعر / تنشيط / علاقة" />
-
-        <div class="grid2">
-          <div><label>جهة الاتصال</label><input id="f-contact" placeholder="الاسم" /></div>
-          <div><label>الهاتف</label><input id="f-phone" inputmode="numeric" placeholder="05xxxxxxxx" /></div>
-        </div>
-        <label>الوظيفة</label>
-        <input id="f-role" placeholder="مثال: مهندس / مشتريات" />
-
-        <div class="grid2">
-          <div><label>نوع المشروع</label><input id="f-ptype" placeholder="مثال: فيلا / عمائر" /></div>
-          <div><label>مرحلة المشروع</label><input id="f-pstage" placeholder="مثال: عظم / تشطيب" /></div>
-        </div>
-
-        <label>الخطوة القادمة</label>
-        <input id="f-next" placeholder="مثال: زيارة ميدانية / اتصال" />
-        <label>تاريخ المتابعة</label>
-        <input id="f-nextdate" type="date" />
-
-        <div class="grid2">
-          <div><label>حالة العرض</label><input id="f-qstatus" placeholder="مثال: pending" /></div>
-          <div><label>المدة (دقائق)</label><input id="f-duration" inputmode="numeric" placeholder="30" /></div>
-        </div>
-
-        <label>الموقع</label>
-        <div class="geo">
-          <button type="button" onclick="getLoc()">📍 تحديد موقعي</button>
-          <span class="gv" id="f-geo"></span>
-        </div>
-
-        <label>ملاحظات</label>
-        <textarea id="f-notes" placeholder="أي تفاصيل إضافية"></textarea>
-
-        <div style="margin-top:14px"><button class="btn btn-gold" onclick="saveVisit()">حفظ الزيارة</button></div>
+      </div>
+      <label>موقع العميل</label>
+      <div class="geo"><button type="button" onclick="getLocStep1()">📍 تحديد / تحديث موقع العميل</button><span class="gv" id="f-geo-1"></span></div>
+      <div id="projectname-wrap" style="display:none">
+        <label>اسم المشروع <span style="font-weight:400;color:var(--mut)">(للشركات متعددة المشاريع)</span></label>
+        <input id="f-projectname" placeholder="مثال: مشروع فلل الياسمين" />
       </div>
     </div>
 
-    <!-- REQUESTS -->
-    <div class="page" id="p-req">
-      <div class="sec-t">📦 طلب منتجات</div>
-      <div class="card">
-        <label>اسم العميل *</label>
-        <input id="r-client" placeholder="اسم العميل" />
-        <label>المنتجات المطلوبة *</label>
-        <input id="r-products" placeholder="مثال: بلاط، دهانات، عوازل" />
-        <label>ملاحظات</label>
-        <textarea id="r-notes" placeholder="كمية / تفاصيل"></textarea>
-        <div style="margin-top:14px"><button class="btn btn-navy" onclick="saveReq()">حفظ الطلب</button></div>
+    <!-- STEP 2A (existing/prospect): classification -->
+    <div class="wstep" id="wstep-2-exist">
+      <label style="margin-top:0">تصنيف العميل *</label>
+      <div class="icon-grid" id="grid-size">
+        <button type="button" class="icon-btn" data-v="active" onclick="pickSize('active',this)"><span class="ic">✅</span><span class="lb">نشط</span></button>
+        <button type="button" class="icon-btn" data-v="strategic" onclick="pickSize('strategic',this)"><span class="ic">👑</span><span class="lb">استراتيجي</span></button>
+        <button type="button" class="icon-btn" data-v="dormant" onclick="pickSize('dormant',this)"><span class="ic">⏸</span><span class="lb">متوقّف</span></button>
+        <button type="button" class="icon-btn" data-v="at_risk" onclick="pickSize('at_risk',this)"><span class="ic">⚠️</span><span class="lb">مهدد بالفقدان</span></button>
+        <button type="button" class="icon-btn" data-v="prospect" onclick="pickSize('prospect',this)" style="grid-column:1/3"><span class="ic">🎯</span><span class="lb">محتمل لم يتعامل</span></button>
       </div>
-      <div class="sec-t">طلبات اليوم</div>
-      <div id="req-today"></div>
+      <div id="interest-wrap" style="display:none">
+        <label>اهتمام العميل المحتمل</label>
+        <select id="f-interest"><option value="">— اختر —</option><option value="عالٍ">اهتمام عالٍ 🔥</option><option value="متوسط">اهتمام متوسط</option><option value="منخفض">اهتمام منخفض</option><option value="غير مهتم">غير مهتم</option></select>
+      </div>
     </div>
 
-    <!-- ARCHIVE -->
-    <div class="page" id="p-archive">
-      <div class="sec-t">🗂️ سجل الزيارات</div>
-      <div class="pills">
-        <input type="date" id="arch-date" class="ctrl" onchange="renderArchive()" />
-        <input type="search" id="arch-q" class="ctrl" style="flex:1;min-width:120px" placeholder="بحث باسم العميل" oninput="renderArchive()" />
-        <button class="pill" onclick="document.getElementById('arch-date').value='';document.getElementById('arch-q').value='';renderArchive()">الكل</button>
+    <!-- STEP 3 (existing/prospect): purpose + conditionals -->
+    <div class="wstep" id="wstep-3-exist">
+      <label style="margin-top:0">هدف الزيارة *</label>
+      <div class="icon-grid g3" id="grid-purpose">
+        <button type="button" class="icon-btn" data-v="متابعة عرض سعر" onclick="pickPurpose('متابعة عرض سعر',this)"><span class="ic">📋</span><span class="lb">متابعة عرض سعر</span></button>
+        <button type="button" class="icon-btn" data-v="متابعة أمر شراء" onclick="pickPurpose('متابعة أمر شراء',this)"><span class="ic">📦</span><span class="lb">متابعة أمر شراء</span></button>
+        <button type="button" class="icon-btn" data-v="متابعة التوريد" onclick="pickPurpose('متابعة التوريد',this)"><span class="ic">🚚</span><span class="lb">متابعة التوريد</span></button>
+        <button type="button" class="icon-btn" data-v="متابعة تحصيل" onclick="pickPurpose('متابعة تحصيل',this)"><span class="ic">💳</span><span class="lb">متابعة تحصيل</span></button>
+        <button type="button" class="icon-btn" data-v="تحصيل دفعة" onclick="pickPurpose('تحصيل دفعة',this)"><span class="ic">💰</span><span class="lb">تحصيل دفعة</span></button>
+        <button type="button" class="icon-btn" data-v="شكوى أو مشكلة" onclick="pickPurpose('شكوى أو مشكلة',this)"><span class="ic">🔧</span><span class="lb">شكوى أو مشكلة</span></button>
+        <button type="button" class="icon-btn" data-v="فرصة جديدة" onclick="pickPurpose('فرصة جديدة',this)"><span class="ic">⭐</span><span class="lb">فرصة جديدة</span></button>
+        <button type="button" class="icon-btn" data-v="علاقة ومتابعة" onclick="pickPurpose('علاقة ومتابعة',this)"><span class="ic">🤝</span><span class="lb">علاقة ومتابعة</span></button>
+        <button type="button" class="icon-btn" data-v="دعم فني" onclick="pickPurpose('دعم فني',this)"><span class="ic">🛠️</span><span class="lb">دعم فني</span></button>
+        <button type="button" class="icon-btn" data-v="تسليم عينة" onclick="pickPurpose('تسليم عينة',this)"><span class="ic">🎁</span><span class="lb">تسليم عينة</span></button>
+        <button type="button" class="icon-btn" data-v="تنشيط" onclick="pickPurpose('تنشيط',this)"><span class="ic">🔄</span><span class="lb">تنشيط</span></button>
+        <button type="button" class="icon-btn" data-v="أخرى" onclick="pickPurpose('أخرى',this)"><span class="ic">➕</span><span class="lb">أخرى</span></button>
       </div>
-      <div id="archive-content"><div class="spin"></div></div>
+      <div id="purpose-other-wrap" style="display:none"><input id="f-purpose-other" placeholder="اكتب هدف الزيارة" /></div>
+
+      <div id="quote-wrap" class="subfield" style="display:none"><label>رقم عرض السعر</label><input id="f-quotenum" placeholder="مثال: Q-2026-014" /></div>
+      <div id="payment-wrap" class="subfield" style="display:none"><label>رقم / قيمة الدفعة المحصلة</label><input id="f-payment" placeholder="مثال: 5000 ريال" /></div>
+
+      <div id="issues-wrap" class="subfield" style="display:none">
+        <label>مشاكل مفتوحة · Open Issues</label>
+        <div class="icon-grid g3" id="grid-issue">
+          <button type="button" class="icon-btn" data-v="تأخير توريد" onclick="pickIssue('تأخير توريد',this)"><span class="ic">🚚</span><span class="lb">تأخير توريد</span></button>
+          <button type="button" class="icon-btn" data-v="مشكلة جودة" onclick="pickIssue('مشكلة جودة',this)"><span class="ic">⚠️</span><span class="lb">مشكلة جودة</span></button>
+          <button type="button" class="icon-btn" data-v="مشكلة سعر" onclick="pickIssue('مشكلة سعر',this)"><span class="ic">💰</span><span class="lb">مشكلة سعر</span></button>
+          <button type="button" class="icon-btn" data-v="مشكلة تحصيل" onclick="pickIssue('مشكلة تحصيل',this)"><span class="ic">💳</span><span class="lb">مشكلة تحصيل</span></button>
+          <button type="button" class="icon-btn" data-v="أخرى" onclick="pickIssue('أخرى',this)" style="grid-column:span 1"><span class="ic">➕</span><span class="lb">أخرى</span></button>
+        </div>
+        <div id="issue-other-wrap" style="display:none;margin-top:8px"><input id="f-issue-other" placeholder="اكتب المشكلة" /></div>
+      </div>
+
+      <div id="opp-wrap" class="subfield" style="display:none">
+        <label>الفرص المطلوبة</label>
+        <div style="display:flex;gap:7px">
+          <input id="f-opp-input" placeholder="اكتب اسم الفرصة / المنتج" style="flex:1" />
+          <button type="button" onclick="addOpportunity()" style="flex:0 0 auto;background:var(--navy);color:#fff;border:none;border-radius:11px;padding:0 16px;font-weight:800;font-family:inherit;cursor:pointer">➕ إضافة</button>
+        </div>
+        <div class="chips" id="opp-chips"></div>
+      </div>
     </div>
 
+    <!-- STEP 2B (new client): contact + role + project size -->
+    <div class="wstep" id="wstep-2-new">
+      <div class="grid2">
+        <div><label style="margin-top:0">جهة الاتصال</label><input id="f-contact" placeholder="اسم المسؤول" /></div>
+        <div><label style="margin-top:0">الهاتف *</label>
+          <div class="phone-wrap"><span class="phone-prefix">+966</span><input id="f-phone" inputmode="numeric" maxlength="9" placeholder="5xxxxxxxx" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,9)" /></div>
+        </div>
+      </div>
+      <label>دور جهة الاتصال</label>
+      <div class="icon-grid g3" id="grid-role">
+        <button type="button" class="icon-btn" data-v="مالك" onclick="pickRole('مالك',this)"><span class="ic">📖</span><span class="lb">مالك</span></button>
+        <button type="button" class="icon-btn" data-v="مدير مشروع" onclick="pickRole('مدير مشروع',this)"><span class="ic">📋</span><span class="lb">مدير مشروع</span></button>
+        <button type="button" class="icon-btn" data-v="مقاول" onclick="pickRole('مقاول',this)"><span class="ic">📐</span><span class="lb">مقاول</span></button>
+        <button type="button" class="icon-btn" data-v="مطور" onclick="pickRole('مطور',this)"><span class="ic">🏗️</span><span class="lb">مطور</span></button>
+        <button type="button" class="icon-btn" data-v="مشتريات" onclick="pickRole('مشتريات',this)"><span class="ic">🛒</span><span class="lb">مشتريات</span></button>
+        <button type="button" class="icon-btn" data-v="مهندس موقع" onclick="pickRole('مهندس موقع',this)"><span class="ic">👷</span><span class="lb">مهندس موقع</span></button>
+        <button type="button" class="icon-btn" data-v="أخرى" onclick="pickRole('أخرى',this)" style="grid-column:span 3"><span class="ic">➕</span><span class="lb">أخرى</span></button>
+      </div>
+      <div id="role-other-wrap" style="display:none"><input id="f-role-other" placeholder="اكتب الدور" /></div>
+      <label>حجم المشروع *</label>
+      <div class="icon-grid g3" id="grid-abc">
+        <button type="button" class="icon-btn" data-v="C" onclick="pickSize('C',this)"><span class="ic">🔹</span><span class="lb">C — صغير</span></button>
+        <button type="button" class="icon-btn" data-v="B" onclick="pickSize('B',this)"><span class="ic">⭐</span><span class="lb">B — متوسط</span></button>
+        <button type="button" class="icon-btn" data-v="A" onclick="pickSize('A',this)"><span class="ic">🏆</span><span class="lb">A — كبير</span></button>
+      </div>
+      <label>وصف مختصر (اختياري)</label>
+      <input id="f-sizedesc" placeholder="مثال: فيلا دورين، ٣ عمائر سكنية…" />
+    </div>
+
+    <!-- STEP 3 (new client): project type + stage -->
+    <div class="wstep" id="wstep-3-new">
+      <label style="margin-top:0">نوع المشروع · Project Type</label>
+      <div class="icon-grid g3" id="grid-ptype">
+        <button type="button" class="icon-btn" data-v="فيلا" onclick="pickPType('فيلا',this)"><span class="ic">🏡</span><span class="lb">فيلا<br><small style="font-weight:600;color:var(--mut)">Villa</small></span></button>
+        <button type="button" class="icon-btn" data-v="عمارة" onclick="pickPType('عمارة',this)"><span class="ic">🏢</span><span class="lb">عمارة<br><small style="font-weight:600;color:var(--mut)">Building</small></span></button>
+        <button type="button" class="icon-btn" data-v="تجاري" onclick="pickPType('تجاري',this)"><span class="ic">🏬</span><span class="lb">تجاري<br><small style="font-weight:600;color:var(--mut)">Commercial</small></span></button>
+        <button type="button" class="icon-btn" data-v="حكومي" onclick="pickPType('حكومي',this)"><span class="ic">🏛️</span><span class="lb">حكومي<br><small style="font-weight:600;color:var(--mut)">Govt</small></span></button>
+        <button type="button" class="icon-btn" data-v="صناعي" onclick="pickPType('صناعي',this)"><span class="ic">🏭</span><span class="lb">صناعي<br><small style="font-weight:600;color:var(--mut)">Industrial</small></span></button>
+        <button type="button" class="icon-btn" data-v="أخرى" onclick="pickPType('أخرى',this)"><span class="ic">➕</span><span class="lb">أخرى<br><small style="font-weight:600;color:var(--mut)">Other</small></span></button>
+      </div>
+      <div id="ptype-other-wrap" style="display:none"><input id="f-ptype-other" placeholder="اكتب نوع المشروع" /></div>
+
+      <label>مرحلة المشروع · Stage</label>
+      <div class="icon-grid g3" id="grid-pstage">
+        <button type="button" class="icon-btn" data-v="الأعمال التمهيدية" onclick="pickPStage('الأعمال التمهيدية',this)"><span class="ic">🚜</span><span class="lb">الأعمال التمهيدية<br><small style="font-weight:600;color:var(--mut)">Site Clearing</small></span></button>
+        <button type="button" class="icon-btn" data-v="الأعمال الإنشائية" onclick="pickPStage('الأعمال الإنشائية',this)"><span class="ic">🏗️</span><span class="lb">الأعمال الإنشائية<br><small style="font-weight:600;color:var(--mut)">Concrete/Steel</small></span></button>
+        <button type="button" class="icon-btn" data-v="أعمال المباني" onclick="pickPStage('أعمال المباني',this)"><span class="ic">🧱</span><span class="lb">أعمال المباني<br><small style="font-weight:600;color:var(--mut)">Block/Masonry</small></span></button>
+        <button type="button" class="icon-btn" data-v="أعمال العزل" onclick="pickPStage('أعمال العزل',this)"><span class="ic">🛡️</span><span class="lb">أعمال العزل<br><small style="font-weight:600;color:var(--mut)">Insulation</small></span></button>
+        <button type="button" class="icon-btn" data-v="أعمال MEP" onclick="pickPStage('أعمال MEP',this)"><span class="ic">⚡</span><span class="lb">أعمال MEP<br><small style="font-weight:600;color:var(--mut)">MEP</small></span></button>
+        <button type="button" class="icon-btn" data-v="التشطيبات" onclick="pickPStage('التشطيبات',this)"><span class="ic">🎨</span><span class="lb">التشطيبات<br><small style="font-weight:600;color:var(--mut)">Finishing</small></span></button>
+        <button type="button" class="icon-btn" data-v="أخرى" onclick="pickPStage('أخرى',this)" style="grid-column:span 3"><span class="ic">➕</span><span class="lb">أخرى<br><small style="font-weight:600;color:var(--mut)">Other</small></span></button>
+      </div>
+      <div id="pstage-other-wrap" style="display:none"><input id="f-pstage-other" placeholder="اكتب مرحلة المشروع" /></div>
+    </div>
+
+    <!-- STEP 4 (new client): visit result -->
+    <div class="wstep" id="wstep-4-new">
+      <label style="margin-top:0">نتيجة الزيارة · Visit Result *</label>
+      <div class="icon-grid" id="grid-newresult">
+        <button type="button" class="icon-btn" data-v="طلب فتح حساب" onclick="pickResult('طلب فتح حساب',this)"><span class="ic">📂</span><span class="lb">طلب فتح حساب</span></button>
+        <button type="button" class="icon-btn" data-v="طلب كتالوج / مواصفات" onclick="pickResult('طلب كتالوج / مواصفات',this)"><span class="ic">📑</span><span class="lb">طلب كتالوج / مواصفات</span></button>
+        <button type="button" class="icon-btn" data-v="طلب عرض سعر" onclick="pickResult('طلب عرض سعر',this)"><span class="ic">📋</span><span class="lb">طلب عرض سعر</span></button>
+        <button type="button" class="icon-btn" data-v="طلب عينة" onclick="pickResult('طلب عينة',this)"><span class="ic">🎁</span><span class="lb">طلب عينة</span></button>
+        <button type="button" class="icon-btn" data-v="طلب زيارة فنية لاحقة" onclick="pickResult('طلب زيارة فنية لاحقة',this)"><span class="ic">🔁</span><span class="lb">طلب زيارة فنية لاحقة</span></button>
+        <button type="button" class="icon-btn" data-v="غير مؤهل" onclick="pickResult('غير مؤهل',this)"><span class="ic">🚫</span><span class="lb">غير مؤهل</span></button>
+      </div>
+    </div>
+
+    <!-- FINAL STEP (shared): next step + date + geo(existing)/photo(new) + notes -->
+    <div class="wstep" id="wstep-final">
+      <label style="margin-top:0">الخطوة القادمة</label>
+      <div class="icon-grid" id="grid-next">
+        <button type="button" class="icon-btn" data-v="متابعة هاتفية" onclick="pickNext('متابعة هاتفية',this)"><span class="ic">📞</span><span class="lb">متابعة هاتفية</span></button>
+        <button type="button" class="icon-btn" data-v="زيارة ميدانية" onclick="pickNext('زيارة ميدانية',this)"><span class="ic">🗓️</span><span class="lb">زيارة ميدانية</span></button>
+        <button type="button" class="icon-btn" data-v="لا توجد متابعة" onclick="pickNext('لا توجد متابعة',this)"><span class="ic">🚫</span><span class="lb">لا توجد متابعة</span></button>
+        <button type="button" class="icon-btn" data-v="أخرى" onclick="pickNext('أخرى',this)"><span class="ic">📝</span><span class="lb">أخرى</span></button>
+      </div>
+      <div id="next-other-wrap" style="display:none"><input id="f-next-other" placeholder="اكتب الخطوة القادمة" /></div>
+      <label>تاريخ المتابعة</label>
+      <input id="f-nextdate" type="date" />
+
+      <div id="geo-exist-wrap">
+        <label>تحديث الموقع (اختياري)</label>
+        <div class="geo"><button type="button" onclick="getLoc()">🔄 تحديث موقع العميل</button><span class="gv" id="f-geo"></span></div>
+      </div>
+
+      <div id="photo-wrap" style="display:none">
+        <label>التقط صورة من الموقع</label>
+        <div class="photo-row">
+          <button type="button" onclick="document.getElementById('f-photo').click()">📷 التقاط صورة</button>
+          <span class="pv" id="photo-status"></span>
+        </div>
+        <input type="file" id="f-photo" accept="image/*" capture="environment" style="display:none" onchange="onPhoto(this)" />
+      </div>
+
+      <label>ملاحظات</label>
+      <textarea id="f-notes" placeholder="أي تفاصيل"></textarea>
+    </div>
+
+    <input type="hidden" id="f-size" value="" />
+    <input type="hidden" id="f-role" value="" />
+    <input type="hidden" id="f-purpose" value="" />
+    <input type="hidden" id="f-issue" value="" />
+    <input type="hidden" id="f-ptype" value="" />
+    <input type="hidden" id="f-pstage" value="" />
+    <input type="hidden" id="f-newresult" value="" />
+    <input type="hidden" id="f-next" value="" />
+
+    <div class="step-nav">
+      <button type="button" class="btn back" id="btn-back" style="display:none" onclick="wizBack()">◂ السابق</button>
+      <button type="button" class="btn next" id="btn-next" onclick="wizNext()">التالي ◃</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESCHEDULE MODAL -->
+<div class="modal" id="reschedModal">
+  <div class="sheet">
+    <div class="sh-top" style="background:var(--navy-2);color:#fff;margin:-20px -20px 14px;padding:16px 20px;border-radius:22px 22px 0 0"><span class="tt" style="color:#fff">⏰ إعادة جدولة الموعد</span><button class="x" onclick="closeResched()">✕</button></div>
+    <div class="card" style="background:var(--bg);text-align:center">
+      <div style="font-size:11px;color:var(--mut)">العميل الحالي:</div>
+      <div style="font-weight:900;color:var(--navy);font-size:15px" id="rs-client">—</div>
+      <div style="font-size:11px;color:var(--mut);margin-top:4px" id="rs-step"></div>
+    </div>
+    <label>تاريخ المتابعة القادم الجديد *</label>
+    <input id="rs-date" type="date" />
+    <label>سبب تأجيل الموعد وإعادة الجدولة *</label>
+    <select id="rs-reason">
+      <option value="">— اختر سبب التأجيل —</option>
+      <option value="العميل غير متواجد في الموقع">العميل غير متواجد في الموقع</option>
+      <option value="طلب تأجيل بطلب مباشر من العميل">طلب تأجيل بطلب مباشر من العميل</option>
+      <option value="عدم جاهزية بنود المشروع الحالية">عدم جاهزية بنود المشروع الحالية</option>
+      <option value="انشغال المندوب بمهام تسليم عاجلة">انشغال المندوب بمهام تسليم عاجلة</option>
+      <option value="أخرى">أخرى</option>
+    </select>
+    <div style="margin-top:16px"><button class="btn" style="background:var(--gold-2);color:#fff" onclick="doReschedule()">تحديث الجدولة وتأجيل الموعد</button></div>
+  </div>
+</div>
+
+<!-- COMPLETE TASK MODAL -->
+<div class="modal" id="completeModal">
+  <div class="sheet">
+    <div class="sh-top" style="background:var(--navy-2);color:#fff;margin:-20px -20px 14px;padding:16px 20px;border-radius:22px 22px 0 0"><span class="tt" style="color:#fff">✅ إتمام المهمة وإغلاقها</span><button class="x" onclick="closeComplete()">✕</button></div>
+    <div class="card" style="background:var(--bg);text-align:center">
+      <div style="font-size:11px;color:var(--mut)">العميل الحالي:</div>
+      <div style="font-weight:900;color:var(--navy);font-size:15px" id="cp-client">—</div>
+      <div style="font-size:11px;color:var(--mut);margin-top:4px" id="cp-step"></div>
+    </div>
+    <label>نتيجة الزيارة / نتيجة المكالمة التفصيلية *</label>
+    <textarea id="cp-outcome" placeholder="اكتب ماذا حدث في الزيارة/المكالمة بالتفصيل (مثلًا: تم الاتفاق على السعر النهائي وإرسال الكتالوجات للعينات)" style="min-height:90px"></textarea>
+    <div style="font-size:10px;color:var(--mut);margin-top:6px;text-align:center">هذا الحقل إجباري لتأكيد إنجاز المتابعة وحفظها في السجل السحابي.</div>
+    <div style="margin-top:16px"><button class="btn btn-navy" style="background:var(--green)" onclick="doComplete()">حفظ وإتمام المهمة بنجاح</button></div>
   </div>
 </div>
 
 <div class="tabbar">
-  <button class="tab on" id="tab-visits" onclick="go('visits')"><span class="ti">📋</span>اليوم</button>
-  <button class="tab" id="tab-req" onclick="go('req')"><span class="ti">📦</span>الطلبات</button>
-  <button class="tab add" id="tab-new" onclick="go('new')"><span class="ti">＋</span>زيارة</button>
-  <button class="tab" id="tab-archive" onclick="go('archive')"><span class="ti">🗂️</span>السجل</button>
-  <button class="tab" id="tab-send" onclick="doSubmit()"><span class="ti">☁️</span>إرسال</button>
+  <div class="fab-visit" onclick="openVisit()">➕</div>
+  <div style="flex:1;display:flex">
+    <button class="tab on" id="tab-dash" onclick="go('dash')"><span class="ti">📊</span>Dashboard</button>
+    <button class="tab" id="tab-clients" onclick="go('clients')"><span class="ti">🏢</span>عملاء</button>
+  </div>
+  <span style="flex:0 0 58px"></span>
+  <div style="flex:1;display:flex">
+    <button class="tab" id="tab-followups" onclick="go('followups')"><span class="ti">🗓️</span>المتابعات</button>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
-
-<div class="modal" id="okModal">
-  <div class="sheet">
-    <div class="ico">✅</div>
-    <h3>تم الإرسال بنجاح</h3>
-    <p id="okMsg">حُفظت زياراتك في النظام السحابي.</p>
-    <button class="btn btn-green" onclick="closeOk()">تمام</button>
-  </div>
-</div>
 
 <script>
 // ===== CONFIG =====
 var SCRIPT_URL='https://script.google.com/macros/s/AKfycbyTBRrJRoukyyt-4c9f9H3_6DfoPVidMvB4sH7gkpFSY4wcgZuGCLSaePCFqJl5-GzBGw/exec';
 var REP_NAME='عبدالرزاق محمد';
 var PREFIX='bh_abdulrazzaq_';
-var PAGES=['visits','req','new','archive'];
+// قاعدة عملاء المندوب الرئيسية (حاليين + محتملين) — مصدرها القائمة التي أعدّها المدير
+var CLIENT_DIRECTORY=[{"name": "شركة شعاع المتطورة المحدودة", "status": "active"}, {"name": "شركة مجموعة زيد الحسين وإخوانه للمقاولات", "status": "active"}, {"name": "مؤسسة الفا الانشائية للمقاولات", "status": "active"}, {"name": "شركة تقدم وإنجاز للمقاولات", "status": "active"}, {"name": "شركة دوزان جده للمقاولات", "status": "active"}, {"name": "شركة سيتي بوول", "status": "active"}, {"name": "شركة فنار العربية الدولية", "status": "active"}, {"name": "شركة مهارات الخليجيون للمقاولات", "status": "active"}, {"name": "شركة العمران المميز للمقاولات", "status": "active"}, {"name": "شركة الهرم الرابع الدولية للمقاولات", "status": "active"}, {"name": "شركة برو فاست المحدودة", "status": "active"}, {"name": "شركة خليج الرواد للتجارة", "status": "active"}, {"name": "شركة دخون الوطنية للتجارة", "status": "active"}, {"name": "شركة رواق للتطوير والاستثمار العقاري", "status": "active"}, {"name": "شركة ريادة العالمية للتجارة", "status": "active"}, {"name": "شركة فنون ميار للمقاولات", "status": "active"}, {"name": "شركة منظور معماري العقارية", "status": "active"}, {"name": "شركة مواد البناء الحديث للتجارة", "status": "active"}, {"name": "شركة نبراس الخليج للمقاولات المعمارية العامة", "status": "active"}, {"name": "شركة هامات الاولى العقارية", "status": "active"}, {"name": "مكتب المنازل المتميزة للخدمات العقارية", "status": "active"}, {"name": "مؤسسة إعمار سيف للتطوير والاستثمار العقاري", "status": "active"}, {"name": "مؤسسة سمو اجدان للمقاولات العامة", "status": "active"}, {"name": "مؤسسة مشعل محمد البطاح للمقاولات العامة", "status": "active"}, {"name": "محمود ابوصخر", "status": "active"}, {"name": "مقاول ابو ماهر", "status": "active"}, {"name": "ابو أيهم", "status": "active"}, {"name": "عبدالله التميمي", "status": "active"}, {"name": "شركة بلكات للمنتجات الاسمنتيه", "status": "active"}, {"name": "شركة دياري للتطوير العقاري", "status": "prospect"}, {"name": "شركة أون للتطوير والاستثمار العقاري", "status": "prospect"}, {"name": "شركة شبكة الموارد", "status": "prospect"}, {"name": "شركة مجموعة النخلات الثلاث المحدودة للتجارة", "status": "prospect"}, {"name": "مؤسسة اركان النسمة للتجارة", "status": "prospect"}, {"name": "شركة سما الشرق المحدودة", "status": "prospect"}, {"name": "شركة افاق التشييد للمقاولات", "status": "prospect"}, {"name": "شركة صناع العمارة المحدودة", "status": "prospect"}, {"name": "شركة نسور الصخر للمقاولات", "status": "prospect"}, {"name": "شركة المعماريون الخليجيون للمقاولات", "status": "prospect"}, {"name": "مؤسسة سراب الطريق للمقاولات", "status": "prospect"}, {"name": "شركة ملي متر للمقاولات", "status": "prospect"}, {"name": "شركة زاوية الجودة للمقاولات", "status": "prospect"}, {"name": "شركة معماريون الجودة للمقاولات", "status": "prospect"}, {"name": "مؤسسة موزان للمقاولات العامة", "status": "prospect"}, {"name": "شركة البناء المبتكر للمقاولات", "status": "prospect"}, {"name": "شركة الرؤية المضيئة للمقاولات", "status": "prospect"}, {"name": "شركة أساس الجوهرة للتطوير العقاري", "status": "prospect"}, {"name": "مؤسسة المسكن المناسب للتطوير والاستثمار العقاري", "status": "prospect"}, {"name": "شركة بي ار كيه زد العالمية لتقنية المعلومات", "status": "prospect"}, {"name": "منظور معماري", "status": "prospect"}, {"name": "مؤسسة اوائل الموردين للتطوير العقاري", "status": "prospect"}, {"name": "مؤسسة أبيات فريدة للتجارة", "status": "prospect"}, {"name": "شركة الكيان الفنية العربية للمقاولات", "status": "prospect"}, {"name": "مؤسسة جبل سنجار للمقاولات", "status": "prospect"}, {"name": "شركة رقوب للمقاولات", "status": "prospect"}, {"name": "شركة هدف للمقاولات", "status": "prospect"}, {"name": "شركة جرين ورليد", "status": "prospect"}, {"name": "شركة إنماء الروابي للمقاولات", "status": "prospect"}, {"name": "شركة سديل المجد التجارية", "status": "prospect"}, {"name": "مؤسسة صرح البتال للمقاولات", "status": "prospect"}, {"name": "شركة ربوع الاتحاد للمقاولات", "status": "prospect"}, {"name": "شركة جودة الاعمار للمقاولات", "status": "prospect"}, {"name": "شركة تميز التنفيذ للمقاولات شركة شخص واحد", "status": "prospect"}, {"name": "شركة انجازات المدن للتطوير العقاري", "status": "prospect"}, {"name": "شركة زاوية التوزيع للتجارة", "status": "prospect"}, {"name": "مؤسسة إمداد للأبنية الذكية للمقاولات العامة", "status": "prospect"}, {"name": "شركة أوتاد الفهد المحدودة", "status": "prospect"}, {"name": "شركة تقنية المباني المستدامة للمقاولات", "status": "prospect"}, {"name": "مؤسسة رتيم للمقاولات", "status": "prospect"}, {"name": "شركة فجر الانشائية للمقاولات", "status": "prospect"}, {"name": "شركة العلم والمعمار للمقاولات", "status": "prospect"}, {"name": "شركة دول الخليج للمقاولات", "status": "prospect"}, {"name": "شركة نقطة التسعين للمقاولات", "status": "prospect"}, {"name": "عبدالله الزكري", "status": "prospect"}, {"name": "مؤسسة دار الريان للتطوير العقاري", "status": "prospect"}, {"name": "مؤسسة روائع العمار للعقارات", "status": "prospect"}, {"name": "الألفية للتطوير العقاري", "status": "prospect"}, {"name": "احمد مخلف", "status": "prospect"}, {"name": "شركة بلدا السعودي", "status": "prospect"}, {"name": "مشعل المطيري", "status": "prospect"}, {"name": "نايف السبيعي", "status": "prospect"}];
+var PAGES=['dash','clients','followups'];
 
-// ===== STATE =====
-var visits=load('visits',[]);      // today's working visits (local)
-var requests=load('requests',[]);  // today's working requests (local)
-var cloudVisits=[];                 // history from sheet
-var newType='New', geo={lat:'',lng:''};
+var visits=load('visits',[]);
+var requests=load('requests',[]);
+var cloudVisits=[];
+var newType='Existing', geo={lat:'',lng:''};
+var _cf='all', _sort='last', _calDate=new Date(Date.now()+180*60000);
 
 // ===== UTILS =====
 function load(k,d){try{var v=JSON.parse(localStorage.getItem(PREFIX+k)||'null');return v==null?d:v;}catch(e){return d;}}
@@ -255,181 +592,546 @@ function val(id){var e=document.getElementById(id);return e?e.value.trim():'';}
 function today(){return new Date(Date.now()+180*60000).toISOString().slice(0,10);}
 function nowTime(){return new Date(Date.now()+180*60000).toISOString().slice(11,16);}
 function dstr(v){var s=txt(v);if(!s)return '';if(s.indexOf('T')>-1){var d=new Date(s);if(!isNaN(d.getTime()))return new Date(d.getTime()+180*60000).toISOString().slice(0,10);}return s.slice(0,10);}
+function daysSince(d){if(!/^\d{4}-\d{2}-\d{2}$/.test(d))return 9999;return Math.floor((Date.parse(today()+'T00:00:00')-Date.parse(d+'T00:00:00'))/86400000);}
 function toast(m){var t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(function(){t.style.display='none';},2200);}
-function prettyDate(d){if(!/^\d{4}-\d{2}-\d{2}$/.test(d))return d;var dt=new Date(d+'T00:00:00');var days=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];return days[dt.getDay()]+' · '+dt.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
+function set(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
 
-// نظام النقاط الجديد (نظيف وشفّاف): جديد=10، حالي=5، محتمل +3، خطوة قادمة +2
-function visitPoints(v){var p=(txt(v.type)==='New')?10:5;if(txt(v.clientSize)==='prospect')p+=3;if(txt(v.nextAction))p+=2;return p;}
-function todayScore(){return visits.filter(function(v){return v.date===today();}).reduce(function(s,v){return s+visitPoints(v);},0);}
+var AR_MONTHS=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+var AR_DOW=['أحد','إثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'];
 
-// ===== NAV =====
-function go(id){
-  PAGES.forEach(function(p){var e=document.getElementById('p-'+p);if(e)e.classList.remove('active');});
-  document.getElementById('p-'+id).classList.add('active');
-  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on');});
-  var map={visits:'tab-visits',req:'tab-req',new:'tab-new',archive:'tab-archive'};
-  var tb=document.getElementById(map[id]);if(tb)tb.classList.add('on');
-  if(id==='archive')renderArchive();
-  window.scrollTo(0,0);
-}
+// نقاط: عميل جديد=20، محتمل=10، حالي=5
+function visitPoints(v){if(txt(v.type)==='New')return 20;if(txt(v.clientSize)==='prospect')return 10;return 5;}
 
-// ===== NEW VISIT =====
-function setType(t){newType=t;document.getElementById('seg-new').classList.toggle('on',t==='New');document.getElementById('seg-exist').classList.toggle('on',t==='Existing');}
-function getLoc(){
-  if(!navigator.geolocation){toast('الموقع غير مدعوم');return;}
-  document.getElementById('f-geo').textContent='جارٍ التحديد…';
-  navigator.geolocation.getCurrentPosition(function(p){
-    geo.lat=p.coords.latitude.toFixed(6);geo.lng=p.coords.longitude.toFixed(6);
-    document.getElementById('f-geo').textContent='✓ تم تحديد الموقع';
-  },function(){document.getElementById('f-geo').textContent='تعذّر تحديد الموقع';});
-}
-function saveVisit(){
-  var client=val('f-client');
-  if(!client){toast('اكتب اسم العميل');return;}
-  var v={
-    id:Date.now(), date:today(), time:nowTime(), client:client, type:newType,
-    region:val('f-region'), hood:val('f-hood'), clientSize:val('f-size'),
-    purpose:val('f-purpose'), visitResult:val('f-result'),
-    contact:val('f-contact'), phone:val('f-phone'), contactRole:val('f-role'),
-    projectType:val('f-ptype'), projectStage:val('f-pstage'),
-    nextAction:val('f-next'), nextDate:val('f-nextdate'),
-    quoteStatus:val('f-qstatus'), duration:val('f-duration'),
-    lat:geo.lat, lng:geo.lng, notes:val('f-notes'),
-    relation:'', sectors:'', quoteNumber:'', opportunities:'', openIssues:'',
-    paymentAmount:'', paymentMethod:'', sampleProduct:'', hasPhoto:false
-  };
-  visits.push(v);save('visits',visits);
-  ['f-client','f-hood','f-purpose','f-result','f-contact','f-phone','f-role','f-ptype','f-pstage','f-next','f-nextdate','f-qstatus','f-duration','f-notes'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
-  document.getElementById('f-size').value='';geo={lat:'',lng:''};document.getElementById('f-geo').textContent='';setType('New');
-  toast('✓ حُفظت الزيارة');renderVisits();go('visits');
-}
-function delVisit(id){visits=visits.filter(function(v){return v.id!==id;});save('visits',visits);renderVisits();}
-
-// ===== REQUESTS =====
-function saveReq(){
-  var c=val('r-client'),p=val('r-products');
-  if(!c||!p){toast('اكتب العميل والمنتجات');return;}
-  requests.push({id:Date.now(),date:today(),time:nowTime(),client:c,products:p,notes:val('r-notes')});
-  save('requests',requests);
-  document.getElementById('r-client').value='';document.getElementById('r-products').value='';document.getElementById('r-notes').value='';
-  toast('✓ حُفظ الطلب');renderReq();
-}
-function delReq(id){requests=requests.filter(function(r){return r.id!==id;});save('requests',requests);renderReq();}
-
-// ===== RENDER TODAY =====
-function renderVisits(){
-  var tv=visits.filter(function(v){return v.date===today();});
-  document.getElementById('st-v').textContent=tv.length;
-  document.getElementById('st-r').textContent=requests.filter(function(r){return r.date===today();}).length;
-  document.getElementById('st-p').textContent=todayScore();
-  var el=document.getElementById('visits-today');
-  if(!tv.length){el.innerHTML='<div class="empty"><div class="ei">📍</div><b>لا زيارات بعد</b>اضغط ＋ لتسجيل زيارة</div>';return;}
-  el.innerHTML=tv.slice().reverse().map(function(v){
-    var tag=v.type==='New'?'<span class="vtag t-new">جديد</span>':'<span class="vtag t-exist">حالي</span>';
-    return '<div class="card vcard"><div class="vtop"><div><div class="vc">'+esc(v.client)+'</div><div class="vmeta">⏱ '+esc(v.time)+(v.hood?' · '+esc(v.hood):'')+(v.clientSize?' · '+esc(v.clientSize):'')+'</div></div>'+tag+'</div>'+(v.purpose||v.nextAction?'<div class="vmeta" style="margin-top:6px">'+esc(v.purpose||'')+(v.nextAction?' → '+esc(v.nextAction):'')+'</div>':'')+'<button class="vdel" onclick="delVisit('+v.id+')">حذف</button></div>';
-  }).join('');
-}
-function renderReq(){
-  var tr=requests.filter(function(r){return r.date===today();});
-  document.getElementById('st-r').textContent=tr.length;
-  var el=document.getElementById('req-today');
-  if(!tr.length){el.innerHTML='<div class="empty" style="padding:20px"><b>لا طلبات بعد</b></div>';return;}
-  el.innerHTML=tr.slice().reverse().map(function(r){
-    return '<div class="card vcard"><div class="vc">'+esc(r.client)+'</div><div class="vmeta" style="margin-top:4px">'+esc(r.products)+'</div>'+(r.notes?'<div class="vmeta">'+esc(r.notes)+'</div>':'')+'<button class="vdel" onclick="delReq('+r.id+')">حذف</button></div>';
-  }).join('');
-}
-
-// ===== ARCHIVE (cloud + local) =====
+// ===== DATA (merge cloud + local) =====
 function cloudToVisit(c){
   var coords=String(c['الإحداثيات']||'').split(','),lat=coords[0]&&coords[1]?coords[0].trim():'',lng=coords[1]?coords[1].trim():'';
   return {_src:'cloud',date:dstr(c['التاريخ']),time:txt(c['الوقت']),client:txt(c['العميل']),type:txt(c['النوع']),
     hood:txt(c['الحي']),region:txt(c['المنطقة']),purpose:txt(c['هدف الزيارة']),visitResult:txt(c['نتيجة الزيارة']),
-    clientSize:txt(c['تصنيف العميل']),contact:txt(c['جهة الاتصال']),phone:txt(c['الهاتف']),contactRole:txt(c['الوظيفة']),
-    projectType:txt(c['نوع المشروع']),projectStage:txt(c['مرحلة المشروع']),nextAction:txt(c['الخطوة القادمة']),
-    nextDate:dstr(c['تاريخ المتابعة']),quoteStatus:txt(c['حالة العرض']),duration:txt(c['المدة (د)']),
+    clientSize:txt(c['تصنيف العميل']),contact:txt(c['جهة الاتصال']),phone:txt(c['الهاتف']),
+    nextAction:txt(c['الخطوة القادمة']),nextDate:dstr(c['تاريخ المتابعة']),quoteStatus:txt(c['حالة العرض']),
     notes:txt(c['ملاحظات']),lat:lat,lng:lng};
 }
-function archiveData(){
+function allVisits(){
   var map={};
   cloudVisits.forEach(function(c){var v=cloudToVisit(c);map[v.date+'|'+v.time+'|'+v.client]=v;});
   visits.forEach(function(v){var k=v.date+'|'+v.time+'|'+v.client;if(!map[k]){var x={};for(var p in v)x[p]=v[p];x._src='local';map[k]=x;}});
   return Object.keys(map).map(function(k){return map[k];});
 }
-function archCard(v){
-  var F=[['النوع','type'],['المنطقة','region'],['الحي','hood'],['الغرض','purpose'],['النتيجة','visitResult'],['التصنيف','clientSize'],['جهة الاتصال','contact'],['الهاتف','phone'],['المشروع','projectType'],['المرحلة','projectStage'],['الخطوة القادمة','nextAction'],['المتابعة','nextDate'],['العرض','quoteStatus'],['المدة','duration']];
-  var rows=F.map(function(f){var val=txt(v[f[1]]);if(!val)return '';return '<div class="af"><div class="k">'+f[0]+'</div><div class="v">'+esc(val)+'</div></div>';}).join('');
-  var mp=(v.lat&&v.lng)?'<a href="https://maps.google.com/?q='+v.lat+','+v.lng+'" target="_blank" style="color:var(--gold-2);font-weight:800;font-size:12px;text-decoration:none;display:inline-block;margin-top:7px">📍 الموقع</a>':'';
-  var src=v._src==='cloud'?'<span class="src s-cloud">☁ سحابة</span>':'<span class="src s-local">📱 جهاز</span>';
-  return '<div class="card"><div class="vc">'+esc(v.client||'—')+' '+src+'</div><div class="vmeta">⏱ '+esc(v.time)+'</div><div class="afields">'+rows+'</div>'+(v.notes?'<div class="vmeta" style="margin-top:7px;background:var(--bg);padding:7px 9px;border-radius:8px">'+esc(v.notes)+'</div>':'')+mp+'</div>';
-}
-function renderArchive(){
-  var el=document.getElementById('archive-content');
-  var df=val('arch-date'),q=val('arch-q').toLowerCase();
-  var list=archiveData().filter(function(v){
-    if(df&&v.date!==df)return false;
-    if(q&&txt(v.client).toLowerCase().indexOf(q)===-1)return false;
-    return true;
+// عملاء مشتقّون: آخر زيارة/تصنيف/عدد/متابعة لكل عميل
+function clientsData(){
+  var m={};
+  // ١) ابدأ بقاعدة العملاء الرئيسية (قد يكون بعضهم لم تتم زيارته بعد إطلاقًا)
+  CLIENT_DIRECTORY.forEach(function(d){
+    var c=txt(d.name).trim();if(!c||m[c])return;
+    m[c]={name:c,count:0,last:'',size:d.status,type:'Existing',nextDate:'',nextAction:'',inDirectory:true};
   });
-  if(!list.length){el.innerHTML='<div class="empty"><div class="ei">🗂️</div><b>لا توجد زيارات</b></div>';return;}
-  var by={};list.forEach(function(v){var d=v.date||'—';(by[d]=by[d]||[]).push(v);});
-  var dates=Object.keys(by).sort(function(a,b){return a<b?1:-1;});
-  el.innerHTML=dates.map(function(d){
-    var items=by[d].sort(function(a,b){return txt(b.time).localeCompare(txt(a.time));});
-    return '<div class="daybar"><span>'+prettyDate(d)+'</span><span class="c">'+items.length+'</span></div>'+items.map(archCard).join('');
-  }).join('');
+  // ٢) ادمج بيانات الزيارات الفعلية (تُنشئ عميلًا جديدًا إن لم يكن موجودًا، أو تُحدّث الموجود)
+  allVisits().forEach(function(v){
+    var c=txt(v.client).trim();if(!c)return;
+    var o=m[c]=m[c]||{name:c,count:0,last:'',size:'',type:'',nextDate:'',nextAction:''};
+    o.count++;
+    var d=dstr(v.date);
+    if(d>=o.last){o.last=d;if(v.clientSize)o.size=v.clientSize;if(v.type)o.type=v.type;}
+    var nd=dstr(v.nextDate);if(nd&&(!o.nextDate||nd<o.nextDate)&&txt(v.nextAction)&&v.nextAction!=='لا توجد متابعة'){o.nextDate=nd;o.nextAction=v.nextAction;}
+  });
+  return Object.keys(m).map(function(k){return m[k];});
 }
 
-// ===== CLOUD LOAD (JSONP) =====
+/* ===== كاشف التكرار الذكي (يوحّد الألف/التاء المربوطة ويحذف الألقاب الشائعة) ===== */
+function normCompany(s){
+  s=txt(s).trim();
+  s=s.replace(/^(شركة|مؤسسة|مكتب)\s+/,'');
+  s=s.replace(/\s+(للمقاولات|للتطوير العقاري|للتطوير والاستثمار العقاري|المحدودة|العامة|المعمارية|للتجارة|عامة).*$/,'');
+  s=s.replace(/[إأآا]/g,'ا');
+  s=s.replace(/ة$/,'ه');
+  return s.trim();
+}
+function allKnownClientNames(){
+  var set={};
+  CLIENT_DIRECTORY.forEach(function(d){set[d.name]=1;});
+  clientsData().forEach(function(c){set[c.name]=1;});
+  return Object.keys(set);
+}
+function findSimilarClient(typed){
+  var t=txt(typed).trim();if(t.length<3)return null;
+  var nt=normCompany(t);if(!nt||nt.length<3)return null;
+  var names=allKnownClientNames();
+  for(var i=0;i<names.length;i++){
+    var cand=names[i];
+    if(cand===t)return cand;
+    var nc=normCompany(cand);
+    if(nc&&(nc===nt||(nt.length>=4&&(nc.indexOf(nt)>-1||nt.indexOf(nc)>-1))))return cand;
+  }
+  return null;
+}
+var _dupMatch='';
+function checkDup(){
+  if(newType!=='New'){document.getElementById('dup-warn').style.display='none';return;}
+  var typed=val('f-client');
+  var m=findSimilarClient(typed);
+  var w=document.getElementById('dup-warn');
+  if(m){_dupMatch=m;w.innerHTML='⚠️ عذرًا، يبدو أن <b>'+esc(m)+'</b> مسجّل بالفعل — اضغط هنا لتسجيل زيارة له بدل إضافته من جديد';w.style.display='block';}
+  else{w.style.display='none';_dupMatch='';}
+}
+function useDupMatch(){if(!_dupMatch)return;var n=_dupMatch;closeVisit();quickVisit(n);}
+
+// ===== NAV =====
+function go(id){
+  if(id==='new'){openVisit();return;}
+  PAGES.forEach(function(p){var e=document.getElementById('p-'+p);if(e)e.classList.remove('active');});
+  var e=document.getElementById('p-'+id);if(e)e.classList.add('active');
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on');});
+  var map={dash:'tab-dash',clients:'tab-clients',followups:'tab-followups'};
+  var tb=document.getElementById(map[id]);if(tb)tb.classList.add('on');
+  if(id==='dash'){renderDash();renderVisits();}
+  if(id==='clients')renderClients();
+  if(id==='followups'){renderCal();_dayFilter=null;renderFollowups();}
+  window.scrollTo(0,0);
+}
+
+// ===== VISIT MODAL =====
+function openVisit(){document.getElementById('visitModal').classList.add('on');populateClients();setType('Existing');getLocStep1();}
+function closeVisit(){document.getElementById('visitModal').classList.remove('on');}
+
+function stepsFor(t){
+  return t==='New' ? ['wstep-1','wstep-2-new','wstep-3-new','wstep-4-new','wstep-final']
+                    : ['wstep-1','wstep-2-exist','wstep-3-exist','wstep-final'];
+}
+var opps=[];
+function setType(t){
+  newType=t;
+  document.getElementById('seg-new').classList.toggle('on',t==='New');
+  document.getElementById('seg-exist').classList.toggle('on',t==='Existing');
+  var lbl=document.getElementById('f-client-label');if(lbl)lbl.textContent=(t==='New')?'اسم الشركة الجديدة *':'اختر العميل *';
+  var ci=document.getElementById('f-client');if(ci)ci.placeholder=(t==='New')?'اسم الشركة الجديدة…':'ابحث بالاسم…';
+  set('vm-title',(t==='New')?'✨ تسجيل عميل جديد':'🏢 تسجيل زيارة');
+  resetWizFields();
+  wizGoto(1);
+}
+function resetWizFields(){
+  ['f-size','f-role','f-purpose','f-issue','f-ptype','f-pstage','f-newresult','f-next'].forEach(function(id){document.getElementById(id).value='';});
+  document.querySelectorAll('.icon-btn').forEach(function(b){b.classList.remove('on');});
+  ['interest-wrap','role-other-wrap','purpose-other-wrap','quote-wrap','payment-wrap','issues-wrap','issue-other-wrap','opp-wrap','ptype-other-wrap','pstage-other-wrap','next-other-wrap','projectname-wrap','photo-wrap'].forEach(function(id){document.getElementById(id).style.display='none';});
+  opps=[];renderOpps();photoTaken=false;set('photo-status','');
+  document.getElementById('dup-warn').style.display='none';_dupMatch='';
+  hideClientSuggest();
+}
+function onRegionChange(){var r=val('f-region');var h=document.getElementById('f-hood');if(r!=='الرياض')h.value='';}
+
+function pickSize(v,btn){document.getElementById('f-size').value=v;btn.parentElement.querySelectorAll('.icon-btn').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');document.getElementById('interest-wrap').style.display=(v==='prospect')?'block':'none';}
+function pickRole(v,btn){document.getElementById('f-role').value=v;btn.parentElement.querySelectorAll('.icon-btn').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');document.getElementById('role-other-wrap').style.display=(v==='أخرى')?'block':'none';}
+function pickPType(v,btn){document.getElementById('f-ptype').value=v;btn.parentElement.querySelectorAll('.icon-btn').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');document.getElementById('ptype-other-wrap').style.display=(v==='أخرى')?'block':'none';}
+function pickPStage(v,btn){document.getElementById('f-pstage').value=v;btn.parentElement.querySelectorAll('.icon-btn').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');document.getElementById('pstage-other-wrap').style.display=(v==='أخرى')?'block':'none';}
+function pickResult(v,btn){document.getElementById('f-newresult').value=v;btn.parentElement.querySelectorAll('.icon-btn').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');}
+function pickNext(v,btn){document.getElementById('f-next').value=v;btn.parentElement.querySelectorAll('.icon-btn').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');document.getElementById('next-other-wrap').style.display=(v==='أخرى')?'block':'none';}
+function pickIssue(v,btn){document.getElementById('f-issue').value=v;btn.parentElement.querySelectorAll('.icon-btn').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');document.getElementById('issue-other-wrap').style.display=(v==='أخرى')?'block':'none';}
+
+function pickPurpose(v,btn){
+  document.getElementById('f-purpose').value=v;
+  btn.parentElement.querySelectorAll('.icon-btn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  document.getElementById('purpose-other-wrap').style.display=(v==='أخرى')?'block':'none';
+  document.getElementById('quote-wrap').style.display=(v==='متابعة عرض سعر')?'block':'none';
+  document.getElementById('payment-wrap').style.display=(v==='متابعة تحصيل'||v==='تحصيل دفعة')?'block':'none';
+  document.getElementById('issues-wrap').style.display=(v==='شكوى أو مشكلة')?'block':'none';
+  document.getElementById('opp-wrap').style.display=(v==='فرصة جديدة')?'block':'none';
+}
+function renderOpps(){
+  var el=document.getElementById('opp-chips');
+  el.innerHTML=opps.map(function(o,i){return '<span class="chip" onclick="editOpp('+i+')">'+esc(o)+' <span class="ed">✏️</span></span>';}).join('');
+}
+function addOpportunity(){
+  var v=val('f-opp-input');
+  if(!v){toast('اكتب اسم الفرصة');return;}
+  opps.push(v);document.getElementById('f-opp-input').value='';renderOpps();
+}
+function editOpp(i){document.getElementById('f-opp-input').value=opps[i];opps.splice(i,1);renderOpps();}
+
+var photoTaken=false;
+function onPhoto(inp){if(inp.files&&inp.files.length){photoTaken=true;set('photo-status','✓ تم التقاط الصورة');}}
+
+function getLoc(){if(!navigator.geolocation){return;}set('f-geo','جارٍ التحديد…');navigator.geolocation.getCurrentPosition(function(p){geo.lat=p.coords.latitude.toFixed(6);geo.lng=p.coords.longitude.toFixed(6);set('f-geo','✓ تم تحديث الموقع');},function(){set('f-geo','تعذّر التحديد');});}
+function getLocStep1(){if(!navigator.geolocation){return;}set('f-geo-1','جارٍ التحديد…');navigator.geolocation.getCurrentPosition(function(p){geo.lat=p.coords.latitude.toFixed(6);geo.lng=p.coords.longitude.toFixed(6);set('f-geo-1','✓ تم تحديد الموقع');document.getElementById('projectname-wrap').style.display='block';},function(){set('f-geo-1','تعذّر التحديد');});}
+
+var visitStep=1;
+function wizGoto(n){
+  visitStep=n;
+  var steps=stepsFor(newType);
+  var target=steps[n-1];
+  ['wstep-1','wstep-2-exist','wstep-2-new','wstep-3-exist','wstep-3-new','wstep-4-new','wstep-final'].forEach(function(id){document.getElementById(id).classList.toggle('on',id===target);});
+  if(target==='wstep-final'){
+    document.getElementById('geo-exist-wrap').style.display=(newType==='New')?'none':'block';
+    document.getElementById('photo-wrap').style.display=(newType==='New')?'block':'none';
+  }
+  var dots=document.getElementById('step-dots');
+  dots.innerHTML=steps.map(function(s,i){return '<i class="'+(i<n?'on':'')+'"></i>';}).join('');
+  document.getElementById('btn-back').style.display=(n===1)?'none':'block';
+  var nb=document.getElementById('btn-next');
+  if(n===steps.length){nb.textContent='💾 حفظ الزيارة';nb.onclick=saveVisit;}
+  else{nb.textContent='التالي ◃';nb.onclick=wizNext;}
+  window.scrollTo(0,0);
+}
+function wizNext(){
+  var steps=stepsFor(newType);
+  var cur=steps[visitStep-1];
+  if(cur==='wstep-1'){if(!val('f-client')){toast('اكتب اسم العميل');return;}hideClientSuggest();wizGoto(visitStep+1);return;}
+  if(cur==='wstep-2-exist'){if(!val('f-size')){toast('اختر تصنيف العميل');return;}wizGoto(visitStep+1);return;}
+  if(cur==='wstep-2-new'){
+    var ph=val('f-phone');
+    if(!/^[0-9]{9}$/.test(ph)){toast('أدخل رقم هاتف صحيح (9 أرقام بعد +966)');return;}
+    if(!val('f-size')){toast('اختر حجم المشروع');return;}
+    wizGoto(visitStep+1);return;
+  }
+  if(cur==='wstep-3-exist'){if(!val('f-purpose')){toast('اختر هدف الزيارة');return;}wizGoto(visitStep+1);return;}
+  if(cur==='wstep-3-new'){wizGoto(visitStep+1);return;}
+  if(cur==='wstep-4-new'){if(!val('f-newresult')){toast('اختر نتيجة الزيارة');return;}wizGoto(visitStep+1);return;}
+}
+function wizBack(){if(visitStep>1)wizGoto(visitStep-1);}
+function populateClients(){var names={};clientsData().forEach(function(c){names[c.name]=1;});var dl=document.getElementById('clientList');if(dl)dl.innerHTML=Object.keys(names).sort().map(function(n){return '<option value="'+esc(n)+'"></option>';}).join('');}
+
+function renderClientSuggest(){
+  var box=document.getElementById('client-suggest');
+  var q=val('f-client');
+  var cd=clientsData();
+  if(newType==='Existing')cd=cd.filter(function(c){return !archivedClients[c.name];}); // لا تقترح عملاء مؤرشفين عند اختيار زيارة عادية
+  var list;
+  if(!q){
+    list=cd.slice().sort(function(a,b){return (b.last||'').localeCompare(a.last||'')||a.name.localeCompare(b.name);}).slice(0,8);
+  }else{
+    var ql=q.toLowerCase();
+    list=cd.filter(function(c){return c.name.toLowerCase().indexOf(ql)>-1;}).slice(0,8);
+  }
+  if(!list.length){box.innerHTML='<div class="cs-empty">لا نتائج مطابقة</div>';box.classList.add('on');return;}
+  box.innerHTML=list.map(function(c){
+    var col=sizeColor(c.size);
+    return '<div class="cs-row" onmousedown="event.preventDefault();pickClientSuggest(\''+esc(c.name).replace(/'/g,"")+'\')"><span>'+esc(c.name)+'</span><span class="cs-tag" style="background:'+col+'22;color:'+col+'">'+esc(sizeLabel(c.size))+'</span></div>';
+  }).join('');
+  box.classList.add('on');
+}
+function hideClientSuggest(){document.getElementById('client-suggest').classList.remove('on');}
+function pickClientSuggest(name){
+  document.getElementById('f-client').value=name;
+  hideClientSuggest();
+  if(newType!=='New'){
+    var c=clientsData().find(function(x){return x.name===name;});
+    document.getElementById('f-size').value=(c&&c.size)?c.size:'';
+    if(c&&c.size==='prospect')document.getElementById('interest-wrap').style.display='block';
+  }
+  checkDup();
+}
+
+function saveVisit(){
+  var client=val('f-client');
+  if(!client){toast('اكتب اسم العميل');return;}
+  if(!val('f-size')){toast(newType==='New'?'اختر حجم المشروع':'اختر تصنيف العميل');return;}
+  if(newType==='New'){
+    var ph=val('f-phone');
+    if(!/^[0-9]{9}$/.test(ph)){toast('أدخل رقم هاتف صحيح (9 أرقام بعد +966)');return;}
+  }
+  if(newType==='New'&&!val('f-newresult')){toast('اختر نتيجة الزيارة');return;}
+
+  var role=val('f-role');if(role==='أخرى')role=val('f-role-other')||'أخرى';
+  var purpose=val('f-purpose');if(purpose==='أخرى')purpose=val('f-purpose-other')||'أخرى';
+  var issue=val('f-issue');if(issue==='أخرى')issue=val('f-issue-other')||'أخرى';
+  var ptype=val('f-ptype');if(ptype==='أخرى')ptype=val('f-ptype-other')||'أخرى';
+  var pstage=val('f-pstage');if(pstage==='أخرى')pstage=val('f-pstage-other')||'أخرى';
+  var nextAction=val('f-next');if(nextAction==='أخرى')nextAction=val('f-next-other')||'أخرى';
+  var visitResult=(newType==='New')?val('f-newresult'):purpose; // للعميل الحالي: لا يوجد اختيار نتيجة منفصل، الهدف يمثّل النتيجة
+  var phoneOut=(newType==='New'&&val('f-phone'))?('+966'+val('f-phone')):val('f-phone');
+
+  var v={id:Date.now(),date:today(),time:nowTime(),client:client,type:newType,
+    region:val('f-region'),hood:val('f-hood'),clientSize:val('f-size'),interest:val('f-interest'),
+    purpose:purpose,visitResult:visitResult,contact:val('f-contact'),phone:phoneOut,
+    nextAction:nextAction,nextDate:val('f-nextdate'),lat:geo.lat,lng:geo.lng,notes:val('f-notes'),
+    contactRole:role,projectType:ptype,projectStage:pstage,projectName:val('f-projectname'),
+    quoteStatus:'',duration:'',relation:'',sectors:'',sizeDesc:val('f-sizedesc'),
+    quoteNumber:val('f-quotenum'),opportunities:opps.join('، '),openIssues:issue,
+    paymentAmount:val('f-payment'),paymentMethod:'',sampleProduct:'',hasPhoto:photoTaken};
+  visits.push(v);save('visits',visits);
+
+  if(visitResult==='غير مؤهل'){
+    archivedClients[client]={date:today(),reason:'غير مؤهل'};
+    save('archived',archivedClients);
+    toast('✓ حُفظت الزيارة، وأُرشف العميل تلقائيًا (غير مؤهل)');
+  }else{
+    toast('✓ حُفظت الزيارة');
+  }
+  geo={lat:'',lng:''};set('f-geo','');set('f-geo-1','');
+  closeVisit();renderDash();go('dash');
+}
+function delVisit(id){visits=visits.filter(function(v){return v.id!==id;});save('visits',visits);renderVisits();renderDash();}
+
+// ===== REQUESTS =====
+function saveReq(){var c=val('r-client'),p=val('r-products');if(!c||!p){toast('اكتب العميل والمنتجات');return;}requests.push({id:Date.now(),date:today(),time:nowTime(),client:c,products:p,notes:val('r-notes')});save('requests',requests);document.getElementById('r-client').value='';document.getElementById('r-products').value='';document.getElementById('r-notes').value='';toast('✓ حُفظ الطلب');renderReq();}
+function delReq(id){requests=requests.filter(function(r){return r.id!==id;});save('requests',requests);renderReq();}
+function renderReq(){var tr=requests.filter(function(r){return r.date===today();});var el=document.getElementById('req-today');if(!tr.length){el.innerHTML='<div class="empty" style="padding:20px"><b>لا طلبات بعد</b></div>';return;}el.innerHTML=tr.slice().reverse().map(function(r){return '<div class="vcard"><div class="vc">'+esc(r.client)+'</div><div class="vmeta" style="margin-top:4px">'+esc(r.products)+'</div>'+(r.notes?'<div class="vmeta">'+esc(r.notes)+'</div>':'')+'<button class="vdel" onclick="delReq('+r.id+')">حذف</button></div>';}).join('');}
+
+// ===== DASHBOARD =====
+function renderDash(){
+  var td=today();
+  var d=new Date(Date.now()+180*60000);
+  set('dash-date',AR_DOW[d.getDay()]+'، '+d.getDate()+' '+AR_MONTHS[d.getMonth()]+' '+d.getFullYear());
+  var tv=visits.filter(function(v){return v.date===td;});
+  var nNew=tv.filter(function(v){return v.type==='New';}).length;
+  var nEx=tv.filter(function(v){return v.type!=='New';}).length;
+  var nPr=tv.filter(function(v){return v.clientSize==='prospect'&&v.type!=='New';}).length;
+  var pts=tv.reduce(function(s,v){return s+visitPoints(v);},0);
+  set('prog-count',tv.length+' / 5 زيارات');
+  var pct=Math.min(100,Math.round(tv.length/5*100));
+  document.getElementById('prog-fill').style.width=pct+'%';
+  set('prog-sub','أنت حقّقت '+pct+'% من هدفك اليومي — استمر! 💪');
+  set('d-exist',nEx);set('d-new',nNew);
+  set('d-points',pts);set('d-p-new',nNew);set('d-p-prospect',nPr);set('d-p-exist',nEx-nPr<0?0:nEx-nPr);
+  set('d-formula','('+nNew+'×20) + ('+nPr+'×10) + ('+(nEx-nPr<0?0:nEx-nPr)+'×5) = '+pts+' نقطة');
+  // monthly
+  var mon=td.slice(0,7),av=allVisits();
+  set('m-new',av.filter(function(v){return v.type==='New'&&dstr(v.date).slice(0,7)===mon;}).length);
+  set('m-opp',av.filter(function(v){return /فرص/.test(txt(v.visitResult))&&dstr(v.date).slice(0,7)===mon;}).length);
+  set('m-quote',av.filter(function(v){return /عرض سعر/.test(txt(v.visitResult))&&dstr(v.date).slice(0,7)===mon;}).length);
+  // today followups
+  var fu=followupsDue();
+  var dueToday=fu.filter(function(f){return !f.needsDate&&f.date<=td;});
+  var needsDateN=fu.filter(function(f){return f.needsDate;}).length;
+  var el=document.getElementById('dash-followups');
+  if(dueToday.length||needsDateN){
+    el.style.background='var(--gold-l)';el.style.color='var(--amb)';
+    var parts=[];
+    if(dueToday.length)parts.push(dueToday.length+' مستحقّة اليوم');
+    if(needsDateN)parts.push(needsDateN+' بحاجة لتاريخ متابعة');
+    el.innerHTML='🔔 لديك '+parts.join(' و ')+' — لا تنسَها!';
+  }else{el.style.background='var(--green-l)';el.style.color='var(--green)';el.innerHTML='✅ لا توجد متابعات مستحقّة اليوم — يوم خفيف!';}
+  set('cta-fu',fu.length);
+}
+
+// ===== FOLLOWUPS (with local reschedule/complete overlays) =====
+var fuOver=load('fu_over',{}); // client -> {date, reason, count}
+var fuDone=load('fu_done',{}); // client -> {date, outcome}
+var archivedClients=load('archived',{}); // client -> {date, reason} — أُرشف تلقائيًا عند "غير مؤهل"
+function rawFollowupMap(){
+  var m={};
+  allVisits().forEach(function(v){
+    var nd=dstr(v.nextDate),na=txt(v.nextAction);
+    if(!na||na==='لا توجد متابعة')return; // فقط استبعد الزيارات التي صرّح المندوب أنها لا تحتاج متابعة
+    var c=txt(v.client);if(!c)return;
+    var vd=dstr(v.date);
+    if(!m[c]||vd>=m[c]._vdate){m[c]={client:c,date:nd,action:na,size:txt(v.clientSize),_vdate:vd};}
+  });
+  return m;
+}
+function rawNextFor(client){var m=rawFollowupMap();return m[client]?m[client].date:'';}
+function pendingFollowups(){
+  var m=rawFollowupMap();
+  var out=[];
+  Object.keys(m).forEach(function(c){
+    var o=m[c];
+    if(fuDone[c]&&fuDone[c].rawBase===o.date)return; // completed (تتم المطابقة على التاريخ الخام الأصلي دومًا)
+    o.count=0;o.reason='';
+    if(fuOver[c]&&fuOver[c].base===o.date){o.date=fuOver[c].date;o.reason=fuOver[c].reason;o.count=fuOver[c].count||0;}
+    o.needsDate=!o.date;
+    out.push(o);
+  });
+  var td=today();
+  var rank=function(o){if(o.needsDate)return 3;if(o.date<td)return 0;if(o.date===td)return 1;return 2;};
+  return out.sort(function(a,b){return rank(a)-rank(b)||a.date.localeCompare(b.date);});
+}
+function followupsDue(){return pendingFollowups();}
+
+var _dayFilter=null;
+function renderFollowups(){
+  var td=today(),list=pendingFollowups();
+  if(_dayFilter)list=list.filter(function(t){return t.date===_dayFilter;});
+  var filterChip=_dayFilter?('<button class="pill on" style="margin-bottom:10px" onclick="clearDayFilter()">📅 '+_dayFilter+' · إلغاء التصفية ✕</button>'):'';
+  set('fu-count',list.length+' مهمة'+(_dayFilter?'':' معلّقة'));
+  var el=document.getElementById('followups-list');
+  if(!list.length){el.innerHTML=filterChip+'<div class="empty"><div class="ei">✅</div><b>لا مهام متابعة'+(_dayFilter?' في هذا اليوم':' معلّقة')+'</b></div>';return;}
+  el.innerHTML=filterChip+list.map(function(t){
+    var over=!t.needsDate&&t.date<td;var col=sizeColor(t.size);
+    var overTag=over?'<span class="badge" style="background:var(--red-l);color:var(--red)">⚠ متأخرة!</span>':(t.needsDate?'<span class="badge" style="background:var(--gold-l);color:var(--amb)">📅 بلا تاريخ</span>':'');
+    var dateRow=t.needsDate
+      ? '<div style="font-size:11px;margin-bottom:12px;color:var(--amb)">⚠️ لم يُحدَّد تاريخ متابعة بعد — حدِّده الآن</div>'
+      : '<div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:12px"><span>🕐 تاريخ الموعد: <b style="color:'+(over?'var(--red)':'var(--navy)')+'">'+esc(t.date)+'</b></span><span style="color:var(--mut)">🔄 مرات التأجيل: <b>'+t.count+'</b></span></div>';
+    return '<div class="card" style="'+(over?'border:1px solid var(--red);background:#fff':(t.needsDate?'border:1px solid var(--gold);background:#fff':''))+'">'+
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px"><div><span style="font-weight:900;color:var(--navy)">'+esc(t.client)+'</span> <span class="badge" style="background:'+col+'22;color:'+col+';font-size:10px;padding:2px 8px;border-radius:20px">'+esc(sizeLabel(t.size))+'</span></div>'+overTag+'</div>'+
+      '<div style="font-size:12.5px;color:var(--mut);margin-bottom:8px">☐ الخطوة القادمة: <b style="color:var(--ink)">'+esc(t.action)+'</b></div>'+
+      dateRow+
+      '<div class="grid2" style="gap:8px"><button class="btn" style="background:var(--gold-2);color:#fff;padding:11px;font-size:13px" onclick="openReschedule(\''+esc(t.client).replace(/'/g,"")+'\')">'+(t.needsDate?'📅 تحديد تاريخ':'🔄 إعادة جدولة')+'</button><button class="btn" style="background:var(--green);color:#fff;padding:11px;font-size:13px" onclick="openComplete(\''+esc(t.client).replace(/'/g,"")+'\')">✔ إتمام المهمة</button></div>'+
+      '</div>';
+  }).join('');
+}
+var _fuClient='';
+function taskFor(client){return pendingFollowups().filter(function(t){return t.client===client;})[0];}
+function openReschedule(client){_fuClient=client;var t=taskFor(client);set('rs-client',client);set('rs-step','الخطوة القادمة: '+(t?t.action:''));document.getElementById('rs-date').value='';document.getElementById('rs-reason').value='';document.getElementById('reschedModal').classList.add('on');}
+function closeResched(){document.getElementById('reschedModal').classList.remove('on');}
+function doReschedule(){
+  var d=val('rs-date'),r=val('rs-reason');
+  if(!d){toast('اختر التاريخ الجديد');return;}
+  if(!r){toast('اختر سبب التأجيل');return;}
+  var rawBase=rawNextFor(_fuClient);
+  var existing=fuOver[_fuClient];
+  var sameCycle=existing&&existing.base===rawBase;
+  var prevCount=sameCycle?(existing.count||0):0;
+  var newCount;
+  if(rawBase){ newCount=prevCount+1; } // كان له تاريخ حقيقي أصلًا → حتى أول إعادة جدولة تُحتسب تأجيلًا فعليًا
+  else{ newCount=sameCycle?prevCount+1:0; } // لم يكن له تاريخ أصلًا → أول تحديد لا يُحتسب، وما بعده يُحتسب
+  fuOver[_fuClient]={base:rawBase,date:d,reason:r,count:newCount};
+  save('fu_over',fuOver);
+  toast('✓ أُعيدت الجدولة');closeResched();renderFollowups();renderDash();renderCal();
+}
+function openComplete(client){_fuClient=client;var t=taskFor(client);set('cp-client',client);set('cp-step','الخطوة القادمة: '+(t?t.action:''));document.getElementById('cp-outcome').value='';document.getElementById('completeModal').classList.add('on');}
+function closeComplete(){document.getElementById('completeModal').classList.remove('on');}
+function doComplete(){
+  var o=val('cp-outcome');
+  if(!o){toast('اكتب نتيجة الزيارة/المكالمة');return;}
+  var t=taskFor(_fuClient);
+  fuDone[_fuClient]={rawBase:rawNextFor(_fuClient),outcome:o,when:today()};
+  save('fu_done',fuDone);
+  // سجّل زيارة متابعة تلقائية (تُرسَل مع تقرير اليوم)
+  visits.push({id:Date.now(),date:today(),time:nowTime(),client:_fuClient,type:'Existing',clientSize:(t?t.size:''),purpose:'متابعة',visitResult:'تم الاتفاق',nextAction:'',nextDate:'',notes:'إتمام مهمة: '+o,lat:'',lng:'',contact:'',phone:'',interest:'',contactRole:'',projectType:'',projectStage:'',quoteStatus:'',duration:'',relation:'',sectors:'',quoteNumber:'',opportunities:'',openIssues:'',paymentAmount:'',paymentMethod:'',sampleProduct:'',hasPhoto:false});
+  save('visits',visits);
+  toast('✓ أُنجزت المهمة');closeComplete();renderFollowups();renderDash();renderVisits();
+}
+
+// ===== VISITS TODAY =====
+function renderVisits(){
+  var tv=visits.filter(function(v){return v.date===today();});
+  var el=document.getElementById('visits-today');
+  if(!tv.length){el.innerHTML='<div class="empty"><div class="ei">📍</div><b>لا زيارات بعد</b>اضغط Dashboard ▸ سجّل زيارة</div>';return;}
+  el.innerHTML=tv.slice().reverse().map(function(v){var tag=v.type==='New'?'<span class="vtag t-new">جديد</span>':'<span class="vtag t-exist">حالي</span>';return '<div class="vcard"><div style="display:flex;justify-content:space-between"><div class="vc">'+esc(v.client)+'</div>'+tag+'</div><div class="vmeta">⏱ '+esc(v.time)+(v.hood?' · '+esc(v.hood):'')+(v.visitResult?' · '+esc(v.visitResult):'')+'</div><button class="vdel" onclick="delVisit('+v.id+')">حذف</button></div>';}).join('');
+}
+
+// ===== CLIENTS =====
+function sizeColor(s){s=txt(s);if(s==='strategic')return 'var(--gold-2)';if(s==='dormant')return 'var(--red)';if(s==='at_risk')return '#B5541A';if(s==='active')return 'var(--green)';if(s==='prospect')return 'var(--pu)';return 'var(--mut)';}
+function sizeLabel(s){s=txt(s);var m={strategic:'استراتيجي',active:'نشط',dormant:'متوقّف',at_risk:'مهدد بالفقدان',prospect:'محتمل'};return m[s]||s||'—';}
+function setCF(f,btn){_cf=f;document.querySelectorAll('#client-pills .pill').forEach(function(b){b.classList.remove('on');});if(btn)btn.classList.add('on');renderClients();}
+function unarchiveClient(name){delete archivedClients[name];save('archived',archivedClients);toast('✓ أُلغيت الأرشفة');renderClients();}
+function setSort(s){_sort=s;['last','most','name'].forEach(function(k){var e=document.getElementById('sort-'+k);if(e)e.classList.toggle('on',k===s);});renderClients();}
+function renderClients(){
+  var cl=clientsData().filter(function(c){return !archivedClients[c.name];}),td=today();
+  set('c-total',cl.length);
+  set('c-active',cl.filter(function(c){return c.size==='active';}).length);
+  set('c-new',cl.filter(function(c){return c.type==='New'||c.size==='prospect';}).length);
+  set('c-urgent',cl.filter(function(c){return c.nextDate&&c.nextDate<td;}).length);
+  var q=(val('global-q')||'').toLowerCase();
+  var showArchived=_cf==='archived';
+  var list=showArchived
+    ? clientsData().filter(function(c){return archivedClients[c.name];})
+    : cl.filter(function(c){
+        if(_cf==='new'&&!(c.type==='New'||c.size==='prospect'))return false;
+        if(_cf==='prospect'&&c.size!=='prospect')return false;
+        if(_cf==='existing'&&!(c.size==='active'||c.type==='Existing'))return false;
+        if(_cf==='urgent'&&!(c.nextDate&&c.nextDate<td))return false;
+        return true;
+      });
+  if(q)list=list.filter(function(c){return c.name.toLowerCase().indexOf(q)>-1;});
+  if(_sort==='last')list.sort(function(a,b){return (b.last||'').localeCompare(a.last||'');});
+  else if(_sort==='most')list.sort(function(a,b){return b.count-a.count;});
+  else list.sort(function(a,b){return a.name.localeCompare(b.name);});
+  var el=document.getElementById('clients-list');
+  if(!list.length){el.innerHTML='<div class="empty"><div class="ei">🏢</div><b>'+(showArchived?'لا عملاء مؤرشفين':'لا عملاء')+'</b></div>';return;}
+  if(showArchived){
+    el.innerHTML=list.map(function(c){
+      return '<div class="ccard" style="border-right:4px solid var(--mut);opacity:.8"><div class="top"><div class="nm">'+esc(c.name)+'</div><span class="badge" style="background:#eee;color:var(--mut)">مؤرشف</span></div><div style="font-size:11px;color:var(--mut);margin:4px 0 9px">سبب الأرشفة: '+esc(archivedClients[c.name].reason)+' · '+esc(archivedClients[c.name].date)+'</div><button style="background:var(--green);color:#fff;border:none;border-radius:10px;padding:9px;font-weight:800;font-size:12px;font-family:inherit;cursor:pointer;width:100%" onclick="unarchiveClient(\''+esc(c.name).replace(/'/g,"")+'\')">↩️ إلغاء الأرشفة</button></div>';
+    }).join('');
+    return;
+  }
+  el.innerHTML=list.map(function(c){
+    var col=sizeColor(c.size);
+    var last=c.count?daysSince(c.last)+' يوم':'—';
+    var urgent=c.nextDate&&c.nextDate<td;
+    var neverVisited=!c.count?'<div style="font-size:9px;color:var(--pu);font-weight:800;margin-top:2px">لم تتم زيارته بعد</div>':'';
+    return '<div class="ccard" style="border-right:4px solid '+col+'"><div onclick="quickVisit(\''+esc(c.name).replace(/'/g,"")+'\')"><div class="top"><div class="nm">'+esc(c.name)+'</div><span class="badge" style="background:'+col+'22;color:'+col+'">'+esc(sizeLabel(c.size))+'</span></div><div class="row"><div class="box"><div class="n">'+c.count+'</div><div class="l">زيارة</div></div><div class="box"><div class="n" style="color:'+(urgent?'var(--red)':'var(--navy)')+'">'+last+'</div><div class="l">'+(urgent?'متابعة متأخرة':'آخر زيارة')+'</div>'+neverVisited+'</div></div></div>'+
+      '<div class="ccard-actions"><button style="background:var(--gold);color:var(--navy-2)" onclick="event.stopPropagation();quickVisit(\''+esc(c.name).replace(/'/g,"")+'\')">📍 تسجيل زيارة</button><button style="background:var(--navy-l);color:var(--navy)" onclick="event.stopPropagation();clientDetail(\''+esc(c.name).replace(/'/g,"")+'\')">📜 السجل</button></div>'+
+      '</div>';
+  }).join('');
+}
+// فتح معالج الزيارة جاهزًا لعميل معروف (حالي/محتمل) — يقفز مباشرة لخطوة الهدف، بلا إعادة كتابة الاسم أو التصنيف
+function quickVisit(name){
+  var cl=clientsData();var c=cl.find(function(x){return x.name===name;});
+  document.getElementById('visitModal').classList.add('on');
+  populateClients();
+  setType('Existing');
+  document.getElementById('f-client').value=name;
+  document.getElementById('f-size').value=(c&&c.size)?c.size:'';
+  if(c&&c.size==='prospect')document.getElementById('interest-wrap').style.display='block';
+  getLoc();
+  wizGoto(3); // القفز مباشرة لخطوة "هدف الزيارة" — الاسم والتصنيف جاهزان بالفعل
+}
+function clientDetail(name){
+  var vs=allVisits().filter(function(v){return txt(v.client)===name;}).sort(function(a,b){return (b.date+b.time).localeCompare(a.date+a.time);});
+  var loc=vs.find(function(v){return v.lat&&v.lng;});
+  var h=vs.map(function(v){return '<div class="vcard"><div style="display:flex;justify-content:space-between"><b>'+esc(v.date)+'</b><span class="vmeta">'+esc(v.visitResult||v.purpose||'')+'</span></div>'+(v.projectName?'<div class="vmeta">🏗️ '+esc(v.projectName)+'</div>':'')+(v.nextAction?'<div class="vmeta">▸ '+esc(v.nextAction)+(v.nextDate?' ('+esc(v.nextDate)+')':'')+'</div>':'')+'</div>';}).join('');
+  var mp=loc?'<a class="btn btn-navy" style="display:block;text-align:center;text-decoration:none;margin-bottom:8px" href="https://maps.google.com/?q='+loc.lat+','+loc.lng+'" target="_blank">📍 موقع العميل</a>':'';
+  var qv='<button class="btn" style="background:var(--gold);color:var(--navy-2);display:block;width:100%;margin-bottom:10px" onclick="document.getElementById(\'detailModal\').classList.remove(\'on\');quickVisit(\''+esc(name).replace(/'/g,"")+'\')">📍 تسجيل زيارة لهذا العميل</button>';
+  showModal('🏢 '+name+' ('+vs.length+' زيارة)',qv+mp+h);
+}
+
+// ===== CALENDAR =====
+function renderCal(){
+  var td=today(),fu=followupsDue();
+  var dated=fu.filter(function(f){return !f.needsDate;});
+  set('cal-up',dated.filter(function(f){return f.date>td;}).length);
+  set('cal-today',dated.filter(function(f){return f.date===td;}).length);
+  set('cal-over',dated.filter(function(f){return f.date<td;}).length);
+  set('cal-nodate',fu.filter(function(f){return f.needsDate;}).length);
+  document.getElementById('cal-dows').innerHTML=AR_DOW.map(function(d){return '<div class="cal-dow">'+d+'</div>';}).join('');
+  set('cal-title',AR_MONTHS[_calDate.getMonth()]+' '+_calDate.getFullYear());
+  var y=_calDate.getFullYear(),mo=_calDate.getMonth();
+  var first=new Date(y,mo,1).getDay(),dim=new Date(y,mo+1,0).getDate();
+  var byDate={};fu.forEach(function(f){byDate[f.date]=(byDate[f.date]||0)+1;});
+  var cells='';
+  for(var i=0;i<first;i++)cells+='<div class="cal-cell"></div>';
+  for(var dnum=1;dnum<=dim;dnum++){
+    var ds=y+'-'+String(mo+1).padStart(2,'0')+'-'+String(dnum).padStart(2,'0');
+    var isToday=ds===td;var dot=byDate[ds]?'<span class="dot"></span>':'';
+    cells+='<div class="cal-cell'+(isToday?' today':'')+'" onclick="calDay(\''+ds+'\')">'+dnum+dot+'</div>';
+  }
+  document.getElementById('cal-body').innerHTML=cells;
+}
+function calMove(n){_calDate=new Date(_calDate.getFullYear(),_calDate.getMonth()+n,1);renderCal();}
+function calDay(ds){_dayFilter=ds;renderFollowups();}
+function clearDayFilter(){_dayFilter=null;renderFollowups();}
+
+// ===== MODAL HELPER =====
+function showModal(title,html){
+  var m=document.getElementById('detailModal');
+  if(!m){m=document.createElement('div');m.id='detailModal';m.className='modal';m.innerHTML='<div class="sheet"><div class="sh-top"><span class="tt" id="dm-t"></span><button class="x" onclick="document.getElementById(\'detailModal\').classList.remove(\'on\')">✕</button></div><div id="dm-b"></div></div>';document.body.appendChild(m);}
+  document.getElementById('dm-t').textContent=title;document.getElementById('dm-b').innerHTML=html;m.classList.add('on');
+}
+
+// ===== SEARCH =====
+function onGlobalSearch(){var a=document.getElementById('p-clients');if(a&&a.classList.contains('active'))renderClients();}
+
+// ===== DRAFTS =====
+function clearDrafts(){if(confirm('مسح الزيارات غير المُرسَلة من هذا الجهاز؟ (المُرسَلة للسحابة تبقى آمنة)')){/* لا نمسح شيئًا تلقائيًا */toast('لم يُمسح شيء — بياناتك آمنة');}}
+
+// ===== CLOUD =====
 function loadCloud(){
-  document.getElementById('sync').textContent='…مزامنة';
-  var cb='__bh'+Date.now();
-  var done=false;
-  var t=setTimeout(function(){if(!done){done=true;document.getElementById('sync').textContent='⚠ بدون اتصال';}},12000);
-  window[cb]=function(resp){
-    if(done)return;done=true;clearTimeout(t);delete window[cb];
-    if(resp&&resp.status==='success'){cloudVisits=resp.visits||[];document.getElementById('sync').textContent='☁ متصل';renderArchive();}
-    else document.getElementById('sync').textContent='⚠ خطأ';
-  };
+  var cb='__bh'+Date.now(),done=false;
+  var t=setTimeout(function(){done=true;},12000);
+  window[cb]=function(resp){if(done)return;done=true;clearTimeout(t);delete window[cb];if(resp&&resp.status==='success'){cloudVisits=resp.visits||[];renderDash();populateClients();}};
   var s=document.createElement('script');
   s.src=SCRIPT_URL+'?mode=archive&rep='+encodeURIComponent(REP_NAME)+'&callback='+cb+'&t='+Date.now();
-  s.onerror=function(){if(!done){done=true;document.getElementById('sync').textContent='⚠ بدون اتصال';}};
+  s.onerror=function(){done=true;};
   document.head.appendChild(s);
 }
 
-// ===== SUBMIT (POST) =====
+// ===== SUBMIT =====
 function doSubmit(){
   var tv=visits.filter(function(v){return v.date===today();});
   var tr=requests.filter(function(r){return r.date===today();});
-  if(!tv.length&&!tr.length){toast('لا يوجد ما تُرسله اليوم');return;}
-  var payload={
-    type:'report', repName:REP_NAME, date:today(),
-    todayVisits:tv.length,
-    existingVisits:tv.filter(function(v){return v.type==='Existing';}).length,
+  if(!tv.length&&!tr.length){toast('لا يوجد ما تُرسله');return;}
+  var payload={type:'report',repName:REP_NAME,date:today(),
+    todayVisits:tv.length,existingVisits:tv.filter(function(v){return v.type!=='New';}).length,
     newVisits:tv.filter(function(v){return v.type==='New';}).length,
     prospectVisits:tv.filter(function(v){return v.clientSize==='prospect';}).length,
-    score:todayScore(),
-    newClientsThisMonth:monthCount('New'),
-    opportunitiesThisMonth:monthOpps(),
-    quotesThisMonth:monthQuotes(),
-    productRequestsToday:tr.length,
-    visits:tv, requests:tr.map(function(r){return {time:r.time,client:r.client,products:r.products,notes:r.notes};})
-  };
-  document.getElementById('sync').textContent='…إرسال';
-  fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload)})
-    .then(function(){onSent();}).catch(function(){onSent();/* no-cors لا يُرجِع خطأ عادةً */});
+    score:tv.reduce(function(s,v){return s+visitPoints(v);},0),
+    newClientsThisMonth:0,opportunitiesThisMonth:0,quotesThisMonth:0,productRequestsToday:tr.length,
+    visits:tv,requests:tr.map(function(r){return {time:r.time,client:r.client,products:r.products,notes:r.notes};})};
+  fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload)}).then(function(){toast('☁ تم الإرسال');setTimeout(loadCloud,1500);}).catch(function(){toast('☁ تم الإرسال');setTimeout(loadCloud,1500);});
 }
-function onSent(){
-  document.getElementById('sync').textContent='☁ تم الإرسال';
-  document.getElementById('okModal').classList.add('on');
-  setTimeout(loadCloud,1500); // أعد تحميل السحابة لتأكيد الحفظ
-}
-function closeOk(){document.getElementById('okModal').classList.remove('on');go('archive');}
-function monthCount(type){var m=today().slice(0,7);return visits.filter(function(v){return v.type===type&&String(v.date).slice(0,7)===m;}).length;}
-function monthOpps(){var m=today().slice(0,7);return visits.filter(function(v){return String(v.date).slice(0,7)===m&&txt(v.visitResult).indexOf('فرص')>-1;}).length;}
-function monthQuotes(){var m=today().slice(0,7);return visits.filter(function(v){return String(v.date).slice(0,7)===m&&txt(v.quoteStatus);}).length;}
 
 // ===== INIT =====
-renderVisits();renderReq();loadCloud();
+renderDash();loadCloud();
 </script>
 </body>
 </html>
