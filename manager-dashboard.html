@@ -103,9 +103,67 @@
   .rp-nav{display:flex;align-items:center;gap:8px;background:var(--bg);border-radius:12px;padding:8px;margin:12px 0}
   .rp-arrow{width:34px;height:34px;flex-shrink:0;border:1px solid var(--ln);background:#fff;color:var(--navy);border-radius:9px;font-size:16px;font-weight:800;cursor:pointer}
   .rp-arrow:hover{background:var(--navy-l)}
-  .rp-range{flex:1;position:relative;text-align:center;font-weight:800;color:var(--navy);font-size:13.5px;cursor:pointer;padding:6px 4px}
-  .rp-range input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+  .rp-range{flex:1;text-align:center;font-weight:800;color:var(--navy);font-size:13.5px;cursor:pointer;padding:6px 4px;border-radius:8px}
+  .rp-range:hover{background:var(--navy-l)}
+  .rp-cal-pop{background:#fff;border:1px solid var(--ln);border-radius:12px;padding:10px;margin:0 auto 12px;box-shadow:0 4px 16px rgba(20,30,60,.08);max-width:270px}
+  .rp-cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .rp-cal-head button{background:var(--navy-l);border:none;color:var(--navy);width:24px;height:24px;border-radius:7px;cursor:pointer;font-size:12px;flex-shrink:0}
+  .rp-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+  .rp-cal-dow{font-size:8px;color:var(--mut);text-align:center;font-weight:700;padding:2px 0}
+  .rp-cal-cell{width:100%;aspect-ratio:1;max-height:30px;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:10.5px;font-weight:700;cursor:pointer;color:var(--ink)}
+  .rp-cal-cell:hover{background:var(--navy-l)}
+  .rp-cal-cell.today{border:1.5px solid var(--gold)}
+  .rp-cal-cell.sel{background:var(--navy);color:#fff;position:relative}
+  .rp-cal-cell.rng-start{background:var(--green)}
+  .rp-cal-cell.rng-end{background:var(--red)}
+  .rng-dot{position:absolute;top:1px;left:1px;width:5px;height:5px;border-radius:50%}
+  .rng-dot.s{background:#fff}
+  .rng-dot.e{background:#fff}
+  .rp-cal-cell.blank{cursor:default}
+  .rp-cal-cell.blank:hover{background:none}
+  .rp-cal-cell.inrange{background:var(--navy-l)}
+  .rp-pick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+  .rp-pick-grid.g2{grid-template-columns:repeat(2,1fr)}
+  .rp-pick-cell{padding:10px 4px;text-align:center;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;background:var(--bg);color:var(--ink)}
+  .rp-pick-cell:hover{background:var(--navy-l)}
+  .rp-pick-cell.sel{background:var(--navy);color:#fff}
+  .cdmodal{position:fixed;inset:0;background:rgba(15,24,48,.6);z-index:90;display:none;align-items:center;justify-content:center;padding:16px}
+  .cdmodal.on{display:flex}
+  .cdcard{background:#fff;border-radius:16px;max-width:600px;width:100%;max-height:88vh;overflow-y:auto}
+  .cdhead{background:linear-gradient(135deg,var(--navy-2),var(--navy-3));color:#fff;padding:20px;border-radius:16px 16px 0 0;position:relative}
+  .cdhead .cdclose{position:absolute;top:14px;left:14px;background:rgba(255,255,255,.15);border:none;color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:15px}
+  .cdhead .cdname{font-size:17px;font-weight:900;margin:8px 0 6px}
+  .cdhead .cdmeta{display:flex;flex-wrap:wrap;gap:14px;font-size:11.5px;color:rgba(255,255,255,.85)}
+  .cdbody{padding:18px}
+  .cdmile{background:var(--bg);border-radius:12px;padding:16px 10px;margin-bottom:16px}
+  .cdmile-title{font-size:11px;font-weight:800;color:var(--navy);margin-bottom:14px;text-align:center}
+  .cdmile-track{display:flex;align-items:flex-start;justify-content:space-between;position:relative}
+  .cdmile-track:before{content:'';position:absolute;top:13px;right:8%;left:8%;height:2px;background:var(--ln)}
+  .cdmile-step{flex:1;text-align:center;position:relative;z-index:1}
+  .cdmile-dot{width:26px;height:26px;border-radius:50%;background:#fff;border:2px solid var(--ln);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--mut);margin:0 auto 6px}
+  .cdmile-step.done .cdmile-dot{background:var(--navy);border-color:var(--navy);color:#fff}
+  .cdmile-step.cur .cdmile-dot{background:var(--gold);border-color:var(--gold);color:#fff}
+  .cdmile-lbl{font-size:8.5px;color:var(--mut);font-weight:700}
+  .cdmile-step.done .cdmile-lbl,.cdmile-step.cur .cdmile-lbl{color:var(--navy)}
+  .cdtl-title{font-size:12px;font-weight:800;color:var(--navy);margin-bottom:10px}
+  .cdtl-item{border-right:2px solid var(--ln);padding:0 14px 14px 0;position:relative;margin-right:6px}
+  .cdtl-item:before{content:'';position:absolute;right:-5px;top:2px;width:8px;height:8px;border-radius:50%;background:var(--navy)}
+  .cdtl-item:last-child{padding-bottom:0}
+  .cdtl-head{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:800;color:var(--navy);margin-bottom:6px}
+  .cdtl-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px}
+  .cdtl-grid .k{color:var(--mut);font-size:9.5px;font-weight:700}
+  .cdtl-grid .v{font-weight:700;color:var(--ink)}
   .b-new{background:var(--navy-l);color:var(--navy)} .b-exist{background:var(--green-l);color:var(--green)}
+  .area-table{width:100%;border-collapse:collapse;font-size:12.5px}
+  .area-table th{text-align:center;font-weight:800;color:var(--mut);font-size:10.5px;padding:8px 6px;border-bottom:2px solid var(--ln)}
+  .area-table th:first-child{text-align:right}
+  .area-table td{text-align:center;padding:7px 6px;border-bottom:1px solid var(--ln2)}
+  .area-table td:first-child{text-align:right;font-weight:600}
+  .area-table tr.grp{background:var(--bg)}
+  .area-table tr.grp td:first-child{font-weight:800;color:var(--navy)}
+  .area-table tr.leaf td:first-child{color:var(--mut);font-size:11.5px;padding-right:18px}
+  .area-table tr.dim{opacity:.55}
+  .area-table tr.dim td:first-child{font-weight:800;color:var(--mut)}
   .b-abd{background:var(--gold-l);color:var(--amb)} .b-has{background:var(--navy-l);color:var(--navy)}
 
   .rep-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -125,13 +183,11 @@
 
   .daybar{display:flex;align-items:center;justify-content:space-between;background:var(--navy);color:#fff;padding:9px 14px;border-radius:10px;font-weight:800;font-size:13px;margin-bottom:8px}
   .daybar .c{background:var(--gold);color:var(--navy-2);border-radius:20px;padding:1px 9px;font-size:11px}
-  .acard{background:#fff;border:1px solid var(--ln);border-radius:12px;padding:13px 15px;margin-bottom:8px}
-  .acard .atop{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:9px}
-  .acard .acl{font-weight:800;color:var(--navy);font-size:14px}
-  .afields{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-  .af .k{color:var(--mut);font-size:10px} .af .v{font-weight:600;font-size:12.5px}
-  .anote{margin-top:9px;background:var(--bg);border-radius:9px;padding:8px 11px;font-size:12.5px}
-  .map{color:var(--gold-2);font-weight:700;font-size:12px;text-decoration:none;margin-top:8px;display:inline-block}
+  .acard{background:#fff;border:1px solid var(--ln);border-radius:12px;padding:12px 14px;cursor:pointer;transition:box-shadow .15s,border-color .15s}
+  .acard:hover{box-shadow:0 2px 10px rgba(20,30,60,.08);border-color:var(--navy)}
+  .acl{font-weight:800;color:var(--navy);font-size:13px}
+  .atop{display:flex;justify-content:space-between;align-items:center}
+  .aday-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
 
   .empty{text-align:center;padding:42px 20px;color:var(--mut)}
   .empty .ei{font-size:34px;margin-bottom:8px}.empty b{display:block;color:var(--navy);font-size:15px}
@@ -143,7 +199,7 @@
   @media(max-width:860px){
     .side{display:none} .content{padding:16px}
     .kgrid{grid-template-columns:1fr 1fr} .g2,.g3,.rep-grid{grid-template-columns:1fr}
-    .afields{grid-template-columns:1fr 1fr}
+    .aday-grid{grid-template-columns:1fr 1fr}
     .mtabs{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--ln);z-index:40;overflow-x:auto}
     .mtab{flex:1;min-width:64px;border:none;background:none;padding:8px 4px;font-size:9.5px;font-weight:700;color:var(--mut);cursor:pointer;font-family:inherit}
     .mtab.on{color:var(--navy)} .mtab .mi{display:block;font-size:17px}
@@ -190,47 +246,14 @@
       <div class="page active" id="p-overview">
         <div class="ph"><h2>Rep Performance & Analytics</h2><p class="ar">أداء المناديب والتحليلات · <span id="ov-date"></span></p></div>
 
-        <!-- ===== 1) REP PERFORMANCE (leads, per request) ===== -->
-        <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
-            <div class="shdr" style="margin-bottom:0">📊 Period summary <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">تلخيص زيارات المندوب خلال الفترة</span></div>
-            <div class="pills" style="margin-bottom:0">
-              <button class="pill" id="rp-day" onclick="setRepPeriod('day')">يومي</button>
-              <button class="pill on" id="rp-week" onclick="setRepPeriod('week')">أسبوعي</button>
-              <button class="pill" id="rp-month" onclick="setRepPeriod('month')">شهري</button>
-            </div>
-          </div>
-          <div class="rp-nav">
-            <button class="rp-arrow" onclick="rpPeriodMove(-1)" aria-label="Previous">‹</button>
-            <div class="rp-range">
-              <span id="rp-range-label" class="ar">—</span>
-              <input type="date" id="rp-anchor" onchange="rpAnchorChanged()" title="اختر تاريخًا محدَّدًا" />
-            </div>
-            <button class="rp-arrow" onclick="rpPeriodMove(1)" aria-label="Next">›</button>
-            <button class="pill" onclick="rpPeriodToday()" style="margin-right:4px">اليوم</button>
-          </div>
-          <div id="rp-summary"><div class="spin"></div></div>
-        </div>
-        <div class="rep-grid" id="reps-grid" style="margin-bottom:18px"><div class="spin"></div></div>
-
-        <!-- ===== 2) TODAY'S SNAPSHOT (from Overview) ===== -->
-        <div class="kgrid">
+        <!-- ===== 1) TODAY'S PULSE (moved first, per request) ===== -->
+        <div class="kgrid" style="grid-template-columns:repeat(2,1fr)">
           <div class="kcard"><div class="ki">📍</div><div class="kv" id="k-v">—</div><div class="kl">Visits today <small class="sub ar">زيارات اليوم</small></div><div class="kx">Abdulrazak <b id="k-va">—</b> · Hassan <b id="k-vh">—</b></div></div>
-          <div class="kcard k-green"><div class="ki">🎯</div><div class="kv" id="k-prospect">—</div><div class="kl">Prospect visits <small class="sub ar">زيارات محتملين</small></div><div class="kx">New <b id="k-new">—</b> · Existing <b id="k-exist">—</b></div></div>
           <div class="kcard k-gold"><div class="ki">⭐</div><div class="kv" id="k-score">—</div><div class="kl">Points today <small class="sub ar">نقاط اليوم</small></div><div class="kx">A <b id="k-sa">—</b> · H <b id="k-sh">—</b></div></div>
-          <div class="kcard k-green"><div class="ki">🗓️</div><div class="kv" id="ov-cum-total">—</div><div class="kl">Total visits (all-time) <small class="sub ar">الإجمالي التراكمي</small></div><div class="kx">Abdulrazak <b id="ov-cum-abd">—</b> · Hassan <b id="ov-cum-has">—</b> · ⭐ <b id="ov-cum-points">—</b></div></div>
         </div>
-        <div class="g2">
-          <div class="card">
-            <div class="shdr">Today's visit mix <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">توزيع زيارات اليوم</span></div>
-            <div id="ov-split"><div class="spin"></div></div>
-          </div>
-          <div class="card">
-            <div class="shdr">Follow-up alerts <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">تنبيهات المتابعات</span></div>
-            <div class="abox" style="background:var(--red-l)"><div><div class="at" style="color:var(--red)">Overdue</div><div style="font-size:9px;color:var(--red)" class="ar">متأخرة</div></div><div class="av" style="color:var(--red)" id="al-od">—</div></div>
-            <div class="abox" style="background:var(--gold-l)"><div><div class="at" style="color:var(--amb)">Today</div><div style="font-size:9px;color:var(--amb)" class="ar">اليوم</div></div><div class="av" style="color:var(--amb)" id="al-td">—</div></div>
-            <div class="abox" style="background:var(--green-l)"><div><div class="at" style="color:var(--green)">This week</div><div style="font-size:9px;color:var(--green)" class="ar">هذا الأسبوع</div></div><div class="av" style="color:var(--green)" id="al-wk">—</div></div>
-          </div>
+        <div class="card">
+          <div class="shdr">Today's visit mix <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">توزيع زيارات اليوم</span></div>
+          <div id="ov-split"><div class="spin"></div></div>
         </div>
         <div class="g2">
           <div class="card"><div class="shdr">🏆 Leaderboard <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">لوحة الصدارة</span></div><div id="ov-leader"></div></div>
@@ -238,18 +261,61 @@
         </div>
         <div class="card"><div class="shdr">Smart insights <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">توصيات</span></div><div id="ov-insights"><div class="empty" style="padding:14px">Refresh to load</div></div></div>
 
-        <!-- ===== 3) ANALYTICS (from Analytics page) ===== -->
+        <!-- ===== 2) PERIOD SUMMARY ===== -->
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+            <div class="shdr" style="margin-bottom:0">📊 Period summary <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">تلخيص زيارات المندوب خلال الفترة</span></div>
+            <select id="rp-kind" class="ctrl" onchange="setRepPeriod(this.value)" style="font-size:12.5px;font-weight:700;padding:7px 10px">
+              <option value="day">يومي</option>
+              <option value="week" selected>أسبوعي</option>
+              <option value="month">شهري</option>
+              <option value="quarter">ربع سنوي</option>
+              <option value="half">نصف سنوي</option>
+              <option value="year">سنوي</option>
+            </select>
+          </div>
+          <div class="rp-nav">
+            <button class="rp-arrow" onclick="rpPeriodMove(-1)" aria-label="Previous">‹</button>
+            <div class="rp-range" onclick="toggleRpCal()">
+              <span id="rp-range-label" class="ar">—</span> <span style="font-size:11px">🗓️</span>
+            </div>
+            <button class="rp-arrow" onclick="rpPeriodMove(1)" aria-label="Next">›</button>
+            <button class="pill" onclick="rpPeriodToday()" style="margin-right:4px">اليوم</button>
+          </div>
+          <div id="rp-cal-pop" class="rp-cal-pop" style="display:none"></div>
+          <div id="rp-summary"><div class="spin"></div></div>
+        </div>
+
+        <!-- ===== 3) REP CARDS (moved third, per request) ===== -->
+        <div class="rep-grid" id="reps-grid" style="margin-bottom:18px"><div class="spin"></div></div>
+
+        <!-- ===== 3b) SEPARATED SUB-SECTIONS with proper headlines, each 2-column per rep ===== -->
+        <div class="card"><div class="shdr">🏆 Most visited clients <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">أكثر العملاء زيارةً</span></div><div id="rep-topclients"><div class="spin"></div></div></div>
+        <div class="card"><div class="shdr">👤 Contact role breakdown <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">تصنيف جهات الاتصال (عملاء جدد)</span></div><div id="rep-roles"><div class="spin"></div></div></div>
+        <div class="card"><div class="shdr">📍 Latest visits <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">أحدث الزيارات</span></div><div id="rep-latest"><div class="spin"></div></div></div>
+
+        <!-- ===== 4) CLIENT DIRECTORY MIX (new — replaces low-value Forgotten card) ===== -->
+        <div class="card">
+          <div class="shdr">📇 Client mix per rep <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">نسبة زيارات العملاء (حاليين / محتملين / جدد) — من قائمة العملاء الكاملة</span></div>
+          <div id="an-clientmix"><div class="spin"></div></div>
+        </div>
+        <div class="card">
+          <div class="shdr">🔔 Never visited yet <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">عملاء من القائمة الكاملة لم تتم زيارتهم إطلاقًا — تنبيه للمندوب</span></div>
+          <div id="an-unvisited"><div class="spin"></div></div>
+        </div>
+        <div class="card">
+          <div class="shdr">📋 Field log quality <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">جودة تعبئة بيانات الزيارة — مؤشر استخدام التقنية</span></div>
+          <div id="an-quality"><div class="spin"></div></div>
+        </div>
+
+        <!-- ===== 5) ANALYTICS (from Analytics page) ===== -->
         <div class="ph" style="margin-top:26px;margin-bottom:14px;padding-top:18px;border-top:1px solid var(--ln)"><h2 style="font-size:17px">📈 Analytics</h2><p class="ar">تحليلات السوق والتغطية</p></div>
         <div class="g3" style="margin-bottom:18px">
           <div class="card"><div class="shdr">🏗️ Project stages <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">مراحل المشاريع</span></div><div id="an-stage"><div class="spin"></div></div></div>
           <div class="card"><div class="shdr">📐 Project sizes <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">حجم المشاريع</span></div><div id="an-size"><div class="spin"></div></div></div>
           <div class="card"><div class="shdr">🏢 Project types <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">أنواع المشاريع</span></div><div id="an-type"><div class="spin"></div></div></div>
         </div>
-        <div class="kgrid" id="an-kpi"></div>
-        <div class="g2">
-          <div class="card"><div class="shdr">Conversion rate <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">معدل التحويل لعروض</span></div><div id="an-conv"><div class="spin"></div></div></div>
-          <div class="card"><div class="shdr">⚠ Forgotten clients (30d+) <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">عملاء لم يُزاروا +٣٠ يوم</span></div><div id="an-forgot"></div></div>
-        </div>
+        <div class="card"><div class="shdr">📈 Conversion rate <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">معدل التحويل لعروض</span></div><div id="an-conv"><div class="spin"></div></div></div>
         <div class="card"><div class="shdr">Visit coverage by area <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">تغطية المناطق</span></div><div id="an-area"></div></div>
       </div>
 
@@ -281,9 +347,21 @@
       <div class="page" id="p-followups">
         <div class="ph"><h2>Follow-ups</h2><p class="ar">المتابعات القادمة</p></div>
         <div class="kgrid" style="grid-template-columns:repeat(3,1fr)">
-          <div class="kcard k-red" style="text-align:center"><div class="kv" style="color:var(--red)" id="fu-od">0</div><div class="kl">Overdue <small class="sub ar">متأخرة</small></div></div>
-          <div class="kcard k-gold" style="text-align:center"><div class="kv" style="color:var(--amb)" id="fu-td">0</div><div class="kl">Today <small class="sub ar">اليوم</small></div></div>
-          <div class="kcard k-green" style="text-align:center"><div class="kv" style="color:var(--green)" id="fu-wk">0</div><div class="kl">This week <small class="sub ar">هذا الأسبوع</small></div></div>
+          <div class="kcard k-red" style="text-align:center;position:relative"><span class="badge" style="position:absolute;top:12px;left:12px;background:var(--red-l);color:var(--red)">OVERDUE</span><div class="ki" style="margin:0 auto 6px">⏳</div><div class="kv" style="color:var(--red)" id="fu-od">0</div><div class="kl">Overdue <small class="sub ar">متأخرة</small></div></div>
+          <div class="kcard k-gold" style="text-align:center;position:relative"><span class="badge" style="position:absolute;top:12px;left:12px;background:var(--gold-l);color:var(--amb)">TODAY</span><div class="ki" style="margin:0 auto 6px">🔔</div><div class="kv" style="color:var(--amb)" id="fu-td">0</div><div class="kl">Today <small class="sub ar">اليوم</small></div></div>
+          <div class="kcard k-green" style="text-align:center;position:relative"><span class="badge" style="position:absolute;top:12px;left:12px;background:var(--green-l);color:var(--green)">THIS WEEK</span><div class="ki" style="margin:0 auto 6px">🗓️</div><div class="kv" style="color:var(--green)" id="fu-wk">0</div><div class="kl">This week <small class="sub ar">هذا الأسبوع</small></div></div>
+        </div>
+        <div class="pills" style="margin-top:14px">
+          <button class="pill on" id="fuf-all" onclick="setFuf('all')">All</button>
+          <button class="pill" id="fuf-od" onclick="setFuf('overdue')">Overdue</button>
+          <button class="pill" id="fuf-td" onclick="setFuf('today')">Today</button>
+          <button class="pill" id="fuf-wk" onclick="setFuf('week')">This week</button>
+          <input type="search" id="fu-q" class="ctrl" style="flex:1;min-width:140px" placeholder="Search client / بحث" oninput="renderFollowups()" />
+          <select id="fu-rep" class="ctrl" onchange="renderFollowups()">
+            <option value="all">All reps</option>
+            <option value="عبدالرزاق محمد">Abdulrazak</option>
+            <option value="الحسن موسى">Hassan</option>
+          </select>
         </div>
         <div id="fu-list"><div class="spin"></div></div>
       </div>
@@ -320,10 +398,37 @@
 
 <div class="toast" id="toast"></div>
 
+<div class="cdmodal" id="cdmodal" onclick="if(event.target===this)closeClientModal()">
+  <div class="cdcard" id="cdcard"></div>
+</div>
+
 <script>
 var SCRIPT_URL='https://script.google.com/macros/s/AKfycbyTBRrJRoukyyt-4c9f9H3_6DfoPVidMvB4sH7gkpFSY4wcgZuGCLSaePCFqJl5-GzBGw/exec';
 var PIN='1234';
 var REPS=['عبدالرزاق محمد','الحسن موسى'];
+// قائمة العملاء الكاملة لكل مندوب (حاليين/محتملين) — نفس القائمة المضمّنة فى تطبيقي المندوبين
+var CLIENT_DIRECTORY={"الحسن موسى": {"existing": ["شركة محطات ترانزيت", "محمود خلف احمد العثمان لتجارة الجملة والتجزئة", "مؤسسة ركيزة الإنشاءات للمقاولات", "شركة مدماك الغد العقارية", "شركة المسكن الهادي للتطوير العقاري", "شركة تمام العقارية", "شركة رواد التكامل للمقاولات عامة", "شركة معماريون الجودة للمقاولات", "شركة معيار للمقاولات", "شركة اعمال مكس للخرسانة الجاهزة", "العنود ريزدنس للتطوير العقاري", "تركي الحضيف", "محل ركن المذاق للحلويات", "دكتور - هائل أحمد سالم", "ركاز الانجاز للمقاولات", "شركة رمز كيان للمقاولات", "شركة صهيب محمد بشير الحافظ", "شركة عبد الله عبد الكريم العثيم المتحدة", "شركة عمار هوم للمقاولات", "شركة العناصر المتطورة للمقاولات العامة", "شركة عليا التنفيذية للمقاولات", "شركة لؤلؤة الاعمار للمقاولات", "شركة لحاء للمقاولات المعمارية", "شركة اعمار اكنان للتطوير العقاري", "محمد ذيب بن حمود العتيبي", "محل منصر عائض سالمين العفاري للتجارة", "مؤسسة البنايات الفائقة للمقاولات", "مؤسسة المنطقة العاشرة للمقاولات", "مؤسسة ثامر سجدى بن ثامر المطيرى للتطوير العقارى", "مؤسسة خالد مبروك عبده الشبعاني للمقاولات العامة", "مؤسسة سرايا للديكور", "مؤسسة هضاب المعزولة للمقاولات", "مؤسسة يونس عبدالسلام محمد المشيقح للمقاولات العامة"], "prospect": ["ابراج التعمير للمقاولات", "ابراج الشهباء للمقاولات", "انسجام للتصميم", "باحة نجد", "بانة الإعمار لمنتجات الحجر والرخام", "بلال حجازي للمقاولات العامة", "بلان العربية المحدودة", "بيت الموارد", "عبد العزيز الهيدان", "عبد الله الخنيني", "فاطمة الراجحي", "كار بلس المحدودة", "لمسة انجاز للمقاولات", "مداميك البناء", "مجموعة الاعمال المتحدة", "شركة انشاء للتشغيل والصيانة", "مصنع راف الشمال", "مؤسسة أضواء التمييز للمقاولات العامة", "مؤسسة اعمال مسار المشاريع للتجارة", "مؤسسة الشوهان للمقاولات", "مؤسسة المبنى الشامخ للمقاولات", "مؤسسة روائع العمار للعقارات", "مؤسسة فواز صالحة فواز الحارثي للمقاولات العامة", "مؤسسة قمة الجزيرة للمقاولات", "مؤسسة مسافة للتصميم", "مستقبل الذكاء للمقاولات", "نخبة ايلان للمقاولات العامة", "نكس للمقاولات", "قواعد البناء الحديث", "شركة أوتاد الفهد للمقاولات", "شركة الأمان للمقاولات", "شركة الأبواب المتقدمة", "شركة ايس بير", "شركة افاق واعمار", "شركة الحقبة الاولى للمقاولات", "شركة الرابط الخليجي للتجارة", "شركة الرؤية المضيئة للمقاولات", "شركة البيوت الاقتصادية للمقاولات", "شركة الكفاح العالمية للمقاولات", "شركة المواد العمرانية للتجارة والصناعة والمقاولات", "شركة ابعاد فنية للمقاولات شركة شخص واحد", "شركة انطلاق الأفق للمقاولات", "شركة برج الاتحاد للمقاولات العامة", "شركة درة الخليج المعمارية المحدودة", "شركة راوز الاستثمار والتطوير العقاري", "شركة ركائز التنفيذ للمقاولات العامة", "شركة زان الخليجية المحدودة", "شركة شبه الجزيرة للمقاولات", "شركة غلام حسن بيد الله للمقاولات", "شركة فهد محمد الحيدري للمقاولات", "شركة فلل الريان للمقاولات", "شركة منار الاحمدية للاستثمار", "شركة مستقبل الذكاء للمقاولات", "شركة نجمة ارتكاز البناء للمقاولات", "شركة نورة عايض الشهري للمقاولات", "شركة وسائل التعمير للمقاولات", "شركة وتين الشرق العقارية", "شركة مسقا للاستثمار", "شركة ايلاف للتطوير العقاري", "شركة خط الحماية لاجهزة السلامة", "نافذة نجد للمقاولات", "وجهات المشاريع", "SNDex COMPANY", "TEC Construction", "Union Support Services Company"]}, "عبدالرزاق محمد": {"existing": ["شركة شعاع المتطورة المحدودة", "شركة مجموعة زيد الحسين وإخوانه للمقاولات", "مؤسسة الفا الانشائية للمقاولات", "شركة تقدم وإنجاز للمقاولات", "شركة دوزان جده للمقاولات", "شركة سيتي بوول", "شركة فنار العربية الدولية", "شركة مهارات الخليجيون للمقاولات", "شركة العمران المميز للمقاولات", "شركة الهرم الرابع الدولية للمقاولات", "شركة برو فاست المحدودة", "شركة خليج الرواد للتجارة", "شركة دخون الوطنية للتجارة", "شركة رواق للتطوير والاستثمار العقاري", "شركة ريادة العالمية للتجارة", "شركة فنون ميار للمقاولات", "شركة منظور معماري العقارية", "شركة مواد البناء الحديث للتجارة", "شركة نبراس الخليج للمقاولات المعمارية العامة", "شركة هامات الاولى العقارية", "مكتب المنازل المتميزة للخدمات العقارية", "مؤسسة إعمار سيف للتطوير والاستثمار العقاري", "مؤسسة سمو اجدان للمقاولات العامة", "مؤسسة مشعل محمد البطاح للمقاولات العامة", "محمود ابوصخر", "مقاول ابو ماهر", "ابو أيهم", "عبدالله التميمي", "شركة بلكات للمنتجات الاسمنتيه"], "prospect": ["شركة دياري للتطوير العقاري", "شركة أون للتطوير والاستثمار العقاري", "شركة شبكة الموارد", "شركة مجموعة النخلات الثلاث المحدودة للتجارة", "مؤسسة اركان النسمة للتجارة", "شركة سما الشرق المحدودة", "شركة افاق التشييد للمقاولات", "شركة صناع العمارة المحدودة", "شركة نسور الصخر للمقاولات", "شركة المعماريون الخليجيون للمقاولات", "مؤسسة سراب الطريق للمقاولات", "شركة ملي متر للمقاولات", "شركة زاوية الجودة للمقاولات", "شركة معماريون الجودة للمقاولات", "مؤسسة موزان للمقاولات العامة", "شركة البناء المبتكر للمقاولات", "شركة الرؤية المضيئة للمقاولات", "شركة أساس الجوهرة للتطوير العقاري", "مؤسسة المسكن المناسب للتطوير والاستثمار العقاري", "شركة بي ار كيه زد العالمية لتقنية المعلومات", "منظور معماري", "مؤسسة اوائل الموردين للتطوير العقاري", "مؤسسة أبيات فريدة للتجارة", "شركة الكيان الفنية العربية للمقاولات", "مؤسسة جبل سنجار للمقاولات", "شركة رقوب للمقاولات", "شركة هدف للمقاولات", "شركة جرين ورليد", "شركة إنماء الروابي للمقاولات", "شركة سديل المجد التجارية", "مؤسسة صرح البتال للمقاولات", "شركة ربوع الاتحاد للمقاولات", "شركة جودة الاعمار للمقاولات", "شركة تميز التنفيذ للمقاولات شركة شخص واحد", "شركة انجازات المدن للتطوير العقاري", "شركة زاوية التوزيع للتجارة", "مؤسسة إمداد للأبنية الذكية للمقاولات العامة", "شركة أوتاد الفهد المحدودة", "شركة تقنية المباني المستدامة للمقاولات", "مؤسسة رتيم للمقاولات", "شركة فجر الانشائية للمقاولات", "شركة العلم والمعمار للمقاولات", "شركة دول الخليج للمقاولات", "شركة نقطة التسعين للمقاولات", "عبدالله الزكري", "مؤسسة دار الريان للتطوير العقاري", "مؤسسة روائع العمار للعقارات", "الألفية للتطوير العقاري", "احمد مخلف", "شركة بلدا السعودي", "مشعل المطيري", "نايف السبيعي"]}};
+function clientStatusFor(rep,name){
+  var d=CLIENT_DIRECTORY[rep];if(!d)return null;
+  if(d.existing.indexOf(name)>-1)return 'existing';
+  if(d.prospect.indexOf(name)>-1)return 'prospect';
+  return null;
+}
+// ===== خريطة الحي ← المنطقة الفرعية الحقيقية (نفس تجميع تطبيق المندوب) — عامة لتُستخدم فى أكثر من تحليل =====
+var HOOD_SUBREGION={};
+[['شمال الرياض',['الملقا','النرجس','العارض','الياسمين','الصحافة','العقيق','القيروان','حطين','الربيع','الغدير','الندى','النفل','الوادي','الفلاح','بنبان','النخيل','المصيف','المروج','الازدهار','الواحة','المرسلات','الورود','الرائد','السفارات']],
+ ['شرق الرياض',['الرمال','اليرموك','النهضة','إشبيلية','الخليج','قرطبة','الحمراء','غرناطة','الروضة','الريان','السلي','النسيم','القدس','النظيم','المغرزات','الجزيرة','الرواد','الربوة','الشهداء','المونسية','القادسية','السلام','الأندلس','الروابي']],
+ ['جنوب الرياض',['الشفا','العزيزية','منفوحة','بدر','عكاظ','الحزم','الدار البيضاء','المصانع','طيبة','الفيصلية','الحائر','أحد','عريض','أم سليم','غبيراء','الفواز']],
+ ['غرب الرياض',['السويدي','البديعة','ظهرة البديعة','عرقة','لبن','العريجاء','جامعة الملك سعود','شبرا','طويق','نمار','المهدية','ديراب','العوالي','وادي لبن','الدرعية']],
+ ['وسط الرياض',['المربع','المرقب','البطحاء','الديرة','الصالحية','الملز','الفاخرية','الوزارات','الخالدية','العود','الشميسي']]
+].forEach(function(pair){pair[1].forEach(function(h){HOOD_SUBREGION[h]=pair[0];});});
+var SUBREGION_ORDER=['شمال الرياض','شرق الرياض','جنوب الرياض','غرب الرياض','وسط الرياض'];
+function resolveSubregion(hoodRaw){
+  if(!hoodRaw)return {sub:'غير محدَّد',specific:null};
+  if(SUBREGION_ORDER.indexOf(hoodRaw)>-1)return {sub:hoodRaw,specific:null};
+  if(HOOD_SUBREGION[hoodRaw])return {sub:HOOD_SUBREGION[hoodRaw],specific:hoodRaw};
+  return {sub:'غير مصنَّف',specific:hoodRaw};
+}
 var REP_EN={'عبدالرزاق محمد':'Abdulrazak','الحسن موسى':'Hassan'};
 var PAGES=['overview','activity','followups','reports','archive'];
 var DATA={summary:[],recentReports:[],visits:[],requests:[]};
@@ -332,6 +437,14 @@ var _vf='all', _arch='all';
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 function num(v){return Number(String(v==null?'':v).replace(/,/g,''))||0;}
 function txt(v){return v==null?'':String(v);}
+// جوجل شيت أحيانًا يُرجع خلايا "الوقت الصِرف" كتاريخ ISO كامل بأساس 1899-12-30 (خلل معروف فى Apps Script) — هذا يستخرج الوقت الحقيقي فقط
+function fmtTime(raw){
+  var s=txt(raw);if(!s)return '';
+  var m=s.match(/^1899-12-30T(\d{2}):(\d{2}):(\d{2})/);
+  if(!m)return s;
+  var h=parseInt(m[1],10),mi=m[2],ap=h>=12?'PM':'AM',h12=h%12||12;
+  return h12+':'+mi+' '+ap;
+}
 function set(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
 function repEN(r){return REP_EN[r]||String(r||'').split(' ')[0];}
 function dstr(v){var s=txt(v);if(!s)return '';if(s.indexOf('T')>-1){var d=new Date(s);if(!isNaN(d.getTime()))return new Date(d.getTime()+180*60000).toISOString().slice(0,10);}return s.slice(0,10);}
@@ -391,8 +504,8 @@ function loadAll(){
 }
 
 function renderAll(){
-  renderOverview();renderReps();renderRepSummary();renderActivity();renderRequests();
-  renderFollowups();renderReports();renderArchive();renderAnalytics();renderSidebar();renderCounts();
+  renderOverview();renderReps();renderTopClients();renderRoles();renderLatest();renderRepSummary();renderActivity();renderRequests();
+  renderFollowups();renderReports();renderArchive();renderAnalytics();renderClientMix();renderUnvisited();renderQuality();renderInsights();renderSidebar();renderCounts();
 }
 function renderCounts(){
   var fu=allFollowups().filter(function(v){return dstr(v['تاريخ المتابعة'])<=weekEnd();}).length;
@@ -416,7 +529,6 @@ function renderOverview(){
     var s=repSummary(r);var p=(s&&dstr(s['آخر تحديث'])===td)?num(s['النقاط']):0;score[r]=p;tScore+=p;
   });
   set('k-v',tv.length);set('k-va',byRep['عبدالرزاق محمد']||0);set('k-vh',byRep['الحسن موسى']||0);
-  set('k-prospect',nPr);set('k-new',nNew);set('k-exist',nEx);
   set('k-score',tScore);set('k-sa',score['عبدالرزاق محمد']||0);set('k-sh',score['الحسن موسى']||0);
 
   var el=document.getElementById('ov-split');
@@ -425,28 +537,8 @@ function renderOverview(){
     el.innerHTML=seg.map(function(s){var pct=Math.round(s.v/tv.length*100);return '<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span><b>'+s.l+'</b> <span class="ar" style="color:var(--mut);font-size:10px">'+s.la+'</span></span><span style="font-weight:700">'+s.v+' ('+pct+'%)</span></div><div style="height:9px;background:var(--ln2);border-radius:6px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:'+s.c+'"></div></div></div>';}).join('');
   }else el.innerHTML='<div class="empty" style="padding:20px">No visits today <span class="ar">لا زيارات اليوم</span></div>';
 
-  var fu=allFollowups(),we=weekEnd();
-  var od=fu.filter(function(v){return dstr(v['تاريخ المتابعة'])<td;}).length;
-  var tdc=fu.filter(function(v){return dstr(v['تاريخ المتابعة'])===td;}).length;
-  var wk=fu.filter(function(v){var d=dstr(v['تاريخ المتابعة']);return d>td&&d<=we;}).length;
-  set('al-od',od);set('al-td',tdc);set('al-wk',wk);
-
   var cc={};DATA.visits.forEach(function(v){var c=txt(v['العميل']);if(c)cc[c]=(cc[c]||0)+1;});
   var top=Object.keys(cc).map(function(k){return [k,cc[k]];}).sort(function(a,b){return b[1]-a[1];}).slice(0,5);
-
-  var ins=[];
-  if(nPr)ins.push('🎯 '+nPr+' prospect visit(s) today — growth opportunity.');
-  if(top.length)ins.push('⭐ Most visited: '+top[0][0]+' ('+top[0][1]+').');
-  var best=REPS.map(function(r){var s=repSummary(r);return {r:r,p:(s&&dstr(s['آخر تحديث'])===td)?num(s['النقاط']):0};}).sort(function(a,b){return b.p-a.p;})[0];
-  if(best&&best.p)ins.push('🏆 Top today: '+repEN(best.r)+' with '+best.p+' pts.');
-  document.getElementById('ov-insights').innerHTML=ins.length?ins.map(function(i){return '<div style="padding:7px 0;border-bottom:1px solid var(--ln2);font-size:12.5px">'+esc(i)+'</div>';}).join(''):'<div class="empty" style="padding:14px">No insights yet</div>';
-
-  // ---- cumulative totals (all-time) ----
-  set('ov-cum-total',DATA.visits.length);
-  set('ov-cum-abd',repVisits('عبدالرزاق محمد').length);
-  set('ov-cum-has',repVisits('الحسن موسى').length);
-  var totalPts=DATA.recentReports.reduce(function(s,r){return s+num(r['نقاط الأداء']);},0);
-  set('ov-cum-points',totalPts);
 
   // ---- leaderboard (rank by all-time visits, tiebreak points) ----
   var board=REPS.map(function(r){var s=repSummary(r);return {r:r,v:repVisits(r).length,p:s?num(s['النقاط']):0};}).sort(function(a,b){return b.v-a.v||b.p-a.p;});
@@ -459,29 +551,212 @@ function renderOverview(){
   var days=[];for(var i=13;i>=0;i--){var d=new Date(Date.now()+180*60000);d.setDate(d.getDate()-i);days.push(d.toISOString().slice(0,10));}
   var cnt={};DATA.visits.forEach(function(v){var d=dstr(v['التاريخ']);if(d)cnt[d]=(cnt[d]||0)+1;});
   var mx=Math.max(1,Math.max.apply(null,days.map(function(d){return cnt[d]||0;})));
-  document.getElementById('ov-trend').innerHTML='<div style="display:flex;align-items:flex-end;gap:4px;height:120px;padding-top:6px">'+days.map(function(d){
+  document.getElementById('ov-trend').innerHTML='<div style="font-size:10.5px;color:var(--mut);text-align:center;margin-bottom:4px">'+fmtEn(days[0])+' – '+fmtEn(days[13])+'</div><div style="display:flex;align-items:flex-end;gap:4px;height:120px;padding-top:6px">'+days.map(function(d){
     var c=cnt[d]||0;var h=Math.round(c/mx*100);var lbl=d.slice(8,10);var isToday=d===td;
     return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;height:100%"><div style="flex:1;width:100%;display:flex;align-items:flex-end"><div title="'+d+': '+c+'" style="width:100%;background:'+(isToday?'var(--gold)':'var(--navy)')+';border-radius:4px 4px 0 0;height:'+(c?Math.max(h,6):2)+'%;opacity:'+(c?1:.25)+'"></div></div><div style="font-size:8.5px;color:var(--mut)">'+lbl+'</div></div>';
   }).join('')+'</div><div style="font-size:10px;color:var(--mut);text-align:center;margin-top:4px">Peak: '+mx+' visits/day</div>';
 }
 
+function renderClientMix(){
+  var el=document.getElementById('an-clientmix');if(!el)return;
+  el.innerHTML='<div class="g2">'+REPS.map(function(r){
+    var rv=repVisits(r);
+    var buckets={existing:0,prospect:0,new:0,unlisted:0};
+    rv.forEach(function(v){
+      var name=txt(v['العميل']);if(!name)return;
+      if(txt(v['النوع'])==='New'){buckets.new++;return;}
+      var st=clientStatusFor(r,name);
+      if(st==='existing')buckets.existing++;
+      else if(st==='prospect')buckets.prospect++;
+      else buckets.unlisted++;
+    });
+    var total=rv.length||1;
+    var abd=String(r).indexOf('عبدالرزاق')===0;
+    var rows=[['existing','🟢 عملاء حاليون (من القائمة)','var(--green)'],['prospect','🎯 عملاء محتملون (من القائمة)','var(--pu)'],['new','✨ عملاء جدد (أُضيفوا حديثًا)','var(--gold-2)'],['unlisted','❔ غير مصنَّف','var(--mut)']]
+      .filter(function(row){return buckets[row[0]]>0;})
+      .map(function(row){
+        var n=buckets[row[0]],pct=Math.round(n/total*100);
+        return '<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:3px" class="ar"><span>'+row[1]+'</span><b>'+n+' ('+pct+'%)</b></div><div style="height:7px;background:var(--ln2);border-radius:5px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:'+row[2]+';border-radius:5px"></div></div></div>';
+      }).join('');
+    return '<div class="card" style="border-top:3px solid '+(abd?'var(--gold)':'var(--navy)')+';margin-bottom:0">'+
+      '<div style="font-weight:800;color:var(--navy);font-size:13px;margin-bottom:10px" class="ar">'+esc(repEN(r))+' <span style="font-weight:600;color:var(--mut);font-size:11px">('+rv.length+' زيارة)</span></div>'+
+      (rows||'<div class="empty" style="padding:14px">لا بيانات</div>')+
+    '</div>';
+  }).join('')+'</div>';
+}
+
+function renderInsights(){
+  var el=document.getElementById('ov-insights');if(!el)return;
+  if(REPS.length<2){el.innerHTML='<div class="empty" style="padding:14px">Need 2+ reps to compare</div>';return;}
+  var r1=REPS[0],r2=REPS[1];
+  function stats(r){
+    var rv=repVisits(r);
+    var conv=rv.length?Math.round(rv.filter(isConverted).length/rv.length*100):0;
+    var subs={};rv.forEach(function(v){subs[resolveSubregion(txt(v['الحي'])).sub]=1;});
+    var d=CLIENT_DIRECTORY[r]||{existing:[],prospect:[]};
+    var visited={};rv.forEach(function(v){var c=txt(v['العميل']);if(c)visited[c]=1;});
+    var dirTotal=d.existing.length+d.prospect.length;
+    var dirVisited=d.existing.concat(d.prospect).filter(function(n){return visited[n];}).length;
+    var newPct=rv.length?Math.round(rv.filter(function(v){return txt(v['النوع'])==='New';}).length/rv.length*100):0;
+    return {r:r,visits:rv.length,conv:conv,areas:Object.keys(subs).length,dirPct:dirTotal?Math.round(dirVisited/dirTotal*100):0,dirTotal:dirTotal,newPct:newPct};
+  }
+  var a=stats(r1),b=stats(r2);
+  var insByRep={};REPS.forEach(function(r){insByRep[r]=[];});
+  // فجوة معدل التحويل — للمتأخّر: توصية تحسين، للمتقدّم: إشادة
+  if(Math.abs(a.conv-b.conv)>=15){
+    var hi=a.conv>b.conv?a:b, lo=a.conv>b.conv?b:a;
+    insByRep[hi.r].push('📈 معدل تحويلك ('+hi.conv+'٪) هو الأعلى بين الفريق — استمر.');
+    insByRep[lo.r].push('📉 معدل تحويلك ('+lo.conv+'٪) أقل من زميلك ('+hi.conv+'٪) — راجع أسلوبك في إغلاق الزيارات بعرض سعر.');
+  }
+  // فجوة التغطية الجغرافية
+  if(a.areas!==b.areas){
+    var wide=a.areas>b.areas?a:b, narrow=a.areas>b.areas?b:a;
+    insByRep[wide.r].push('🗺️ تغطّي '+wide.areas+' مناطق فرعية — أوسع انتشار في الفريق.');
+    insByRep[narrow.r].push('🗺️ تغطّي '+narrow.areas+' مناطق فقط (زميلك يغطّي '+wide.areas+') — قد تستفيد من توسيع نطاقك.');
+  }
+  // فجوة إنجاز قائمة العملاء
+  if(a.dirTotal&&b.dirTotal&&Math.abs(a.dirPct-b.dirPct)>=10){
+    var ahead=a.dirPct>b.dirPct?a:b, behind=a.dirPct>b.dirPct?b:a;
+    insByRep[ahead.r].push('📇 زرت '+ahead.dirPct+'٪ من قائمة عملائك المخصّصة.');
+    insByRep[behind.r].push('📇 زرت '+behind.dirPct+'٪ فقط من قائمتك ('+(100-behind.dirPct)+'٪ لم تُزَر بعد).');
+  }
+  // فجوة حجم الزيارات
+  if(a.visits&&b.visits&&Math.abs(a.visits-b.visits)/Math.max(a.visits,b.visits)>=0.3){
+    var more=a.visits>b.visits?a:b, less=a.visits>b.visits?b:a;
+    insByRep[less.r].push('📍 سجّلت '+less.visits+' زيارة إجمالًا، زميلك سجّل '+more.visits+'.');
+  }
+  // نمط عملاء جدد
+  if(Math.abs(a.newPct-b.newPct)>=20){
+    var newer=a.newPct>b.newPct?a:b;
+    insByRep[newer.r].push('✨ '+newer.newPct+'٪ من زياراتك لعملاء جدد — تركيز أعلى على الاستقطاب من زميلك.');
+  }
+  var anyIns=REPS.some(function(r){return insByRep[r].length;});
+  el.innerHTML=anyIns?('<div class="g2">'+REPS.map(function(r){
+    var abd=String(r).indexOf('عبدالرزاق')===0;
+    var list=insByRep[r].length?insByRep[r].map(function(i){return '<div class="ar" style="padding:6px 0;border-bottom:1px solid var(--ln2);font-size:12px;line-height:1.6">'+i+'</div>';}).join(''):'<div class="empty" style="padding:10px;font-size:11.5px">لا ملاحظات لافتة</div>';
+    return '<div style="border-top:3px solid '+(abd?'var(--gold)':'var(--navy)')+';padding-top:8px"><div style="font-weight:800;color:var(--navy);font-size:12.5px;margin-bottom:4px" class="ar">'+esc(repEN(r))+'</div>'+list+'</div>';
+  }).join('')+'</div>'):'<div class="empty" style="padding:14px">لا فروقات لافتة بين المندوبين حاليًا</div>';
+}
+
+function renderUnvisited(){
+  var el=document.getElementById('an-unvisited');if(!el)return;
+  el.innerHTML='<div class="g2">'+REPS.map(function(r){
+    var d=CLIENT_DIRECTORY[r]||{existing:[],prospect:[]};
+    var visited={};repVisits(r).forEach(function(v){var c=txt(v['العميل']);if(c)visited[c]=1;});
+    var neverExisting=d.existing.filter(function(n){return !visited[n];});
+    var neverProspect=d.prospect.filter(function(n){return !visited[n];});
+    var totalNever=neverExisting.length+neverProspect.length;
+    var totalDir=d.existing.length+d.prospect.length;
+    var abd=String(r).indexOf('عبدالرزاق')===0;
+    var listHtml='';
+    if(neverExisting.length)listHtml+='<div style="font-size:10.5px;font-weight:800;color:var(--red);margin:8px 0 4px" class="ar">🔴 حاليون لم تتم زيارتهم ('+neverExisting.length+')</div>'+
+      '<div style="max-height:110px;overflow-y:auto">'+neverExisting.map(function(n){return '<div class="ar" style="font-size:11px;padding:3px 0;border-bottom:1px solid var(--ln2)">'+esc(n)+'</div>';}).join('')+'</div>';
+    if(neverProspect.length)listHtml+='<div style="font-size:10.5px;font-weight:800;color:var(--pu);margin:8px 0 4px" class="ar">🎯 محتملون لم تتم زيارتهم ('+neverProspect.length+')</div>'+
+      '<div style="max-height:110px;overflow-y:auto">'+neverProspect.map(function(n){return '<div class="ar" style="font-size:11px;padding:3px 0;border-bottom:1px solid var(--ln2)">'+esc(n)+'</div>';}).join('')+'</div>';
+    return '<div class="card" style="border-top:3px solid '+(abd?'var(--gold)':'var(--navy)')+';margin-bottom:0">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:800;color:var(--navy);font-size:13px" class="ar">'+esc(repEN(r))+'</span><span class="badge" style="background:'+(totalNever>0?'var(--red-l);color:var(--red)':'var(--green-l);color:var(--green)')+'">'+totalNever+' من '+totalDir+'</span></div>'+
+      (totalNever?listHtml:'<div class="empty" style="padding:14px">✅ تمت زيارة كل عملاء القائمة</div>')+
+    '</div>';
+  }).join('')+'</div>';
+}
+
+var STAGE_ORDER=['الأعمال التمهيدية','الأعمال الإنشائية','أعمال المباني','أعمال العزل','أعمال MEP','التشطيبات'];
+var STAGE_EN={'الأعمال التمهيدية':'Site Prep','الأعمال الإنشائية':'Structure','أعمال المباني':'Masonry','أعمال العزل':'Insulation','أعمال MEP':'MEP','التشطيبات':'Finishing'};
+function closeClientModal(){document.getElementById('cdmodal').classList.remove('on');}
+function openClientModal(clientName){
+  var vs=DATA.visits.filter(function(v){return txt(v['العميل'])===clientName;}).sort(function(a,b){return (dstr(b['التاريخ'])+fmtTime(b['الوقت'])).localeCompare(dstr(a['التاريخ'])+fmtTime(a['الوقت']));});
+  if(!vs.length)return;
+  var latest=vs[0];
+  // ابحث عبر كل زيارات العميل (الأحدث أولًا) عن أول قيمة غير فارغة لكل حقل — العميل الحالي غالبًا لا تُجمع له جهة اتصال/هاتف فى كل زيارة
+  function bestField(key){for(var i=0;i<vs.length;i++){var v=txt(vs[i][key]);if(v)return v;}return '';}
+  var region=bestField('المنطقة')||'—',hood=bestField('الحي');
+  var contact=bestField('جهة الاتصال')||'—',phone=bestField('الهاتف')||'—';
+  var isNew=vs.some(function(v){return txt(v['النوع'])==='New';});
+  // مرحلة المشروع الحالية (آخر قيمة معروفة، بعد توحيد القيم القديمة)
+  var STAGE_NORM={'clearing':'الأعمال التمهيدية','concrete':'الأعمال الإنشائية','عضم':'الأعمال الإنشائية','تحت الانشاء':'الأعمال الإنشائية','block':'أعمال المباني','finishing':'التشطيبات','تشطيب':'التشطيبات'};
+  var curStage=null;
+  for(var i=0;i<vs.length&&!curStage;i++){var raw=txt(vs[i]['مرحلة المشروع']);if(raw){curStage=STAGE_NORM[raw]||raw;}}
+  var curIdx=curStage?STAGE_ORDER.indexOf(curStage):-1;
+
+  var mileHtml='<div class="cdmile"><div class="cdmile-title ar">تطوّر مرحلة المشروع</div><div class="cdmile-track">'+
+    STAGE_ORDER.map(function(s,i){
+      var cls=curIdx<0?'':(i<curIdx?'done':(i===curIdx?'cur':''));
+      return '<div class="cdmile-step '+cls+'"><div class="cdmile-dot">'+(i+1)+'</div><div class="cdmile-lbl">'+STAGE_EN[s]+'</div></div>';
+    }).join('')+'</div></div>';
+
+  var tl='<div class="cdtl-title ar">سجلّ الزيارات (' +vs.length+')</div>'+vs.map(function(v,i){
+    var fields=[['Purpose','هدف الزيارة'],['Result','نتيجة الزيارة'],['Stage','مرحلة المشروع'],['Next step','الخطوة القادمة']];
+    var cells=fields.map(function(f){var val=txt(v[f[1]]);if(!val)return '';return '<div><div class="k">'+f[0]+'</div><div class="v ar">'+esc(val)+(f[1]==='الخطوة القادمة'&&txt(v['تاريخ المتابعة'])?' ('+dstr(v['تاريخ المتابعة'])+')':'')+'</div></div>';}).join('');
+    return '<div class="cdtl-item"><div class="cdtl-head"><span>'+dstr(v['التاريخ'])+(i===0?' <span class="badge b-has" style="font-size:8.5px">LATEST</span>':'')+'</span>'+repBadge(txt(v['المندوب']))+'</div><div class="cdtl-grid">'+cells+'</div></div>';
+  }).join('');
+
+  document.getElementById('cdcard').innerHTML=
+    '<div class="cdhead"><button class="cdclose" onclick="closeClientModal()">✕</button>'+
+    (isNew?'<span class="badge" style="background:var(--pu);color:#fff">NEW</span>':'')+
+    '<div class="cdname ar">'+esc(clientName)+'</div>'+
+    '<div class="cdmeta ar"><span>📍 '+esc(region)+(hood?' · '+esc(hood):'')+'</span><span>👤 '+esc(contact)+'</span><span>📞 '+esc(phone)+'</span></div></div>'+
+    '<div class="cdbody">'+mileHtml+tl+'</div>';
+  document.getElementById('cdmodal').classList.add('on');
+}
+
+function renderQuality(){
+  var el=document.getElementById('an-quality');if(!el)return;
+  el.innerHTML='<div class="g2">'+REPS.map(function(r){
+    var rv=repVisits(r),n=rv.length||1,abd=String(r).indexOf('عبدالرزاق')===0;
+    var fields=[
+      ['📍','GPS pin','الإحداثيات',function(v){return !!txt(v['الإحداثيات']);}],
+      ['📞','Phone','الهاتف',function(v){return !!txt(v['الهاتف']);}],
+      ['👤','Contact name','جهة الاتصال',function(v){return !!txt(v['جهة الاتصال']);}],
+      ['🗓️','Follow-up date','تاريخ المتابعة',function(v){return !!txt(v['تاريخ المتابعة']);}]
+    ];
+    var rates=fields.map(function(f){var c=rv.filter(f[3]).length;return {ic:f[0],en:f[1],ar:f[2],pct:Math.round(c/n*100)};});
+    var score=Math.round(rates.reduce(function(s,f){return s+f.pct;},0)/rates.length);
+    var scoreColor=score>=60?'var(--green)':(score>=35?'var(--amb)':'var(--red)');
+    var rows=rates.map(function(f){
+      var barColor=f.pct>=60?'var(--green)':(f.pct>=30?'var(--gold-2)':'var(--red)');
+      return '<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px"><span>'+f.ic+' '+f.en+' <span class="ar" style="color:var(--mut);font-size:9.5px">('+f.ar+')</span></span><b>'+f.pct+'٪</b></div><div style="height:6px;background:var(--ln2);border-radius:4px;overflow:hidden"><div style="height:100%;width:'+f.pct+'%;background:'+barColor+';border-radius:4px"></div></div></div>';
+    }).join('');
+    var weakest=rates.slice().sort(function(a,b){return a.pct-b.pct;})[0];
+    var finding=score<50?('⚠️ أضعف نقطة: <b>'+weakest.en+'</b> ('+weakest.pct+'٪ فقط) — يحتاج تذكير المندوب بتعبئتها في كل زيارة.'):'✅ مستوى تعبئة جيد بشكل عام.';
+    return '<div class="card" style="border-top:3px solid '+(abd?'var(--gold)':'var(--navy)')+';margin-bottom:0">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span style="font-weight:800;color:var(--navy);font-size:13px" class="ar">'+esc(repEN(r))+'</span><span style="font-weight:900;font-size:20px;color:'+scoreColor+'">'+score+'٪</span></div>'+
+      rows+
+      '<div class="ar" style="font-size:10.5px;color:var(--mut);margin-top:8px;padding-top:8px;border-top:1px dashed var(--ln2);line-height:1.6">'+finding+'</div>'+
+    '</div>';
+  }).join('')+'</div>';
+}
+
 function renderReps(){
   document.getElementById('reps-grid').innerHTML=REPS.map(function(r){
-    var s=repSummary(r),allV=repVisits(r),tv=allV.filter(function(v){return dstr(v['التاريخ'])===today();});
-    var ex=tv.filter(function(v){return txt(v['النوع'])==='Existing';}).length;
-    var nw=tv.filter(function(v){return txt(v['النوع'])==='New';}).length;
-    var pr=tv.filter(function(v){return txt(v['تصنيف العميل'])==='prospect';}).length;
+    var s=repSummary(r),allV=repVisits(r);
+    var ex=allV.filter(function(v){return txt(v['النوع'])==='Existing';}).length;
+    var nw=allV.filter(function(v){return txt(v['النوع'])==='New';}).length;
+    var pr=allV.filter(function(v){return txt(v['تصنيف العميل'])==='prospect';}).length;
     var abd=String(r).indexOf('عبدالرزاق')===0;
-    var list=tv.length?tv.map(function(v){return '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--ln2);font-size:12px"><span class="ar">'+esc(txt(v['العميل']))+'</span><span style="color:var(--mut)">'+esc(txt(v['الوقت']))+'</span></div>';}).join(''):'<div style="font-size:12px;color:var(--mut);padding:8px 0">No visits today</div>';
+    return '<div class="rcard '+(abd?'abd':'')+'"><div class="rhead"><div style="display:flex;align-items:center;gap:11px"><div class="rav">'+esc(repEN(r)[0])+'</div><div><div class="rname">'+esc(repEN(r))+'</div><div class="rsub ar">'+(s?esc(txt(s['آخر تحديث'])):'—')+'</div></div></div><div class="rpts">'+(s?num(s['النقاط']):0)+'<small>points</small></div></div>'+
+      '<div style="font-size:9.5px;color:var(--mut);margin:4px 0 6px" class="ar">إجمالي كل الأوقات</div>'+
+      '<div class="rstats"><div class="rstat"><div class="n" style="color:var(--navy)">'+allV.length+'</div><div class="l">Visits</div></div><div class="rstat"><div class="n" style="color:var(--green)">'+ex+'</div><div class="l">Existing</div></div><div class="rstat"><div class="n" style="color:var(--amb)">'+pr+'</div><div class="l">Prospect</div></div><div class="rstat"><div class="n" style="color:var(--pu)">'+nw+'</div><div class="l">New</div></div></div>'+
+      '<div class="rmonth"><div class="rstat"><div class="n" style="color:var(--navy)">'+(s?num(s['عملاء جدد (الشهر)']):0)+'</div><div class="l">New / month</div></div><div class="rstat"><div class="n" style="color:var(--navy)">'+(s?num(s['فرص (الشهر)']):0)+'</div><div class="l">Opps / month</div></div><div class="rstat"><div class="n" style="color:var(--navy)">'+(s?num(s['عروض (الشهر)']):0)+'</div><div class="l">Quotes / month</div></div></div>'+
+    '</div>';
+  }).join('');
+}
 
-    // أكثر العملاء زيارة لهذا المندوب تحديدًا (كل الأوقات) — بلا سقف مخفٍ، مع تمرير إن طال
+function renderTopClients(){
+  var el=document.getElementById('rep-topclients');if(!el)return;
+  el.innerHTML='<div class="g2">'+REPS.map(function(r){
+    var allV=repVisits(r);var abd=String(r).indexOf('عبدالرزاق')===0;
     var freq={};allV.forEach(function(v){var c=txt(v['العميل']);if(c)freq[c]=(freq[c]||0)+1;});
     var topClients=Object.keys(freq).map(function(c){return [c,freq[c]];}).filter(function(x){return x[1]>=2;}).sort(function(a,b){return b[1]-a[1];});
-    var topHtml=topClients.length?('<div style="max-height:180px;overflow-y:auto">'+topClients.map(function(x){return '<div style="display:flex;justify-content:space-between;font-size:11.5px;padding:4px 0;border-bottom:1px solid var(--ln2)"><span class="ar">'+esc(x[0])+'</span><b>'+x[1]+'</b></div>';}).join('')+'</div>'):'<div style="font-size:11px;color:var(--mut);padding:4px 0">لا زيارات متكرّرة بعد</div>';
+    var topHtml=topClients.length?('<div style="max-height:200px;overflow-y:auto">'+topClients.map(function(x){return '<div style="display:flex;justify-content:space-between;font-size:11.5px;padding:4px 0;border-bottom:1px solid var(--ln2)"><span class="ar">'+esc(x[0])+'</span><b>'+x[1]+'</b></div>';}).join('')+'</div>'):'<div class="empty" style="padding:14px">لا زيارات متكرّرة بعد</div>';
+    return '<div class="card" style="border-top:3px solid '+(abd?'var(--gold)':'var(--navy)')+';margin-bottom:0"><div style="font-weight:800;color:var(--navy);font-size:13px;margin-bottom:8px" class="ar">'+esc(repEN(r))+'</div>'+topHtml+'</div>';
+  }).join('')+'</div>';
+}
 
-    // تصنيف جهات الاتصال من زيارات العملاء الجدد (الوظيفة: مالك/مقاول/مدير مشروع...)
-    // تصنيف جهات الاتصال — توحيد القيم القديمة (إنجليزية/حرّة) مع القائمة الحالية + عرض بشكل أشرطة موحّد
-    var ROLE_NORM={'contractor':'مقاول','engineer':'مهندس موقع','procure':'مشتريات','procurement':'مشتريات','pm':'مدير مشروع','dev':'مطور','owner':'مالك','مقاول':'مقاول','مهندس':'مهندس موقع','المقاول':'مقاول'};
+function renderRoles(){
+  var el=document.getElementById('rep-roles');if(!el)return;
+  var ROLE_NORM={'contractor':'مقاول','engineer':'مهندس موقع','procure':'مشتريات','procurement':'مشتريات','pm':'مدير مشروع','dev':'مطور','owner':'مالك','مقاول':'مقاول','مهندس':'مهندس موقع','المقاول':'مقاول'};
+  el.innerHTML='<div class="g2">'+REPS.map(function(r){
+    var allV=repVisits(r);var abd=String(r).indexOf('عبدالرزاق')===0;
     var roleCount={};allV.filter(function(v){return txt(v['النوع'])==='New';}).forEach(function(v){
       var raw=txt(v['الوظيفة']).trim();if(!raw)return;
       var norm=ROLE_NORM[raw.toLowerCase()]||raw;
@@ -492,25 +767,41 @@ function renderReps(){
     var roleHtml=roleKeys.length?roleKeys.map(function(k){
       var n=roleCount[k],pct=Math.round(n/roleTotal*100);
       return '<div style="margin-bottom:6px"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px"><span class="ar">'+esc(k)+'</span><b>'+n+'</b></div><div style="height:6px;background:var(--ln2);border-radius:4px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--pu);border-radius:4px"></div></div></div>';
-    }).join(''):'<div style="font-size:11px;color:var(--mut);padding:4px 0">لا بيانات جهة اتصال بعد</div>';
-
-    return '<div class="rcard '+(abd?'abd':'')+'"><div class="rhead"><div style="display:flex;align-items:center;gap:11px"><div class="rav">'+esc(repEN(r)[0])+'</div><div><div class="rname">'+esc(repEN(r))+'</div><div class="rsub ar">'+(s?esc(txt(s['آخر تحديث'])):'—')+'</div></div></div><div class="rpts">'+(s?num(s['النقاط']):0)+'<small>points</small></div></div>'+
-      '<div class="rstats"><div class="rstat"><div class="n" style="color:var(--navy)">'+tv.length+'</div><div class="l">Visits</div></div><div class="rstat"><div class="n" style="color:var(--green)">'+ex+'</div><div class="l">Existing</div></div><div class="rstat"><div class="n" style="color:var(--amb)">'+pr+'</div><div class="l">Prospect</div></div><div class="rstat"><div class="n" style="color:var(--pu)">'+nw+'</div><div class="l">New</div></div></div>'+
-      '<div class="rmonth"><div class="rstat"><div class="n" style="color:var(--navy)">'+(s?num(s['عملاء جدد (الشهر)']):0)+'</div><div class="l">New / month</div></div><div class="rstat"><div class="n" style="color:var(--navy)">'+(s?num(s['فرص (الشهر)']):0)+'</div><div class="l">Opps / month</div></div><div class="rstat"><div class="n" style="color:var(--navy)">'+(s?num(s['عروض (الشهر)']):0)+'</div><div class="l">Quotes / month</div></div></div>'+
-      '<div style="margin-top:12px;font-size:12px;font-weight:700;color:var(--navy)" class="ar">أكثر العملاء زيارةً</div>'+topHtml+
-      '<div style="margin-top:12px;font-size:12px;font-weight:700;color:var(--navy)" class="ar">تصنيف جهات الاتصال (عملاء جدد)</div><div style="margin-top:4px">'+roleHtml+'</div>'+
-      '<div style="margin-top:12px;font-size:12px;font-weight:700;color:var(--navy)">Today\'s visits ('+tv.length+')</div>'+list+'</div>';
-  }).join('');
+    }).join(''):'<div class="empty" style="padding:14px">لا بيانات جهة اتصال بعد</div>';
+    return '<div class="card" style="border-top:3px solid '+(abd?'var(--gold)':'var(--navy)')+';margin-bottom:0"><div style="font-weight:800;color:var(--navy);font-size:13px;margin-bottom:8px" class="ar">'+esc(repEN(r))+'</div>'+roleHtml+'</div>';
+  }).join('')+'</div>';
 }
+
+function renderLatest(){
+  var el=document.getElementById('rep-latest');if(!el)return;
+  el.innerHTML='<div class="g2">'+REPS.map(function(r){
+    var allV=repVisits(r);var abd=String(r).indexOf('عبدالرزاق')===0;
+    var latest=allV.slice().sort(function(a,b){return (dstr(b['التاريخ'])+fmtTime(b['الوقت'])).localeCompare(dstr(a['التاريخ'])+fmtTime(a['الوقت']));}).slice(0,5);
+    var list=latest.length?latest.map(function(v){return '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--ln2);font-size:12px"><span class="ar">'+esc(txt(v['العميل']))+'</span><span style="color:var(--mut)">'+dstr(v['التاريخ'])+'</span></div>';}).join(''):'<div class="empty" style="padding:14px">No visits yet</div>';
+    return '<div class="card" style="border-top:3px solid '+(abd?'var(--gold)':'var(--navy)')+';margin-bottom:0"><div style="font-weight:800;color:var(--navy);font-size:13px;margin-bottom:8px" class="ar">'+esc(repEN(r))+'</div>'+list+'</div>';
+  }).join('')+'</div>';
+}
+
 
 var _repPeriod='week';
 var _repAnchor=today();
+var _rpCalMonth=null; // الشهر المعروض حاليًا فى نافذة التقويم المنبثقة
 var AR_MONTHS=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+var EN_MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 var AR_DOW=['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+var EN_DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 function periodBounds(kind,anchorStr){
   var a=new Date(anchorStr+'T12:00:00'); // ظهرًا لتفادي مشاكل التوقيت الصيفي/التقريب
   var start,end;
-  if(kind==='month'){
+  if(kind==='year'){
+    start=new Date(a.getFullYear(),0,1); end=new Date(a.getFullYear(),11,31);
+  }else if(kind==='half'){
+    var h=a.getMonth()<6?0:6;
+    start=new Date(a.getFullYear(),h,1); end=new Date(a.getFullYear(),h+6,0);
+  }else if(kind==='quarter'){
+    var q=Math.floor(a.getMonth()/3)*3;
+    start=new Date(a.getFullYear(),q,1); end=new Date(a.getFullYear(),q+3,0);
+  }else if(kind==='month'){
     start=new Date(a.getFullYear(),a.getMonth(),1);
     end=new Date(a.getFullYear(),a.getMonth()+1,0);
   }else if(kind==='day'){
@@ -522,31 +813,124 @@ function periodBounds(kind,anchorStr){
   }
   return {start:start.toISOString().slice(0,10), end:end.toISOString().slice(0,10)};
 }
-function fmtAr(dstr){var d=new Date(dstr+'T12:00:00');return d.getDate()+' '+AR_MONTHS[d.getMonth()]+' '+d.getFullYear();}
+function fmtEn(dstr){var d=new Date(dstr+'T12:00:00');return EN_MONTHS[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();}
 function periodLabel(kind,anchorStr){
   var b=periodBounds(kind,anchorStr);
-  if(kind==='month'){var d=new Date(anchorStr+'T12:00:00');return AR_MONTHS[d.getMonth()]+' '+d.getFullYear();}
-  if(kind==='day'){var d=new Date(anchorStr+'T12:00:00');return AR_DOW[d.getDay()]+'، '+fmtAr(anchorStr);}
-  return fmtAr(b.start)+' – '+fmtAr(b.end);
+  var d=new Date(anchorStr+'T12:00:00');
+  if(kind==='year')return 'Year '+d.getFullYear();
+  if(kind==='half')return (d.getMonth()<6?'H1':'H2')+' '+d.getFullYear();
+  if(kind==='quarter')return 'Q'+(Math.floor(d.getMonth()/3)+1)+' '+d.getFullYear();
+  if(kind==='month')return EN_MONTHS[d.getMonth()]+' '+d.getFullYear();
+  if(kind==='day')return fmtEn(anchorStr);
+  return fmtEn(b.start)+' – '+fmtEn(b.end);
 }
 function setRepPeriod(p){
   _repPeriod=p;
-  ['rp-day','rp-week','rp-month'].forEach(function(id){document.getElementById(id).classList.toggle('on',id==='rp-'+p);});
+  var sel=document.getElementById('rp-kind');if(sel)sel.value=p;
+  document.getElementById('rp-cal-pop').style.display='none';
   renderRepSummary();
 }
 function rpPeriodMove(dir){
   var d=new Date(_repAnchor+'T12:00:00');
-  if(_repPeriod==='month')d.setMonth(d.getMonth()+dir);
+  if(_repPeriod==='year')d.setFullYear(d.getFullYear()+dir);
+  else if(_repPeriod==='half')d.setMonth(d.getMonth()+dir*6);
+  else if(_repPeriod==='quarter')d.setMonth(d.getMonth()+dir*3);
+  else if(_repPeriod==='month')d.setMonth(d.getMonth()+dir);
   else if(_repPeriod==='day')d.setDate(d.getDate()+dir);
   else d.setDate(d.getDate()+dir*7);
   _repAnchor=d.toISOString().slice(0,10);
   renderRepSummary();
 }
 function rpPeriodToday(){_repAnchor=today();renderRepSummary();}
-function rpAnchorChanged(){var v=document.getElementById('rp-anchor').value;if(v){_repAnchor=v;renderRepSummary();}}
+
+// ===== نافذة تقويم منبثقة مخصّصة (بدل منتقي التاريخ الافتراضي للمتصفح) =====
+function toggleRpCal(){
+  var pop=document.getElementById('rp-cal-pop');
+  var show=pop.style.display==='none';
+  pop.style.display=show?'block':'none';
+  if(show){var a=new Date(_repAnchor+'T12:00:00');_rpCalMonth=new Date(a.getFullYear(),a.getMonth(),1);renderRpCal();}
+}
+function rpCalMove(dir){
+  if(_repPeriod==='year')_rpCalMonth.setFullYear(_rpCalMonth.getFullYear()+dir*12);
+  else _rpCalMonth.setMonth(_rpCalMonth.getMonth()+dir);
+  renderRpCal();
+}
+function rpCalPick(ds){_repAnchor=ds;document.getElementById('rp-cal-pop').style.display='none';renderRepSummary();}
+function renderRpCal(){
+  var pop=document.getElementById('rp-cal-pop');
+  if(_repPeriod==='year')return renderRpCalYears(pop);
+  if(_repPeriod==='half')return renderRpCalHalf(pop);
+  if(_repPeriod==='quarter')return renderRpCalQuarters(pop);
+  if(_repPeriod==='month')return renderRpCalMonths(pop);
+  return renderRpCalDays(pop); // day أو week
+}
+// يوم/أسبوع: شبكة أيام عادية — فى وضع الأسبوع تُميَّز الأسبوع كاملًا، مع علامتين واضحتين لبداية/نهاية النطاق
+function renderRpCalDays(pop){
+  var y=_rpCalMonth.getFullYear(),mo=_rpCalMonth.getMonth(),td=today();
+  var selBounds=_repPeriod==='week'?periodBounds('week',_repAnchor):null;
+  var html='<div class="rp-cal-head"><button onclick="rpCalMove(-1)">‹</button><b style="font-size:11.5px;color:var(--navy)">'+EN_MONTHS[mo]+' '+y+'</b><button onclick="rpCalMove(1)">›</button></div>';
+  if(_repPeriod==='week')html+='<div style="font-size:9px;color:var(--mut);text-align:center;margin-bottom:4px">🟢 Week start · 🔴 Week end</div>';
+  html+='<div class="rp-cal-grid">'+EN_DOW.map(function(d){return '<div class="rp-cal-dow">'+d+'</div>';}).join('');
+  var first=new Date(y,mo,1).getDay(),dim=new Date(y,mo+1,0).getDate();
+  for(var i=0;i<first;i++)html+='<div class="rp-cal-cell blank"></div>';
+  for(var dnum=1;dnum<=dim;dnum++){
+    var ds=y+'-'+String(mo+1).padStart(2,'0')+'-'+String(dnum).padStart(2,'0');
+    var inRange=selBounds&&ds>=selBounds.start&&ds<=selBounds.end;
+    var isStart=selBounds&&ds===selBounds.start, isEnd=selBounds&&ds===selBounds.end;
+    var isSel=_repPeriod==='day'?ds===_repAnchor:(isStart||isEnd);
+    var cls='rp-cal-cell'+(ds===td?' today':'')+(inRange?' inrange':'')+(isSel?' sel':'')+(isStart?' rng-start':'')+(isEnd?' rng-end':'');
+    var mark=isStart?'<span class="rng-dot s"></span>':(isEnd?'<span class="rng-dot e"></span>':'');
+    html+='<div class="'+cls+'" onclick="rpCalPick(\''+ds+'\')">'+dnum+mark+'</div>';
+  }
+  html+='</div>';
+  pop.innerHTML=html;
+}
+// شهر: اختيار مباشر من ١٢ شهرًا لسنة معيّنة (مثل أودو) — بأسماء إنجليزية مختصرة (أوضح من التقطيع العربي)
+function renderRpCalMonths(pop){
+  var y=_rpCalMonth.getFullYear(),curY=new Date(_repAnchor+'T12:00:00').getFullYear(),curM=new Date(_repAnchor+'T12:00:00').getMonth();
+  var html='<div class="rp-cal-head"><button onclick="rpCalMove(-12)">‹</button><b style="font-size:12.5px;color:var(--navy)">'+y+'</b><button onclick="rpCalMove(12)">›</button></div>';
+  html+='<div class="rp-pick-grid">'+EN_MONTHS.map(function(m,i){
+    var sel=(y===curY&&i===curM);
+    return '<div class="rp-pick-cell'+(sel?' sel':'')+'" onclick="rpCalPickMonth('+y+','+i+')">'+m+'</div>';
+  }).join('')+'</div>';
+  pop.innerHTML=html;
+}
+function rpCalPickMonth(y,m){_repAnchor=new Date(y,m,15).toISOString().slice(0,10);document.getElementById('rp-cal-pop').style.display='none';renderRepSummary();}
+// نصف سنوي: اختيار مباشر بين النصف الأول والثاني لسنة معيّنة (كان مفقودًا سابقًا ويُستخدم شبكة الأيام خطأً)
+function renderRpCalHalf(pop){
+  var y=_rpCalMonth.getFullYear(),cur=new Date(_repAnchor+'T12:00:00'),curY=cur.getFullYear(),curH=cur.getMonth()<6?0:1;
+  var html='<div class="rp-cal-head"><button onclick="rpCalMove(-12)">‹</button><b style="font-size:12.5px;color:var(--navy)">'+y+'</b><button onclick="rpCalMove(12)">›</button></div>';
+  html+='<div class="rp-pick-grid g2">'+['H1','H2'].map(function(lbl,h){
+    var sel=(y===curY&&h===curH);
+    return '<div class="rp-pick-cell'+(sel?' sel':'')+'" onclick="rpCalPickHalf('+y+','+h+')">'+lbl+'<br><small style="font-weight:600;opacity:.75">'+(h===0?'Jan–Jun':'Jul–Dec')+'</small></div>';
+  }).join('')+'</div>';
+  pop.innerHTML=html;
+}
+function rpCalPickHalf(y,h){_repAnchor=new Date(y,h*6+2,15).toISOString().slice(0,10);document.getElementById('rp-cal-pop').style.display='none';renderRepSummary();}
+// ربع سنوي: اختيار مباشر من Q1-Q4 لسنة معيّنة
+function renderRpCalQuarters(pop){
+  var y=_rpCalMonth.getFullYear(),cur=new Date(_repAnchor+'T12:00:00'),curY=cur.getFullYear(),curQ=Math.floor(cur.getMonth()/3);
+  var html='<div class="rp-cal-head"><button onclick="rpCalMove(-12)">‹</button><b style="font-size:12.5px;color:var(--navy)">'+y+'</b><button onclick="rpCalMove(12)">›</button></div>';
+  html+='<div class="rp-pick-grid g2">'+[0,1,2,3].map(function(q){
+    var sel=(y===curY&&q===curQ);
+    return '<div class="rp-pick-cell'+(sel?' sel':'')+'" onclick="rpCalPickQuarter('+y+','+q+')">Q'+(q+1)+'</div>';
+  }).join('')+'</div>';
+  pop.innerHTML=html;
+}
+function rpCalPickQuarter(y,q){_repAnchor=new Date(y,q*3+1,15).toISOString().slice(0,10);document.getElementById('rp-cal-pop').style.display='none';renderRepSummary();}
+// سنوي: قائمة سنوات حديثة
+function renderRpCalYears(pop){
+  var centerY=_rpCalMonth.getFullYear(),curY=new Date(_repAnchor+'T12:00:00').getFullYear();
+  var years=[];for(var i=-3;i<=2;i++)years.push(centerY+i);
+  var html='<div class="rp-cal-head"><button onclick="rpCalMove(-1)">‹</button><b style="font-size:12.5px;color:var(--navy)">'+years[0]+' – '+years[5]+'</b><button onclick="rpCalMove(1)">›</button></div>';
+  html+='<div class="rp-pick-grid">'+years.map(function(y){
+    return '<div class="rp-pick-cell'+(y===curY?' sel':'')+'" onclick="rpCalPickYear('+y+')">'+y+'</div>';
+  }).join('')+'</div>';
+  pop.innerHTML=html;
+}
+function rpCalPickYear(y){_repAnchor=new Date(y,6,15).toISOString().slice(0,10);document.getElementById('rp-cal-pop').style.display='none';renderRepSummary();}
+
 function renderRepSummary(){
-  var anchorInput=document.getElementById('rp-anchor');
-  if(anchorInput)anchorInput.value=_repAnchor;
   set('rp-range-label',periodLabel(_repPeriod,_repAnchor));
   var b=periodBounds(_repPeriod,_repAnchor);
   var el=document.getElementById('rp-summary');
@@ -576,14 +960,14 @@ function renderActivity(){
   if(from)list=list.filter(function(v){return dstr(v['التاريخ'])>=from;});
   if(to)list=list.filter(function(v){return dstr(v['التاريخ'])<=to;});
   if(q)list=list.filter(function(v){return txt(v['العميل']).toLowerCase().indexOf(q)>-1;});
-  list.sort(function(a,b){var d=dstr(b['التاريخ']).localeCompare(dstr(a['التاريخ']));return d!==0?d:txt(b['الوقت']).localeCompare(txt(a['الوقت']));});
+  list.sort(function(a,b){var d=dstr(b['التاريخ']).localeCompare(dstr(a['التاريخ']));return d!==0?d:fmtTime(b['الوقت']).localeCompare(fmtTime(a['الوقت']));});
   var el=document.getElementById('activity-content');
   if(!list.length){el.innerHTML='<div class="empty"><div class="ei">📍</div><b>No visits</b></div>';return;}
   var rows=list.map(function(v){
     var t=txt(v['النوع'])==='New'?'<span class="badge b-new">New</span>':'<span class="badge b-exist">Existing</span>';
     var gps=txt(v['الإحداثيات']);var g=gps?' <a href="https://maps.google.com/?q='+encodeURIComponent(gps)+'" target="_blank">📍</a>':'';
     var nd=dstr(v['تاريخ المتابعة']);
-    return '<tr><td style="white-space:nowrap">'+dstr(v['التاريخ'])+'<div style="color:var(--mut);font-size:10px" class="ar">'+esc(txt(v['الوقت']))+'</div></td><td>'+repBadge(txt(v['المندوب']))+'</td><td><b class="ar">'+esc(txt(v['العميل']))+'</b><div style="margin-top:3px">'+t+'</div></td><td class="ar">'+esc(txt(v['هدف الزيارة'])||'—')+(txt(v['نتيجة الزيارة'])?'<div style="font-size:11px;color:var(--mut);margin-top:2px">'+esc(txt(v['نتيجة الزيارة']))+'</div>':'')+'</td><td class="ar">'+esc(txt(v['الحي'])||'—')+g+'</td><td class="ar">'+esc(txt(v['الخطوة القادمة'])||'—')+(nd?'<div style="margin-top:3px"><span class="badge b-abd">'+nd+'</span></div>':'')+'</td></tr>';
+    return '<tr><td style="white-space:nowrap">'+dstr(v['التاريخ'])+'<div style="color:var(--mut);font-size:10px">'+esc(fmtTime(v['الوقت']))+'</div></td><td>'+repBadge(txt(v['المندوب']))+'</td><td><b class="ar">'+esc(txt(v['العميل']))+'</b><div style="margin-top:3px">'+t+'</div></td><td class="ar">'+esc(txt(v['هدف الزيارة'])||'—')+(txt(v['نتيجة الزيارة'])?'<div style="font-size:11px;color:var(--mut);margin-top:2px">'+esc(txt(v['نتيجة الزيارة']))+'</div>':'')+'</td><td class="ar">'+esc(txt(v['الحي'])||'—')+g+'</td><td class="ar">'+esc(txt(v['الخطوة القادمة'])||'—')+(nd?'<div style="margin-top:3px"><span class="badge b-abd">'+nd+'</span></div>':'')+'</td></tr>';
   }).join('');
   el.innerHTML='<table><thead><tr><th>Date</th><th>Rep</th><th>Client</th><th>Purpose / Result</th><th>Area</th><th>Follow-up</th></tr></thead><tbody>'+rows+'</tbody></table>';
 }
@@ -591,21 +975,31 @@ function renderActivity(){
 function renderRequests(){
   var el=document.getElementById('requests-content'),list=DATA.requests;
   if(!list.length){el.innerHTML='<div class="empty"><div class="ei">📦</div><b>No product requests</b></div>';return;}
-  var rows=list.map(function(r){return '<tr><td style="white-space:nowrap">'+dstr(r['التاريخ'])+'<div style="color:var(--mut);font-size:10px" class="ar">'+esc(txt(r['الوقت']))+'</div></td><td>'+repBadge(txt(r['المندوب']))+'</td><td class="ar"><b>'+esc(txt(r['العميل']))+'</b></td><td class="ar">'+esc(txt(r['المنتجات المطلوبة'])||'—')+'</td><td class="ar" style="color:var(--mut)">'+esc(txt(r['ملاحظات'])||'—')+'</td></tr>';}).join('');
+  var rows=list.map(function(r){return '<tr><td style="white-space:nowrap">'+dstr(r['التاريخ'])+'<div style="color:var(--mut);font-size:10px">'+esc(fmtTime(r['الوقت']))+'</div></td><td>'+repBadge(txt(r['المندوب']))+'</td><td class="ar"><b>'+esc(txt(r['العميل']))+'</b></td><td class="ar">'+esc(txt(r['المنتجات المطلوبة'])||'—')+'</td><td class="ar" style="color:var(--mut)">'+esc(txt(r['ملاحظات'])||'—')+'</td></tr>';}).join('');
   el.innerHTML='<table><thead><tr><th>Date</th><th>Rep</th><th>Client</th><th>Requested products</th><th>Notes</th></tr></thead><tbody>'+rows+'</tbody></table>';
 }
 
+var _fuf='all';
+function setFuf(f){_fuf=f;['fuf-all','fuf-od','fuf-td','fuf-wk'].forEach(function(id){document.getElementById(id).classList.remove('on');});var m={'all':'fuf-all','overdue':'fuf-od','today':'fuf-td','week':'fuf-wk'};document.getElementById(m[f]).classList.add('on');renderFollowups();}
 function renderFollowups(){
   var fu=allFollowups(),td=today(),we=weekEnd();
   var od=fu.filter(function(v){return dstr(v['تاريخ المتابعة'])<td;});
   var tdc=fu.filter(function(v){return dstr(v['تاريخ المتابعة'])===td;});
   var wk=fu.filter(function(v){var d=dstr(v['تاريخ المتابعة']);return d>td&&d<=we;});
   set('fu-od',od.length);set('fu-td',tdc.length);set('fu-wk',wk.length);
-  var groups=[{t:'Overdue',c:'var(--red)',list:od},{t:'Today',c:'var(--amb)',list:tdc},{t:'This week',c:'var(--green)',list:wk}];
-  var h=groups.filter(function(g){return g.list.length;}).map(function(g){
-    return '<div class="card"><div class="shdr" style="color:'+g.c+'">'+g.t+' ('+g.list.length+')</div>'+g.list.map(function(v){return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--ln2)"><div><div style="font-size:13px;font-weight:700"><span class="ar">'+esc(txt(v['العميل']))+'</span> '+repBadge(txt(v['المندوب']))+'</div><div class="ar" style="font-size:11px;color:var(--mut)">'+esc(txt(v['الخطوة القادمة']))+'</div></div><div style="font-weight:800;color:'+g.c+';white-space:nowrap">'+dstr(v['تاريخ المتابعة'])+'</div></div>';}).join('')+'</div>';
+  var all=od.concat(tdc).concat(wk).sort(function(a,b){return dstr(a['تاريخ المتابعة']).localeCompare(dstr(b['تاريخ المتابعة']));});
+  if(_fuf==='overdue')all=od;else if(_fuf==='today')all=tdc;else if(_fuf==='week')all=wk;
+  var repF=(document.getElementById('fu-rep')||{}).value||'all';
+  if(repF!=='all')all=all.filter(function(v){return txt(v['المندوب'])===repF;});
+  var q=((document.getElementById('fu-q')||{}).value||'').trim().toLowerCase();
+  if(q)all=all.filter(function(v){return txt(v['العميل']).toLowerCase().indexOf(q)>-1;});
+  function statusOf(v){var d=dstr(v['تاريخ المتابعة']);if(d<td)return{t:'Overdue',c:'var(--red)',bg:'var(--red-l)'};if(d===td)return{t:'Today',c:'var(--amb)',bg:'var(--gold-l)'};return{t:'This week',c:'var(--green)',bg:'var(--green-l)'};}
+  if(!all.length){document.getElementById('fu-list').innerHTML='<div class="empty"><div class="ei">✅</div><b>No matching follow-ups</b></div>';return;}
+  var rows=all.map(function(v){
+    var s=statusOf(v),cn=txt(v['العميل']);
+    return '<tr><td style="white-space:nowrap">'+dstr(v['تاريخ المتابعة'])+'</td><td>'+repBadge(txt(v['المندوب']))+'</td><td><b class="ar">'+esc(cn)+'</b><div class="ar" style="font-size:10px;color:var(--mut)">'+esc(txt(v['الخطوة القادمة']))+'</div></td><td><span class="badge" style="background:'+s.bg+';color:'+s.c+'">'+s.t+'</span></td><td><button class="pill on" style="font-size:10.5px;padding:5px 12px" onclick="openClientModal(\''+esc(cn).replace(/'/g,"")+'\')">View details</button></td></tr>';
   }).join('');
-  document.getElementById('fu-list').innerHTML=h||'<div class="empty"><div class="ei">✅</div><b>No pending follow-ups</b></div>';
+  document.getElementById('fu-list').innerHTML='<div class="card" style="padding:0;overflow-x:auto"><table><thead><tr><th>Follow-up date</th><th>Rep</th><th>Client / Next step</th><th>Status</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>';
 }
 
 function renderReports(){
@@ -618,12 +1012,17 @@ function renderReports(){
 function setArch(r){_arch=r;document.querySelectorAll('#p-archive .pill').forEach(function(b){if(b.id&&b.id.indexOf('af-')===0)b.classList.remove('on');});var m={'all':'af-all','عبدالرزاق محمد':'af-abd','الحسن موسى':'af-has'};var e=document.getElementById(m[r]);if(e)e.classList.add('on');renderArchive();}
 function clearArch(){document.getElementById('arch-date').value='';document.getElementById('arch-q').value='';renderArchive();}
 function archCard(v){
-  var F=[['Type','النوع'],['Region','المنطقة'],['Area','الحي'],['Purpose','هدف الزيارة'],['Result','نتيجة الزيارة'],['Class','تصنيف العميل'],['Contact','جهة الاتصال'],['Phone','الهاتف'],['Project','نوع المشروع'],['Stage','مرحلة المشروع'],['Next action','الخطوة القادمة'],['Next date','تاريخ المتابعة'],['Quote','حالة العرض'],['Duration','المدة (د)']];
-  var rows=F.map(function(f){var val=f[1]==='تاريخ المتابعة'?dstr(v[f[1]]):txt(v[f[1]]);if(!val)return '';return '<div class="af"><div class="k">'+f[0]+'</div><div class="v ar">'+esc(val)+'</div></div>';}).join('');
-  var gps=txt(v['الإحداثيات']);var mp=gps?'<a class="map" href="https://maps.google.com/?q='+encodeURIComponent(gps)+'" target="_blank">📍 Location</a>':'';
-  var notes=txt(v['ملاحظات']);
-  return '<div class="acard"><div class="atop"><div><span class="acl ar">'+esc(txt(v['العميل'])||'—')+'</span> '+repBadge(txt(v['المندوب']))+'<div style="color:var(--mut);font-size:10px;margin-top:2px" class="ar">⏱ '+esc(txt(v['الوقت']))+'</div></div></div><div class="afields">'+rows+'</div>'+(notes?'<div class="anote ar">'+esc(notes)+'</div>':'')+(mp?'<div>'+mp+'</div>':'')+'</div>';
+  var cn=txt(v['العميل'])||'—';
+  var status=txt(v['مرحلة المشروع'])||txt(v['هدف الزيارة'])||txt(v['نتيجة الزيارة'])||'—';
+  var loc=txt(v['الحي'])||txt(v['المنطقة'])||'';
+  return '<div class="acard" onclick="openClientModal(\''+esc(cn).replace(/'/g,"")+'\')">'+
+    '<div class="atop"><span>'+repBadge(txt(v['المندوب']))+'</span><span style="color:var(--mut);font-size:10px">'+esc(fmtTime(v['الوقت']))+'</span></div>'+
+    '<div class="acl ar" style="margin:6px 0 3px">'+esc(cn)+'</div>'+
+    '<div class="ar" style="font-size:11px;color:var(--mut);margin-bottom:8px">'+esc(txt(v['هدف الزيارة'])||txt(v['نتيجة الزيارة'])||'—')+'</div>'+
+    '<div style="display:flex;justify-content:space-between;align-items:center"><span class="ar" style="font-size:10.5px;color:var(--mut)">📍 '+esc(loc)+'</span><span class="badge b-has ar">'+esc(status)+'</span></div>'+
+  '</div>';
 }
+
 function renderArchive(){
   var el=document.getElementById('archive-content');if(!el)return;
   var df=(document.getElementById('arch-date')||{}).value||'';
@@ -639,8 +1038,8 @@ function renderArchive(){
   var dates=Object.keys(by).sort(function(a,b){return a<b?1:-1;});
   var head='<div class="kgrid" style="grid-template-columns:1fr 1fr;margin-bottom:14px"><div class="kcard" style="text-align:center"><div class="kv">'+list.length+'</div><div class="kl">Visits</div></div><div class="kcard k-gold" style="text-align:center"><div class="kv" style="color:var(--amb)">'+dates.length+'</div><div class="kl">Days</div></div></div>';
   var h=dates.map(function(d){
-    var items=by[d].sort(function(a,b){return txt(b['الوقت']).localeCompare(txt(a['الوقت']));});
-    return '<div style="margin-bottom:16px"><div class="daybar"><span>'+prettyDate(d)+'</span><span class="c">'+items.length+'</span></div>'+items.map(archCard).join('')+'</div>';
+    var items=by[d].sort(function(a,b){return fmtTime(b['الوقت']).localeCompare(fmtTime(a['الوقت']));});
+    return '<div style="margin-bottom:16px"><div class="daybar"><span>'+prettyDate(d)+'</span><span class="c">'+items.length+' visits</span></div><div class="aday-grid">'+items.map(archCard).join('')+'</div></div>';
   }).join('');
   el.innerHTML=head+h;
 }
@@ -693,15 +1092,6 @@ function renderAnalytics(){
   document.getElementById('an-type').innerHTML=countBars(lastType,TYPE_LABELS,['فيلا','عمارة','تجاري','حكومي','صناعي']);
 
   // last visit & class per client
-  var last={},cls={};
-  V.forEach(function(v){var c=txt(v['العميل']);if(!c)return;var d=dstr(v['التاريخ']);if(!last[c]||d>last[c]){last[c]=d;cls[c]=txt(v['تصنيف العميل']);}});
-  var forgot=Object.keys(last).filter(function(c){var k=cls[c];return (k==='active'||k==='strategic')&&daysSince(last[c])>30;}).map(function(c){return [c,daysSince(last[c]),cls[c]];}).sort(function(a,b){return b[1]-a[1];});
-
-  // KPI cards (مبسّطة — بلا قمع مبيعات مربك)
-  document.getElementById('an-kpi').innerHTML=
-    '<div class="kcard"><div class="ki">📍</div><div class="kv">'+V.length+'</div><div class="kl">Total visits <small class="sub ar">إجمالي الزيارات</small></div></div>'+
-    '<div class="kcard k-green"><div class="ki">📈</div><div class="kv">'+convRate+'%</div><div class="kl">Conversion <small class="sub ar">معدل التحويل</small></div><div class="kx">'+conv+' of '+V.length+' led to a quote</div></div>'+
-    '<div class="kcard k-red"><div class="ki">⚠</div><div class="kv">'+forgot.length+'</div><div class="kl">Forgotten <small class="sub ar">عملاء منسيون</small></div></div>';
 
   // conversion per rep (+ توضيح المقصود بـ"تحويل")
   document.getElementById('an-conv').innerHTML='<div style="font-size:10.5px;color:var(--mut);margin-bottom:10px" class="ar">نسبة الزيارات التي انتهت بعرض سعر أو رقم عرض</div>'+REPS.map(function(r){
@@ -709,58 +1099,80 @@ function renderAnalytics(){
     return '<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px"><span><b>'+esc(repEN(r))+'</b></span><span style="font-weight:800">'+pct+'% <span style="color:var(--mut);font-weight:600">('+cc+'/'+rv.length+')</span></span></div><div style="height:9px;background:var(--ln2);border-radius:6px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--green)"></div></div></div>';
   }).join('')||'<div class="empty" style="padding:14px">No data</div>';
 
-  // ===== خريطة الحي ← المنطقة الفرعية الحقيقية (نفس تجميع تطبيق المندوب) =====
-  var HOOD_SUBREGION={};
-  [['شمال الرياض',['الملقا','النرجس','العارض','الياسمين','الصحافة','العقيق','القيروان','حطين','الربيع','الغدير','الندى','النفل','الوادي','الفلاح','بنبان','النخيل','المصيف','المروج','الازدهار','الواحة','المرسلات','الورود','الرائد','السفارات']],
-   ['شرق الرياض',['الرمال','اليرموك','النهضة','إشبيلية','الخليج','قرطبة','الحمراء','غرناطة','الروضة','الريان','السلي','النسيم','القدس','النظيم','المغرزات','الجزيرة','الرواد','الربوة','الشهداء','المونسية','القادسية','السلام','الأندلس','الروابي']],
-   ['جنوب الرياض',['الشفا','العزيزية','منفوحة','بدر','عكاظ','الحزم','الدار البيضاء','المصانع','طيبة','الفيصلية','الحائر','أحد','عريض','أم سليم','غبيراء','الفواز']],
-   ['غرب الرياض',['السويدي','البديعة','ظهرة البديعة','عرقة','لبن','العريجاء','جامعة الملك سعود','شبرا','طويق','نمار','المهدية','ديراب','العوالي','وادي لبن','الدرعية']],
-   ['وسط الرياض',['المربع','المرقب','البطحاء','الديرة','الصالحية','الملز','الفاخرية','الوزارات','الخالدية','العود','الشميسي']]
-  ].forEach(function(pair){pair[1].forEach(function(h){HOOD_SUBREGION[h]=pair[0];});});
-  var SUBREGION_ORDER=['شمال الرياض','شرق الرياض','جنوب الرياض','غرب الرياض','وسط الرياض'];
-  function resolveSubregion(hoodRaw){
-    if(!hoodRaw)return {sub:'غير محدَّد',specific:null};
-    if(SUBREGION_ORDER.indexOf(hoodRaw)>-1)return {sub:hoodRaw,specific:null}; // كتب المندوب المنطقة العامة مباشرة
-    if(HOOD_SUBREGION[hoodRaw])return {sub:HOOD_SUBREGION[hoodRaw],specific:hoodRaw}; // حي محدّد معروف
-    return {sub:'غير مصنَّف',specific:hoodRaw}; // حي غير موجود في القائمة (بيانات قديمة حرة)
-  }
-
-  // area coverage: region -> المنطقة الفرعية الحقيقية -> حي محدّد (إن وُجد) -> reps
-  var reg={};
+  // area coverage: أشرطة مضغوطة (٥ مناطق فقط) + توصيات تلقائية + تفاصيل الأحياء اختيارية
+  var cross={};
   V.forEach(function(v){
-    var mnt=txt(v['المنطقة'])||'—';
-    var rp=repEN(txt(v['المندوب']));
+    var rp=txt(v['المندوب']);
     var res=resolveSubregion(txt(v['الحي']));
-    reg[mnt]=reg[mnt]||{total:0,subs:{}};
-    reg[mnt].total++;
-    var sr=reg[mnt].subs[res.sub]=reg[mnt].subs[res.sub]||{total:0,reps:{},hoods:{}};
+    var sr=cross[res.sub]=cross[res.sub]||{total:0,reps:{},hoods:{}};
     sr.total++; sr.reps[rp]=(sr.reps[rp]||0)+1;
-    if(res.specific){var hd=sr.hoods[res.specific]=sr.hoods[res.specific]||{total:0,reps:{}};hd.total++;hd.reps[rp]=(hd.reps[rp]||0)+1;}
+    if(res.specific){
+      var hd=sr.hoods[res.specific]=sr.hoods[res.specific]||{total:0,reps:{}};
+      hd.total++; hd.reps[rp]=(hd.reps[rp]||0)+1;
+    }
   });
-  var regList=Object.keys(reg).sort(function(a,b){return reg[b].total-reg[a].total;});
-  document.getElementById('an-area').innerHTML=regList.length?('<div style="font-size:10.5px;color:var(--mut);margin-bottom:6px" class="ar">اضغط أي منطقة لعرض الأحياء · مجمّعة جغرافيًا حسب المنطقة الفرعية الحقيقية</div>'+regList.map(function(m,i){
-    var subKeys=Object.keys(reg[m].subs).sort(function(a,b){
-      if(a==='غير محدَّد'||a==='غير مصنَّف')return 1; if(b==='غير محدَّد'||b==='غير مصنَّف')return -1;
-      return reg[m].subs[b].total-reg[m].subs[a].total;
-    });
-    var rowsHtml=subKeys.map(function(sk){
-      var sr=reg[m].subs[sk];
-      var repSplit=Object.keys(sr.reps).sort(function(a,b){return sr.reps[b]-sr.reps[a];}).map(function(r){return r+' ('+sr.reps[r]+')';}).join('، ');
-      var isUnk=(sk==='غير محدَّد'||sk==='غير مصنَّف');
-      var groupRow='<div class="area-row grp'+(isUnk?' dim':'')+'"><span class="an ar">'+esc(sk)+'</span><span class="ar-reps ar">'+esc(repSplit)+'</span><span class="ar-n">'+sr.total+'</span></div>';
-      var hoodKeys=Object.keys(sr.hoods).sort(function(a,b){return sr.hoods[b].total-sr.hoods[a].total;});
-      var leafRows=hoodKeys.map(function(h){
-        var hd=sr.hoods[h];var who=Object.keys(hd.reps).sort(function(a,b){return hd.reps[b]-hd.reps[a];}).map(function(r){return r+' ('+hd.reps[r]+')';}).join('، ');
-        return '<div class="area-row leaf"><span class="an ar">'+esc(h)+'</span><span class="ar-reps ar">'+esc(who)+'</span><span class="ar-n">'+hd.total+'</span></div>';
-      }).join('');
-      return groupRow+leafRows;
+  var subKeys=Object.keys(cross).sort(function(a,b){
+    if(a==='غير محدَّد'||a==='غير مصنَّف')return 1; if(b==='غير محدَّد'||b==='غير مصنَّف')return -1;
+    return cross[b].total-cross[a].total;
+  });
+  var maxTotal=Math.max.apply(null,subKeys.map(function(k){return cross[k].total;}).concat([1]));
+  var repColors={};repColors[REPS[0]]='var(--navy)';repColors[REPS[1]]='var(--gold-2)';
+  var barsHtml=subKeys.map(function(sk){
+    var sr=cross[sk];
+    var isUnk=(sk==='غير محدَّد'||sk==='غير مصنَّف');
+    var widthPct=Math.round(sr.total/maxTotal*100);
+    var segs=REPS.map(function(r){
+      var n=sr.reps[r]||0,segPct=sr.total?Math.round(n/sr.total*100):0;
+      return segPct?'<div style="width:'+segPct+'%;background:'+repColors[r]+'" title="'+esc(repEN(r))+': '+n+'"></div>':'';
     }).join('');
-    return '<details'+(i===0?' open':'')+' style="margin-bottom:4px"><summary style="cursor:pointer;font-weight:800;color:var(--navy);padding:7px 0;display:flex;justify-content:space-between;align-items:center;list-style:none;border-bottom:2px solid var(--ln)"><span class="ar">▸ '+esc(m)+'</span><span class="badge b-has">'+reg[m].total+'</span></summary>'+
-      rowsHtml+'</details>';
-  }).join('')):'<div class="empty" style="padding:14px">No data</div>';
+    var repLine=REPS.map(function(r){return (sr.reps[r]||0)?('<span style="color:'+repColors[r]+'">'+esc(repEN(r))+' '+sr.reps[r]+'</span>'):'';}).filter(Boolean).join(' · ');
+    var hoodKeys=Object.keys(sr.hoods).sort(function(a,b){return sr.hoods[b].total-sr.hoods[a].total;});
+    var hoodsDetail=hoodKeys.length?('<details style="margin-top:4px"><summary class="ar" style="font-size:10px;color:var(--mut);cursor:pointer">تفاصيل الأحياء ('+hoodKeys.length+')</summary>'+
+      hoodKeys.map(function(h){var hd=sr.hoods[h];var who=REPS.map(function(r){return (hd.reps[r]||0)?(repEN(r)+' '+hd.reps[r]):'';}).filter(Boolean).join(' · ');
+        return '<div style="display:flex;justify-content:space-between;font-size:10.5px;padding:3px 0 3px 10px;border-top:1px dashed var(--ln2)"><span class="ar">'+esc(h)+'</span><span style="color:var(--mut)">'+hd.total+' · '+esc(who)+'</span></div>';
+      }).join('')+'</details>'):'';
+    return '<div style="margin-bottom:11px'+(isUnk?';opacity:.6':'')+'"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px" class="ar"><b style="color:var(--navy)">'+esc(sk)+'</b><span>'+sr.total+'</span></div>'+
+      '<div style="height:14px;background:var(--ln2);border-radius:7px;overflow:hidden;display:flex;width:'+Math.max(widthPct,8)+'%">'+segs+'</div>'+
+      '<div style="font-size:10px;margin-top:2px" class="ar">'+repLine+'</div>'+hoodsDetail+'</div>';
+  }).join('');
 
-  // forgotten list
-  document.getElementById('an-forgot').innerHTML=forgot.length?forgot.slice(0,10).map(function(f){return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--ln2)"><div><div class="ar" style="font-size:13px;font-weight:700">'+esc(f[0])+'</div><div style="font-size:10px;color:var(--mut)">'+esc(f[2])+' · last '+last[f[0]]+'</div></div><span class="badge" style="background:var(--red-l);color:var(--red)">'+f[1]+'d</span></div>';}).join(''):'<div class="empty" style="padding:14px">✅ None</div>';
+  // توصيات تلقائية على التغطية — مُقسَّمة لكل مندوب على حدة
+  var covInsByRep={};REPS.forEach(function(r){covInsByRep[r]=[];});
+  var mainSubs=['شمال الرياض','شرق الرياض','جنوب الرياض','غرب الرياض','وسط الرياض'];
+  REPS.forEach(function(r){
+    var covered=mainSubs.filter(function(s){return cross[s]&&(cross[s].reps[r]||0)>0;});
+    var missing=mainSubs.filter(function(s){return covered.indexOf(s)===-1;});
+    if(missing.length>=3)covInsByRep[r].push('⚠️ لم يزر بعد: '+missing.map(esc).join('، ')+'.');
+  });
+  mainSubs.forEach(function(s){
+    if(!cross[s])return;
+    var zeros=REPS.filter(function(r){return !(cross[s].reps[r]||0);});
+    if(zeros.length===1&&REPS.length===2){
+      var active=REPS.filter(function(r){return r!==zeros[0];})[0];
+      covInsByRep[zeros[0]].push('🔹 <b>'+esc(s)+'</b>: يغطّيها <b>'+esc(repEN(active))+'</b> فقط ('+cross[s].total+' زيارة) — فرصة لتعزيز تواجدك هناك.');
+    }
+  });
+  // اختلال التوزيع: مندوب يغطّي كل المناطق اسميًا لكن جهده مركَّز بشدّة فى منطقة واحدة
+  REPS.forEach(function(r){
+    var repTotal=mainSubs.reduce(function(s,sub){return s+(cross[sub]?(cross[sub].reps[r]||0):0);},0);
+    if(!repTotal)return;
+    mainSubs.forEach(function(s){
+      var n=cross[s]?(cross[s].reps[r]||0):0;
+      var pct=Math.round(n/repTotal*100);
+      if(pct>=40&&n>=5)covInsByRep[r].push('⚖️ <b>'+pct+'٪</b> من زياراتك مركَّزة فى <b>'+esc(s)+'</b> ('+n+' زيارة) — تنويع تغطيتك على باقي المناطق قد يفتح فرصًا جديدة.');
+    });
+  });
+  var anyIns=REPS.some(function(r){return covInsByRep[r].length;});
+  var recsHtml=anyIns?('<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--ln)"><div style="font-weight:800;color:var(--navy);font-size:12px;margin-bottom:8px" class="ar">💡 توصيات التغطية</div>'+
+    '<div class="g2">'+REPS.map(function(r){
+      var abd=String(r).indexOf('عبدالرزاق')===0;
+      var list=covInsByRep[r].length?covInsByRep[r].map(function(i){return '<div class="ar" style="font-size:11.5px;padding:5px 0;line-height:1.6;border-bottom:1px solid var(--ln2)">'+i+'</div>';}).join(''):'<div class="empty" style="padding:10px;font-size:11.5px">✅ لا فجوات لافتة</div>';
+      return '<div style="border-top:3px solid '+(abd?'var(--gold)':'var(--navy)')+';padding-top:8px"><div style="font-weight:800;color:var(--navy);font-size:12px;margin-bottom:4px" class="ar">'+esc(repEN(r))+'</div>'+list+'</div>';
+    }).join('')+'</div></div>'):'';
+
+  document.getElementById('an-area').innerHTML=
+    '<div style="font-size:10.5px;color:var(--mut);margin-bottom:10px" class="ar">مقارنة مباشرة بين المناديب — طول الشريط يعكس عدد الزيارات، ولونه يعكس المندوب</div>'+
+    barsHtml+recsHtml;
 }
 
 document.getElementById('pin').focus();
