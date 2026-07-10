@@ -1117,9 +1117,10 @@ function loadCloud(){
 
 // ===== SUBMIT =====
 function doSubmit(){
-  var tv=visits.filter(function(v){return v.date===today();});
-  var tr=requests.filter(function(r){return r.date===today();});
-  if(!tv.length&&!tr.length){toast('لا يوجد ما تُرسله');return;}
+  // فقط زيارات/طلبات اليوم التي لم تُرسَل بنجاح من قبل — يمنع تكرار الإرسال عند الضغط مرتين أو الإرسال لاحقًا فى نفس اليوم
+  var tv=visits.filter(function(v){return v.date===today()&&!v.sent;});
+  var tr=requests.filter(function(r){return r.date===today()&&!r.sent;});
+  if(!tv.length&&!tr.length){toast('لا يوجد جديد لإرساله — كل شيء مُرسَل بالفعل');return;}
   var payload={type:'report',repName:REP_NAME,date:today(),
     todayVisits:tv.length,existingVisits:tv.filter(function(v){return v.type!=='New';}).length,
     newVisits:tv.filter(function(v){return v.type==='New';}).length,
@@ -1127,7 +1128,14 @@ function doSubmit(){
     score:tv.reduce(function(s,v){return s+visitPoints(v);},0),
     newClientsThisMonth:0,opportunitiesThisMonth:0,quotesThisMonth:0,productRequestsToday:tr.length,
     visits:tv,requests:tr.map(function(r){return {time:r.time,client:r.client,products:r.products,notes:r.notes};})};
-  fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload)}).then(function(){toast('☁ تم الإرسال');setTimeout(loadCloud,1500);}).catch(function(){toast('☁ تم الإرسال');setTimeout(loadCloud,1500);});
+  var sentIds={};tv.forEach(function(v){sentIds[v.id]=1;});
+  var sentReqIds={};tr.forEach(function(r){sentReqIds[r.id]=1;});
+  function markSent(){
+    visits.forEach(function(v){if(sentIds[v.id])v.sent=true;});
+    requests.forEach(function(r){if(sentReqIds[r.id])r.sent=true;});
+    save('visits',visits);save('requests',requests);
+  }
+  fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload)}).then(function(){markSent();toast('☁ تم الإرسال');setTimeout(loadCloud,1500);}).catch(function(){markSent();toast('☁ تم الإرسال');setTimeout(loadCloud,1500);});
 }
 
 // ===== INIT =====
