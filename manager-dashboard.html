@@ -436,7 +436,7 @@ var _vf='all', _arch='all';
 
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 function num(v){return Number(String(v==null?'':v).replace(/,/g,''))||0;}
-function txt(v){return v==null?'':String(v);}
+function txt(v){return v==null?'':String(v).trim();}
 // جوجل شيت أحيانًا يُرجع خلايا "الوقت الصِرف" كتاريخ ISO كامل بأساس 1899-12-30 (خلل معروف فى Apps Script) — هذا يستخرج الوقت الحقيقي فقط
 function fmtTime(raw){
   var s=txt(raw);if(!s)return '';

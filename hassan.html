@@ -587,7 +587,7 @@ var _cf='all', _sort='last', _calDate=new Date(Date.now()+180*60000);
 function load(k,d){try{var v=JSON.parse(localStorage.getItem(PREFIX+k)||'null');return v==null?d:v;}catch(e){return d;}}
 function save(k,v){try{localStorage.setItem(PREFIX+k,JSON.stringify(v));}catch(e){}}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
-function txt(v){return v==null?'':String(v);}
+function txt(v){return v==null?'':String(v).trim();}
 function val(id){var e=document.getElementById(id);return e?e.value.trim():'';}
 function today(){return new Date(Date.now()+180*60000).toISOString().slice(0,10);}
 function nowTime(){return new Date(Date.now()+180*60000).toISOString().slice(11,16);}
@@ -631,7 +631,7 @@ function clientsData(){
     var o=m[c]=m[c]||{name:c,count:0,last:'',size:'',type:'',nextDate:'',nextAction:''};
     o.count++;
     var d=dstr(v.date);
-    if(d>=o.last){o.last=d;if(v.clientSize)o.size=v.clientSize;if(v.type)o.type=v.type;}
+    if(d>=o.last){o.last=d;if(v.clientSize)o.size=v.clientSize;if(v.type)o.type=v.type;if(v.region)o.region=v.region;if(v.hood)o.hood=v.hood;}
     var nd=dstr(v.nextDate);if(nd&&(!o.nextDate||nd<o.nextDate)&&txt(v.nextAction)&&v.nextAction!=='لا توجد متابعة'){o.nextDate=nd;o.nextAction=v.nextAction;}
   });
   return Object.keys(m).map(function(k){return m[k];});
@@ -1052,9 +1052,11 @@ function quickVisit(name){
   setType('Existing');
   document.getElementById('f-client').value=name;
   document.getElementById('f-size').value=(c&&c.size)?c.size:'';
+  document.getElementById('f-region').value=(c&&c.region)?c.region:'الرياض';
+  if(c&&c.hood)document.getElementById('f-hood').value=c.hood;
   if(c&&c.size==='prospect')document.getElementById('interest-wrap').style.display='block';
   getLoc();
-  wizGoto(3); // القفز مباشرة لخطوة "هدف الزيارة" — الاسم والتصنيف جاهزان بالفعل
+  wizGoto(3); // القفز مباشرة لخطوة "هدف الزيارة" — الاسم والتصنيف والمنطقة جاهزة بالفعل
 }
 function clientDetail(name){
   var vs=allVisits().filter(function(v){return txt(v.client)===name;}).sort(function(a,b){return (b.date+b.time).localeCompare(a.date+a.time);});
