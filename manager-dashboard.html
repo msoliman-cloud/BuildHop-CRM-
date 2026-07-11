@@ -246,7 +246,10 @@
       <div class="page active" id="p-overview">
         <div class="ph"><h2>Rep Performance & Analytics</h2><p class="ar">أداء المناديب والتحليلات · <span id="ov-date"></span></p></div>
 
-        <!-- ===== 1) TODAY'S PULSE (moved first, per request) ===== -->
+        <!-- ===== 1) REP CARDS ===== -->
+        <div class="rep-grid" id="reps-grid" style="margin-bottom:18px"><div class="spin"></div></div>
+
+        <!-- ===== 2) TODAY'S PULSE ===== -->
         <div class="kgrid" style="grid-template-columns:repeat(2,1fr)">
           <div class="kcard"><div class="ki">📍</div><div class="kv" id="k-v">—</div><div class="kl">Visits today <small class="sub ar">زيارات اليوم</small></div><div class="kx">Abdulrazak <b id="k-va">—</b> · Hassan <b id="k-vh">—</b></div></div>
           <div class="kcard k-gold"><div class="ki">⭐</div><div class="kv" id="k-score">—</div><div class="kl">Points today <small class="sub ar">نقاط اليوم</small></div><div class="kx">A <b id="k-sa">—</b> · H <b id="k-sh">—</b></div></div>
@@ -259,9 +262,8 @@
           <div class="card"><div class="shdr">🏆 Leaderboard <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">لوحة الصدارة</span></div><div id="ov-leader"></div></div>
           <div class="card"><div class="shdr">Visits trend · last 14 days <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">اتجاه الزيارات</span></div><div id="ov-trend"></div></div>
         </div>
-        <div class="card"><div class="shdr">Smart insights <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">توصيات</span></div><div id="ov-insights"><div class="empty" style="padding:14px">Refresh to load</div></div></div>
 
-        <!-- ===== 2) PERIOD SUMMARY ===== -->
+        <!-- ===== 3) PERIOD SUMMARY (moved before Smart Insights, per request) ===== -->
         <div class="card">
           <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
             <div class="shdr" style="margin-bottom:0">📊 Period summary <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">تلخيص زيارات المندوب خلال الفترة</span></div>
@@ -286,17 +288,17 @@
           <div id="rp-summary"><div class="spin"></div></div>
         </div>
 
-        <!-- ===== 3) REP CARDS (moved third, per request) ===== -->
-        <div class="rep-grid" id="reps-grid" style="margin-bottom:18px"><div class="spin"></div></div>
+        <!-- ===== 4) SMART INSIGHTS (own section, English) ===== -->
+        <div class="card"><div class="shdr">Smart insights <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">توصيات</span></div><div id="ov-insights"><div class="empty" style="padding:14px">Refresh to load</div></div></div>
 
-        <!-- ===== 3b) SEPARATED SUB-SECTIONS with proper headlines, each 2-column per rep ===== -->
+        <!-- ===== 5) MOST VISITED CLIENTS + roles + latest ===== -->
         <div class="card"><div class="shdr">🏆 Most visited clients <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">أكثر العملاء زيارةً</span></div><div id="rep-topclients"><div class="spin"></div></div></div>
         <div class="card"><div class="shdr">👤 Contact role breakdown <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">تصنيف جهات الاتصال (عملاء جدد)</span></div><div id="rep-roles"><div class="spin"></div></div></div>
         <div class="card"><div class="shdr">📍 Latest visits <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">أحدث الزيارات</span></div><div id="rep-latest"><div class="spin"></div></div></div>
 
-        <!-- ===== 4) CLIENT DIRECTORY MIX (new — replaces low-value Forgotten card) ===== -->
+        <!-- ===== 6) CLIENT DIRECTORY MIX / UNVISITED / QUALITY ===== -->
         <div class="card">
-          <div class="shdr">📇 Client mix per rep <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">نسبة زيارات العملاء (حاليين / محتملين / جدد) — من قائمة العملاء الكاملة</span></div>
+          <div class="shdr">📇 Client mix per rep <span style="font-weight:600;font-size:11px;color:var(--mut)">Share of client visits (existing / prospect / new) — from the full client list</span></div>
           <div id="an-clientmix"><div class="spin"></div></div>
         </div>
         <div class="card">
@@ -304,11 +306,11 @@
           <div id="an-unvisited"><div class="spin"></div></div>
         </div>
         <div class="card">
-          <div class="shdr">📋 Field log quality <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">جودة تعبئة بيانات الزيارة — مؤشر استخدام التقنية</span></div>
+          <div class="shdr">📋 Field log quality <span style="font-weight:600;font-size:11px;color:var(--mut)">Visit data completeness — a technology-adoption indicator</span></div>
           <div id="an-quality"><div class="spin"></div></div>
         </div>
 
-        <!-- ===== 5) ANALYTICS (from Analytics page) ===== -->
+        <!-- ===== 7) ANALYTICS ===== -->
         <div class="ph" style="margin-top:26px;margin-bottom:14px;padding-top:18px;border-top:1px solid var(--ln)"><h2 style="font-size:17px">📈 Analytics</h2><p class="ar">تحليلات السوق والتغطية</p></div>
         <div class="g3" style="margin-bottom:18px">
           <div class="card"><div class="shdr">🏗️ Project stages <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">مراحل المشاريع</span></div><div id="an-stage"><div class="spin"></div></div></div>
@@ -415,6 +417,17 @@ function clientStatusFor(rep,name){
   return null;
 }
 // ===== خريطة الحي ← المنطقة الفرعية الحقيقية (نفس تجميع تطبيق المندوب) — عامة لتُستخدم فى أكثر من تحليل =====
+var PURPOSE_EN={'متابعة عرض سعر':'Quote follow-up','متابعة أمر شراء':'Purchase-order follow-up','متابعة التوريد':'Delivery follow-up','متابعة تحصيل':'Collection follow-up','تحصيل دفعة':'Payment collection','شكوى أو مشكلة':'Complaint / issue','فرصة جديدة':'New opportunity','علاقة ومتابعة':'Relationship & follow-up','دعم فني':'Technical support','تسليم عينة':'Sample delivery','تنشيط':'Reactivation','أخرى':'Other','متابعه':'Follow-up','متابعة':'Follow-up','تعريف':'Introduction'};
+function purposeEN(p){return PURPOSE_EN[p]||p;}
+var SUB_EN_G={'شمال الرياض':'North Riyadh','شرق الرياض':'East Riyadh','جنوب الرياض':'South Riyadh','غرب الرياض':'West Riyadh','وسط الرياض':'Central Riyadh','غير محدَّد':'Unspecified','غير مصنَّف':'Unclassified'};
+var HOOD_EN={
+  'الملقا':'Al-Malqa','النرجس':'Al-Narjis','العارض':'Al-Arid','الياسمين':'Al-Yasmin','الصحافة':'Al-Sahafah','العقيق':'Al-Aqiq','القيروان':'Al-Qirawan','حطين':'Hittin','الربيع':'Al-Rabie','الغدير':'Al-Ghadir','الندى':'Al-Nada','النفل':'Al-Nafl','الوادي':'Al-Wadi','الفلاح':'Al-Falah','بنبان':'Banban','النخيل':'Al-Nakheel','المصيف':'Al-Masif','المروج':'Al-Muruj','الازدهار':'Al-Izdihar','الواحة':'Al-Waha','المرسلات':'Al-Mursalat','الورود':'Al-Wurud','الرائد':'Al-Raed','السفارات':'Al-Safarat',
+  'الرمال':'Al-Rimal','اليرموك':'Al-Yarmouk','النهضة':'Al-Nahda','إشبيلية':'Ishbiliyah','الخليج':'Al-Khaleej','قرطبة':'Qurtubah','الحمراء':'Al-Hamra','غرناطة':'Gharnatah','الروضة':'Al-Rawdah','الريان':'Al-Rayyan','السلي':'Al-Sulay','النسيم':'Al-Naseem','القدس':'Al-Quds','النظيم':'Al-Nadheem','المغرزات':'Al-Mughrizat','الجزيرة':'Al-Jazirah','الرواد':'Al-Ruwwad','الربوة':'Al-Rabwah','الشهداء':'Al-Shuhada','المونسية':'Al-Munisiyah','القادسية':'Al-Qadisiyah','السلام':'Al-Salam','الأندلس':'Al-Andalus','الروابي':'Al-Rawabi',
+  'الشفا':'Al-Shifa','العزيزية':'Al-Aziziyah','منفوحة':'Manfouha','بدر':'Badr','عكاظ':'Okaz','الحزم':'Al-Hazm','الدار البيضاء':'Al-Dar Al-Baida','المصانع':'Al-Masani','طيبة':'Taibah','الفيصلية':'Al-Faisaliyah','الحائر':'Al-Hair','أحد':'Uhud','عريض':'Oraid','أم سليم':'Umm Saleem','غبيراء':'Ghubairaa','الفواز':'Al-Fawwaz',
+  'السويدي':'Al-Suwaidi','البديعة':'Al-Badiah','ظهرة البديعة':'Dhahrat Al-Badiah','عرقة':'Irqah','لبن':'Laban','العريجاء':'Al-Uraija','جامعة الملك سعود':'King Saud University','شبرا':'Shubra','طويق':'Tuwaiq','نمار':'Nimar','المهدية':'Al-Mahdiyah','ديراب':'Dirab','العوالي':'Al-Awali','وادي لبن':'Wadi Laban','الدرعية':'Diriyah',
+  'المربع':'Al-Murabba','المرقب':'Al-Marqab','البطحاء':'Al-Batha','الديرة':'Al-Dirah','الصالحية':'Al-Salhiyah','الملز':'Al-Malaz','الفاخرية':'Al-Fakhriyah','الوزارات':'Al-Wizarat','الخالدية':'Al-Khalidiyah','العود':'Al-Ood','الشميسي':'Al-Shemaisi'
+};
+function hoodEN(h){return HOOD_EN[h]||h;} // يعود للاسم العربي الأصلي إن لم يكن ضمن القائمة (نص حر قديم)
 var HOOD_SUBREGION={};
 [['شمال الرياض',['الملقا','النرجس','العارض','الياسمين','الصحافة','العقيق','القيروان','حطين','الربيع','الغدير','الندى','النفل','الوادي','الفلاح','بنبان','النخيل','المصيف','المروج','الازدهار','الواحة','المرسلات','الورود','الرائد','السفارات']],
  ['شرق الرياض',['الرمال','اليرموك','النهضة','إشبيلية','الخليج','قرطبة','الحمراء','غرناطة','الروضة','الريان','السلي','النسيم','القدس','النظيم','المغرزات','الجزيرة','الرواد','الربوة','الشهداء','المونسية','القادسية','السلام','الأندلس','الروابي']],
@@ -572,14 +585,14 @@ function renderClientMix(){
     });
     var total=rv.length||1;
     var abd=String(r).indexOf('عبدالرزاق')===0;
-    var rows=[['existing','🟢 عملاء حاليون (من القائمة)','var(--green)'],['prospect','🎯 عملاء محتملون (من القائمة)','var(--pu)'],['new','✨ عملاء جدد (أُضيفوا حديثًا)','var(--gold-2)'],['unlisted','❔ غير مصنَّف','var(--mut)']]
+    var rows=[['existing','🟢 Existing clients (from list)','var(--green)'],['prospect','🎯 Prospect clients (from list)','var(--pu)'],['new','✨ New clients (recently added)','var(--gold-2)'],['unlisted','❔ Unclassified','var(--mut)']]
       .filter(function(row){return buckets[row[0]]>0;})
       .map(function(row){
         var n=buckets[row[0]],pct=Math.round(n/total*100);
-        return '<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:3px" class="ar"><span>'+row[1]+'</span><b>'+n+' ('+pct+'%)</b></div><div style="height:7px;background:var(--ln2);border-radius:5px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:'+row[2]+';border-radius:5px"></div></div></div>';
+        return '<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:3px"><span>'+row[1]+'</span><b>'+n+' ('+pct+'%)</b></div><div style="height:7px;background:var(--ln2);border-radius:5px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:'+row[2]+';border-radius:5px"></div></div></div>';
       }).join('');
     return '<div class="card" style="border-top:3px solid '+(abd?'var(--gold)':'var(--navy)')+';margin-bottom:0">'+
-      '<div style="font-weight:800;color:var(--navy);font-size:13px;margin-bottom:10px" class="ar">'+esc(repEN(r))+' <span style="font-weight:600;color:var(--mut);font-size:11px">('+rv.length+' زيارة)</span></div>'+
+      '<div style="font-weight:800;color:var(--navy);font-size:13px;margin-bottom:10px">'+esc(repEN(r))+' <span style="font-weight:600;color:var(--mut);font-size:11px">('+rv.length+' visits)</span></div>'+
       (rows||'<div class="empty" style="padding:14px">لا بيانات</div>')+
     '</div>';
   }).join('')+'</div>';
@@ -602,40 +615,40 @@ function renderInsights(){
   }
   var a=stats(r1),b=stats(r2);
   var insByRep={};REPS.forEach(function(r){insByRep[r]=[];});
-  // فجوة معدل التحويل — للمتأخّر: توصية تحسين، للمتقدّم: إشادة
+  // conversion-rate gap — praise the leader, coach the laggard
   if(Math.abs(a.conv-b.conv)>=15){
     var hi=a.conv>b.conv?a:b, lo=a.conv>b.conv?b:a;
-    insByRep[hi.r].push('📈 معدل تحويلك ('+hi.conv+'٪) هو الأعلى بين الفريق — استمر.');
-    insByRep[lo.r].push('📉 معدل تحويلك ('+lo.conv+'٪) أقل من زميلك ('+hi.conv+'٪) — راجع أسلوبك في إغلاق الزيارات بعرض سعر.');
+    insByRep[hi.r].push('📈 Your conversion rate is '+hi.conv+'% — the highest on the team, keep it up.');
+    insByRep[lo.r].push('📉 Your conversion rate is '+lo.conv+'%, below your teammate\'s '+hi.conv+'% — review how you close visits with a quote.');
   }
-  // فجوة التغطية الجغرافية
+  // geographic coverage gap
   if(a.areas!==b.areas){
     var wide=a.areas>b.areas?a:b, narrow=a.areas>b.areas?b:a;
-    insByRep[wide.r].push('🗺️ تغطّي '+wide.areas+' مناطق فرعية — أوسع انتشار في الفريق.');
-    insByRep[narrow.r].push('🗺️ تغطّي '+narrow.areas+' مناطق فقط (زميلك يغطّي '+wide.areas+') — قد تستفيد من توسيع نطاقك.');
+    insByRep[wide.r].push('🗺️ Your area coverage is '+wide.areas+' sub-regions — the widest spread on the team.');
+    insByRep[narrow.r].push('🗺️ Your area coverage is only '+narrow.areas+' area(s), versus '+wide.areas+' for your teammate — you may benefit from expanding your range.');
   }
-  // فجوة إنجاز قائمة العملاء
+  // client-directory completion gap
   if(a.dirTotal&&b.dirTotal&&Math.abs(a.dirPct-b.dirPct)>=10){
     var ahead=a.dirPct>b.dirPct?a:b, behind=a.dirPct>b.dirPct?b:a;
-    insByRep[ahead.r].push('📇 زرت '+ahead.dirPct+'٪ من قائمة عملائك المخصّصة.');
-    insByRep[behind.r].push('📇 زرت '+behind.dirPct+'٪ فقط من قائمتك ('+(100-behind.dirPct)+'٪ لم تُزَر بعد).');
+    insByRep[ahead.r].push('📇 Your client-list coverage is '+ahead.dirPct+'% of your assigned clients.');
+    insByRep[behind.r].push('📇 Your client-list coverage is only '+behind.dirPct+'% ('+(100-behind.dirPct)+'% of your list not yet visited).');
   }
-  // فجوة حجم الزيارات
+  // visit-volume gap
   if(a.visits&&b.visits&&Math.abs(a.visits-b.visits)/Math.max(a.visits,b.visits)>=0.3){
     var more=a.visits>b.visits?a:b, less=a.visits>b.visits?b:a;
-    insByRep[less.r].push('📍 سجّلت '+less.visits+' زيارة إجمالًا، زميلك سجّل '+more.visits+'.');
+    insByRep[less.r].push('📍 Your visit count is '+less.visits+' total, versus '+more.visits+' for your teammate.');
   }
-  // نمط عملاء جدد
+  // new-client focus pattern
   if(Math.abs(a.newPct-b.newPct)>=20){
     var newer=a.newPct>b.newPct?a:b;
-    insByRep[newer.r].push('✨ '+newer.newPct+'٪ من زياراتك لعملاء جدد — تركيز أعلى على الاستقطاب من زميلك.');
+    insByRep[newer.r].push('✨ Your new-client focus is '+newer.newPct+'% of visits — a stronger prospecting emphasis than your teammate.');
   }
   var anyIns=REPS.some(function(r){return insByRep[r].length;});
   el.innerHTML=anyIns?('<div class="g2">'+REPS.map(function(r){
     var abd=String(r).indexOf('عبدالرزاق')===0;
-    var list=insByRep[r].length?insByRep[r].map(function(i){return '<div class="ar" style="padding:6px 0;border-bottom:1px solid var(--ln2);font-size:12px;line-height:1.6">'+i+'</div>';}).join(''):'<div class="empty" style="padding:10px;font-size:11.5px">لا ملاحظات لافتة</div>';
-    return '<div style="border-top:3px solid '+(abd?'var(--gold)':'var(--navy)')+';padding-top:8px"><div style="font-weight:800;color:var(--navy);font-size:12.5px;margin-bottom:4px" class="ar">'+esc(repEN(r))+'</div>'+list+'</div>';
-  }).join('')+'</div>'):'<div class="empty" style="padding:14px">لا فروقات لافتة بين المندوبين حاليًا</div>';
+    var list=insByRep[r].length?insByRep[r].map(function(i){return '<div style="padding:6px 0;border-bottom:1px solid var(--ln2);font-size:12px;line-height:1.6">'+i+'</div>';}).join(''):'<div class="empty" style="padding:10px;font-size:11.5px">No notable findings</div>';
+    return '<div style="border-top:3px solid '+(abd?'var(--gold)':'var(--navy)')+';padding-top:8px"><div style="font-weight:800;color:var(--navy);font-size:12.5px;margin-bottom:4px">'+esc(repEN(r))+'</div>'+list+'</div>';
+  }).join('')+'</div>'):'<div class="empty" style="padding:14px">No notable differences between reps right now</div>';
 }
 
 function renderUnvisited(){
@@ -704,24 +717,24 @@ function renderQuality(){
   el.innerHTML='<div class="g2">'+REPS.map(function(r){
     var rv=repVisits(r),n=rv.length||1,abd=String(r).indexOf('عبدالرزاق')===0;
     var fields=[
-      ['📍','GPS pin','الإحداثيات',function(v){return !!txt(v['الإحداثيات']);}],
-      ['📞','Phone','الهاتف',function(v){return !!txt(v['الهاتف']);}],
-      ['👤','Contact name','جهة الاتصال',function(v){return !!txt(v['جهة الاتصال']);}],
-      ['🗓️','Follow-up date','تاريخ المتابعة',function(v){return !!txt(v['تاريخ المتابعة']);}]
+      ['📍','GPS pin',function(v){return !!txt(v['الإحداثيات']);}],
+      ['📞','Phone',function(v){return !!txt(v['الهاتف']);}],
+      ['👤','Contact name',function(v){return !!txt(v['جهة الاتصال']);}],
+      ['🗓️','Follow-up date',function(v){return !!txt(v['تاريخ المتابعة']);}]
     ];
-    var rates=fields.map(function(f){var c=rv.filter(f[3]).length;return {ic:f[0],en:f[1],ar:f[2],pct:Math.round(c/n*100)};});
+    var rates=fields.map(function(f){var c=rv.filter(f[2]).length;return {ic:f[0],en:f[1],pct:Math.round(c/n*100)};});
     var score=Math.round(rates.reduce(function(s,f){return s+f.pct;},0)/rates.length);
     var scoreColor=score>=60?'var(--green)':(score>=35?'var(--amb)':'var(--red)');
     var rows=rates.map(function(f){
       var barColor=f.pct>=60?'var(--green)':(f.pct>=30?'var(--gold-2)':'var(--red)');
-      return '<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px"><span>'+f.ic+' '+f.en+' <span class="ar" style="color:var(--mut);font-size:9.5px">('+f.ar+')</span></span><b>'+f.pct+'٪</b></div><div style="height:6px;background:var(--ln2);border-radius:4px;overflow:hidden"><div style="height:100%;width:'+f.pct+'%;background:'+barColor+';border-radius:4px"></div></div></div>';
+      return '<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px"><span>'+f.ic+' '+f.en+'</span><b>'+f.pct+'%</b></div><div style="height:6px;background:var(--ln2);border-radius:4px;overflow:hidden"><div style="height:100%;width:'+f.pct+'%;background:'+barColor+';border-radius:4px"></div></div></div>';
     }).join('');
     var weakest=rates.slice().sort(function(a,b){return a.pct-b.pct;})[0];
-    var finding=score<50?('⚠️ أضعف نقطة: <b>'+weakest.en+'</b> ('+weakest.pct+'٪ فقط) — يحتاج تذكير المندوب بتعبئتها في كل زيارة.'):'✅ مستوى تعبئة جيد بشكل عام.';
+    var finding=score<50?('⚠️ Weakest spot: <b>'+weakest.en+'</b> (only '+weakest.pct+'%) — remind the rep to fill it in on every visit.'):'✅ Overall data completeness is good.';
     return '<div class="card" style="border-top:3px solid '+(abd?'var(--gold)':'var(--navy)')+';margin-bottom:0">'+
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span style="font-weight:800;color:var(--navy);font-size:13px" class="ar">'+esc(repEN(r))+'</span><span style="font-weight:900;font-size:20px;color:'+scoreColor+'">'+score+'٪</span></div>'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span style="font-weight:800;color:var(--navy);font-size:13px">'+esc(repEN(r))+'</span><span style="font-weight:900;font-size:20px;color:'+scoreColor+'">'+score+'%</span></div>'+
       rows+
-      '<div class="ar" style="font-size:10.5px;color:var(--mut);margin-top:8px;padding-top:8px;border-top:1px dashed var(--ln2);line-height:1.6">'+finding+'</div>'+
+      '<div style="font-size:10.5px;color:var(--mut);margin-top:8px;padding-top:8px;border-top:1px dashed var(--ln2);line-height:1.6">'+finding+'</div>'+
     '</div>';
   }).join('')+'</div>';
 }
@@ -939,11 +952,13 @@ function renderRepSummary(){
     var nw=pv.filter(function(v){return txt(v['النوع'])==='New';}).length;
     var hoods={};pv.forEach(function(v){var h=txt(v['الحي'])||txt(v['المنطقة']);if(h)hoods[h]=1;});
     var purpose={};pv.forEach(function(v){var p=txt(v['هدف الزيارة']);if(p)purpose[p]=(purpose[p]||0)+1;});
-    var topPurpose=Object.keys(purpose).sort(function(a,b){return purpose[b]-purpose[a];}).slice(0,2).map(function(p){return p+' ('+purpose[p]+')';}).join('، ')||'—';
+    var purposeKeys=Object.keys(purpose).sort(function(a,b){return purpose[b]-purpose[a];});
+    var purposeDetail=purposeKeys.length?('<div style="margin-top:8px"><div style="font-size:10px;font-weight:700;color:var(--navy);margin-bottom:3px">Visit purposes</div>'+
+      purposeKeys.map(function(p){return '<div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--mut);padding:2px 0"><span>'+esc(purposeEN(p))+'</span><b style="color:var(--ink)">'+purpose[p]+'</b></div>';}).join('')+'</div>'):'<div style="font-size:11px;color:var(--mut);margin-top:8px">No visits in this period</div>';
     var abd=String(r).indexOf('عبدالرزاق')===0;
-    return '<div class="rcard '+(abd?'abd':'')+'" style="padding:14px"><div style="font-weight:800;color:var(--navy);margin-bottom:8px" class="ar">'+esc(repEN(r))+'</div>'+
+    return '<div class="rcard '+(abd?'abd':'')+'" style="padding:14px"><div style="font-weight:800;color:var(--navy);margin-bottom:8px">'+esc(repEN(r))+'</div>'+
       '<div class="rstats"><div class="rstat"><div class="n" style="color:var(--navy)">'+pv.length+'</div><div class="l">Visits</div></div><div class="rstat"><div class="n" style="color:var(--pu)">'+nw+'</div><div class="l">New</div></div><div class="rstat"><div class="n" style="color:var(--green)">'+Object.keys(hoods).length+'</div><div class="l">Areas</div></div></div>'+
-      '<div style="font-size:11px;color:var(--mut);margin-top:8px" class="ar">أبرز أهداف الزيارة: '+esc(topPurpose)+'</div></div>';
+      purposeDetail+'</div>';
   }).join('')+'</div>';
 }
 
@@ -1058,9 +1073,9 @@ function renderAnalytics(){
   var convRate=V.length?Math.round(conv/V.length*100):0;
 
   // آخر قيمة معروفة لكل عميل: المرحلة/النوع/الحجم (يمنع تضخيم الأرقام بتكرار زيارات نفس المشروع)
-  var STAGE_LABELS={'الأعمال التمهيدية':'🚜 الأعمال التمهيدية','الأعمال الإنشائية':'🏗️ الأعمال الإنشائية','أعمال المباني':'🧱 أعمال المباني','أعمال العزل':'🛡️ أعمال العزل','أعمال MEP':'⚡ أعمال MEP','التشطيبات':'🎨 التشطيبات'};
-  var TYPE_LABELS={'فيلا':'🏡 فيلا','عمارة':'🏢 عمارة','تجاري':'🏬 تجاري','حكومي':'🏛️ حكومي','صناعي':'🏭 صناعي'};
-  var SIZE_LABELS={'A':'🏆 A — كبير','B':'⭐ B — متوسط','C':'🔹 C — صغير'};
+  var STAGE_LABELS={'الأعمال التمهيدية':'🚜 Site Prep','الأعمال الإنشائية':'🏗️ Structure','أعمال المباني':'🧱 Masonry','أعمال العزل':'🛡️ Insulation','أعمال MEP':'⚡ MEP','التشطيبات':'🎨 Finishing'};
+  var TYPE_LABELS={'فيلا':'🏡 Villa','عمارة':'🏢 Building','تجاري':'🏬 Commercial','حكومي':'🏛️ Government','صناعي':'🏭 Industrial'};
+  var SIZE_LABELS={'A':'🏆 A — Large','B':'⭐ B — Medium','C':'🔹 C — Small'};
   // توحيد القيم القديمة (إنجليزية/عامية) الموجودة فعليًا في الشيت مع القائمة الحالية المعتمدة
   var STAGE_NORM={'clearing':'الأعمال التمهيدية','concrete':'الأعمال الإنشائية','عضم':'الأعمال الإنشائية','تحت الانشاء':'الأعمال الإنشائية','تحت الإنشاء':'الأعمال الإنشائية','block':'أعمال المباني','finishing':'التشطيبات','تشطيب':'التشطيبات'};
   var TYPE_NORM={'villa':'فيلا','فلل':'فيلا','comm':'تجاري','commercial':'تجاري','build':'عمارة','عماير':'عمارة','عماره':'عمارة','عماير سكنية':'عمارة'};
@@ -1079,13 +1094,13 @@ function renderAnalytics(){
   });
   function countBars(valMap,labelMap,order){
     var counts={};Object.keys(valMap).forEach(function(c){var v=valMap[c];counts[v]=(counts[v]||0)+1;});
-    var keys=order?order.filter(function(k){return counts[k];}):Object.keys(counts).sort(function(a,b){return counts[b]-counts[a];});
-    var total=keys.reduce(function(s,k){return s+counts[k];},0)||1;
+    var keys=order?order.slice():Object.keys(counts).sort(function(a,b){return counts[b]-counts[a];});
+    var total=keys.reduce(function(s,k){return s+(counts[k]||0);},0)||1;
     if(!keys.length)return '<div class="empty" style="padding:14px">No data yet</div>';
     return keys.map(function(k){
-      var n=counts[k],pct=Math.round(n/total*100);
-      return '<div style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span class="ar">'+esc(labelMap[k]||k)+'</span><b>'+n+'</b></div><div style="height:7px;background:var(--ln2);border-radius:5px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--navy);border-radius:5px"></div></div></div>';
-    }).join('')+'<div style="font-size:10px;color:var(--mut);text-align:center;margin-top:6px" class="ar">من '+total+' عميل له بيانات مسجّلة</div>';
+      var n=counts[k]||0,pct=Math.round(n/total*100);
+      return '<div style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>'+esc(labelMap[k]||k)+'</span><b>'+n+'</b></div><div style="height:7px;background:var(--ln2);border-radius:5px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--navy);border-radius:5px"></div></div></div>';
+    }).join('')+'<div style="font-size:10px;color:var(--mut);text-align:center;margin-top:6px">out of '+total+' clients with recorded data</div>';
   }
   document.getElementById('an-stage').innerHTML=countBars(lastStage,STAGE_LABELS,['الأعمال التمهيدية','الأعمال الإنشائية','أعمال المباني','أعمال العزل','أعمال MEP','التشطيبات']);
   document.getElementById('an-size').innerHTML=countBars(lastSize,SIZE_LABELS,['A','B','C']);
@@ -1094,7 +1109,7 @@ function renderAnalytics(){
   // last visit & class per client
 
   // conversion per rep (+ توضيح المقصود بـ"تحويل")
-  document.getElementById('an-conv').innerHTML='<div style="font-size:10.5px;color:var(--mut);margin-bottom:10px" class="ar">نسبة الزيارات التي انتهت بعرض سعر أو رقم عرض</div>'+REPS.map(function(r){
+  document.getElementById('an-conv').innerHTML='<div style="font-size:10.5px;color:var(--mut);margin-bottom:10px">Share of visits that resulted in a quote or quote number</div>'+REPS.map(function(r){
     var rv=V.filter(function(v){return txt(v['المندوب'])===r;});var cc=rv.filter(isConverted).length;var pct=rv.length?Math.round(cc/rv.length*100):0;
     return '<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px"><span><b>'+esc(repEN(r))+'</b></span><span style="font-weight:800">'+pct+'% <span style="color:var(--mut);font-weight:600">('+cc+'/'+rv.length+')</span></span></div><div style="height:9px;background:var(--ln2);border-radius:6px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--green)"></div></div></div>';
   }).join('')||'<div class="empty" style="padding:14px">No data</div>';
@@ -1127,30 +1142,36 @@ function renderAnalytics(){
     }).join('');
     var repLine=REPS.map(function(r){return (sr.reps[r]||0)?('<span style="color:'+repColors[r]+'">'+esc(repEN(r))+' '+sr.reps[r]+'</span>'):'';}).filter(Boolean).join(' · ');
     var hoodKeys=Object.keys(sr.hoods).sort(function(a,b){return sr.hoods[b].total-sr.hoods[a].total;});
-    var hoodsDetail=hoodKeys.length?('<details style="margin-top:4px"><summary class="ar" style="font-size:10px;color:var(--mut);cursor:pointer">تفاصيل الأحياء ('+hoodKeys.length+')</summary>'+
+    var hoodsDetail=hoodKeys.length?('<details style="margin-top:4px"><summary style="font-size:10px;color:var(--mut);cursor:pointer">Neighborhood details ('+hoodKeys.length+')</summary>'+
       hoodKeys.map(function(h){var hd=sr.hoods[h];var who=REPS.map(function(r){return (hd.reps[r]||0)?(repEN(r)+' '+hd.reps[r]):'';}).filter(Boolean).join(' · ');
-        return '<div style="display:flex;justify-content:space-between;font-size:10.5px;padding:3px 0 3px 10px;border-top:1px dashed var(--ln2)"><span class="ar">'+esc(h)+'</span><span style="color:var(--mut)">'+hd.total+' · '+esc(who)+'</span></div>';
+        return '<div style="display:flex;justify-content:space-between;font-size:10.5px;padding:3px 0 3px 10px;border-top:1px dashed var(--ln2)"><span>'+esc(hoodEN(h))+'</span><span style="color:var(--mut)">'+hd.total+' · '+esc(who)+'</span></div>';
       }).join('')+'</details>'):'';
-    return '<div style="margin-bottom:11px'+(isUnk?';opacity:.6':'')+'"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px" class="ar"><b style="color:var(--navy)">'+esc(sk)+'</b><span>'+sr.total+'</span></div>'+
+    return '<div style="margin-bottom:11px'+(isUnk?';opacity:.6':'')+'"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><b style="color:var(--navy)">'+esc(SUB_EN_G[sk]||sk)+'</b><span>'+sr.total+'</span></div>'+
       '<div style="height:14px;background:var(--ln2);border-radius:7px;overflow:hidden;display:flex;width:'+Math.max(widthPct,8)+'%">'+segs+'</div>'+
       '<div style="font-size:10px;margin-top:2px" class="ar">'+repLine+'</div>'+hoodsDetail+'</div>';
   }).join('');
 
-  // توصيات تلقائية على التغطية — مُقسَّمة لكل مندوب على حدة
-  var covInsByRep={};REPS.forEach(function(r){covInsByRep[r]=[];});
+  // auto-generated coverage recommendations — one unified analysis (not split per rep)
+  var SUB_EN={'شمال الرياض':'North Riyadh','شرق الرياض':'East Riyadh','جنوب الرياض':'South Riyadh','غرب الرياض':'West Riyadh','وسط الرياض':'Central Riyadh'};
   var mainSubs=['شمال الرياض','شرق الرياض','جنوب الرياض','غرب الرياض','وسط الرياض'];
-  REPS.forEach(function(r){
-    var covered=mainSubs.filter(function(s){return cross[s]&&(cross[s].reps[r]||0)>0;});
-    var missing=mainSubs.filter(function(s){return covered.indexOf(s)===-1;});
-    if(missing.length>=3)covInsByRep[r].push('⚠️ لم يزر بعد: '+missing.map(esc).join('، ')+'.');
-  });
+  var covIns=[];
+
+  // مناطق يغطّيها مندوب واحد حصريًا — بيان موحّد يذكر الاثنين معًا فى جملة واحدة
   mainSubs.forEach(function(s){
     if(!cross[s])return;
     var zeros=REPS.filter(function(r){return !(cross[s].reps[r]||0);});
     if(zeros.length===1&&REPS.length===2){
       var active=REPS.filter(function(r){return r!==zeros[0];})[0];
-      covInsByRep[zeros[0]].push('🔹 <b>'+esc(s)+'</b>: يغطّيها <b>'+esc(repEN(active))+'</b> فقط ('+cross[s].total+' زيارة) — فرصة لتعزيز تواجدك هناك.');
+      var repTotal=mainSubs.reduce(function(sum,sub){return sum+(cross[sub]?(cross[sub].reps[active]||0):0);},0);
+      var sharePct=repTotal?Math.round(cross[s].reps[active]/repTotal*100):0;
+      covIns.push('🔹 <b>'+SUB_EN[s]+'</b> ('+cross[s].total+' visits) is covered exclusively by <b>'+esc(repEN(active))+'</b>'+(sharePct>=30?' ('+sharePct+'% of their visits)':'')+', while <b>'+esc(repEN(zeros[0]))+'</b> has no presence there yet — worth considering how coverage is split.');
     }
+  });
+  // مناطق لم يزرها مندوب مطلقًا (٣+ مناطق) — لكل مندوب على حدة، لكن ضمن نفس القائمة الموحّدة
+  REPS.forEach(function(r){
+    var covered=mainSubs.filter(function(s){return cross[s]&&(cross[s].reps[r]||0)>0;});
+    var missing=mainSubs.filter(function(s){return covered.indexOf(s)===-1;});
+    if(missing.length>=3)covIns.push('⚠️ <b>'+esc(repEN(r))+'</b> hasn\'t visited yet: '+missing.map(function(s){return SUB_EN[s];}).join(', ')+'.');
   });
   // اختلال التوزيع: مندوب يغطّي كل المناطق اسميًا لكن جهده مركَّز بشدّة فى منطقة واحدة
   REPS.forEach(function(r){
@@ -1159,19 +1180,16 @@ function renderAnalytics(){
     mainSubs.forEach(function(s){
       var n=cross[s]?(cross[s].reps[r]||0):0;
       var pct=Math.round(n/repTotal*100);
-      if(pct>=40&&n>=5)covInsByRep[r].push('⚖️ <b>'+pct+'٪</b> من زياراتك مركَّزة فى <b>'+esc(s)+'</b> ('+n+' زيارة) — تنويع تغطيتك على باقي المناطق قد يفتح فرصًا جديدة.');
+      var otherHasIt=cross[s]&&REPS.some(function(r2){return r2!==r&&(cross[s].reps[r2]||0)>0;});
+      // تفادي التكرار: لا نُعيد نفس المنطقة إن كانت مذكورة فعلًا فى بند التغطية الحصرية أعلاه
+      if(pct>=40&&n>=5&&otherHasIt)covIns.push('⚖️ <b>'+SUB_EN[s]+'</b> makes up '+pct+'% of <b>'+esc(repEN(r))+'\'s</b> visits ('+n+') — diversifying into other areas could open new opportunities.');
     });
   });
-  var anyIns=REPS.some(function(r){return covInsByRep[r].length;});
-  var recsHtml=anyIns?('<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--ln)"><div style="font-weight:800;color:var(--navy);font-size:12px;margin-bottom:8px" class="ar">💡 توصيات التغطية</div>'+
-    '<div class="g2">'+REPS.map(function(r){
-      var abd=String(r).indexOf('عبدالرزاق')===0;
-      var list=covInsByRep[r].length?covInsByRep[r].map(function(i){return '<div class="ar" style="font-size:11.5px;padding:5px 0;line-height:1.6;border-bottom:1px solid var(--ln2)">'+i+'</div>';}).join(''):'<div class="empty" style="padding:10px;font-size:11.5px">✅ لا فجوات لافتة</div>';
-      return '<div style="border-top:3px solid '+(abd?'var(--gold)':'var(--navy)')+';padding-top:8px"><div style="font-weight:800;color:var(--navy);font-size:12px;margin-bottom:4px" class="ar">'+esc(repEN(r))+'</div>'+list+'</div>';
-    }).join('')+'</div></div>'):'';
+  var recsHtml=covIns.length?('<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--ln)"><div style="font-weight:800;color:var(--navy);font-size:12px;margin-bottom:8px">💡 Coverage recommendations</div>'+
+    covIns.map(function(i){return '<div style="font-size:11.5px;padding:6px 0;line-height:1.6;border-bottom:1px solid var(--ln2)">'+i+'</div>';}).join('')+'</div>'):'';
 
   document.getElementById('an-area').innerHTML=
-    '<div style="font-size:10.5px;color:var(--mut);margin-bottom:10px" class="ar">مقارنة مباشرة بين المناديب — طول الشريط يعكس عدد الزيارات، ولونه يعكس المندوب</div>'+
+    '<div style="font-size:10.5px;color:var(--mut);margin-bottom:10px">Direct rep comparison — bar length reflects visit count, color reflects the rep</div>'+
     barsHtml+recsHtml;
 }
 
