@@ -4,10 +4,12 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 <meta name="theme-color" content="#1B2A4A" />
+<meta name="color-scheme" content="light" />
 <title>BuildHop — Manager Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Cairo:wght@600;700;800&display=swap" rel="stylesheet" />
 <style>
   :root{
+    color-scheme: light;
     --navy:#243760; --navy-2:#1B2A4A; --navy-l:#EAEEF6;
     --gold:#C9A227; --gold-2:#E8A320; --gold-l:#FBF3D9;
     --bg:#F4F6FB; --card:#FFFFFF; --ln:#E6E9F0; --ln2:#EFF1F6;
@@ -130,13 +132,13 @@
   .cdmodal{position:fixed;inset:0;background:rgba(15,24,48,.6);z-index:90;display:none;align-items:center;justify-content:center;padding:16px}
   .cdmodal.on{display:flex}
   .cdcard{background:#fff;border-radius:16px;max-width:600px;width:100%;max-height:88vh;overflow-y:auto}
-  .cdhead{background:linear-gradient(135deg,var(--navy-2),var(--navy-3));color:#fff;padding:20px;border-radius:16px 16px 0 0;position:relative}
+  .cdhead{background:linear-gradient(135deg,var(--navy-2,#1B2A4A),var(--navy-3,#14203A));color:#fff!important;-webkit-text-fill-color:#fff;padding:20px;border-radius:16px 16px 0 0;position:relative}
   .cdhead .cdclose{position:absolute;top:14px;left:14px;background:rgba(255,255,255,.15);border:none;color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:15px}
-  .cdhead .cdname{font-size:17px;font-weight:900;margin:8px 0 6px}
-  .cdhead .cdmeta{display:flex;flex-wrap:wrap;gap:14px;font-size:11.5px;color:rgba(255,255,255,.85)}
+  .cdhead .cdname{font-size:17px;font-weight:900;margin:8px 0 6px;color:#fff!important;-webkit-text-fill-color:#fff}
+  .cdhead .cdmeta{display:flex;flex-wrap:wrap;gap:14px;font-size:11.5px;color:rgba(255,255,255,.85)!important;-webkit-text-fill-color:rgba(255,255,255,.85)}
   .cdbody{padding:18px}
-  .cdmile{background:var(--bg);border-radius:12px;padding:16px 10px;margin-bottom:16px}
-  .cdmile-title{font-size:11px;font-weight:800;color:var(--navy);margin-bottom:14px;text-align:center}
+  .cdmile{background:var(--bg,#F4F6FB);border:1px solid var(--ln,#E6E9F0);border-radius:12px;padding:16px 10px;margin-bottom:16px}
+  .cdmile-title{font-size:11px;font-weight:800;color:var(--navy,#243760)!important;-webkit-text-fill-color:var(--navy,#243760);margin-bottom:14px;text-align:center}
   .cdmile-track{display:flex;align-items:flex-start;justify-content:space-between;position:relative}
   .cdmile-track:before{content:'';position:absolute;top:13px;right:8%;left:8%;height:2px;background:var(--ln)}
   .cdmile-step{flex:1;text-align:center;position:relative;z-index:1}
@@ -268,8 +270,8 @@
           <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
             <div class="shdr" style="margin-bottom:0">📊 Period summary <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">تلخيص زيارات المندوب خلال الفترة</span></div>
             <select id="rp-kind" class="ctrl" onchange="setRepPeriod(this.value)" style="font-size:12.5px;font-weight:700;padding:7px 10px">
-              <option value="day">يومي</option>
-              <option value="week" selected>أسبوعي</option>
+              <option value="day" selected>يومي</option>
+              <option value="week">أسبوعي</option>
               <option value="month">شهري</option>
               <option value="quarter">ربع سنوي</option>
               <option value="half">نصف سنوي</option>
@@ -289,7 +291,6 @@
         </div>
 
         <!-- ===== 4) SMART INSIGHTS (own section, English) ===== -->
-        <div class="card"><div class="shdr">Smart insights <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">توصيات</span></div><div id="ov-insights"><div class="empty" style="padding:14px">Refresh to load</div></div></div>
 
         <!-- ===== 5) MOST VISITED CLIENTS + roles + latest ===== -->
         <div class="card"><div class="shdr">🏆 Most visited clients <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">أكثر العملاء زيارةً</span></div><div id="rep-topclients"><div class="spin"></div></div></div>
@@ -317,8 +318,14 @@
           <div class="card"><div class="shdr">📐 Project sizes <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">حجم المشاريع</span></div><div id="an-size"><div class="spin"></div></div></div>
           <div class="card"><div class="shdr">🏢 Project types <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">أنواع المشاريع</span></div><div id="an-type"><div class="spin"></div></div></div>
         </div>
+        <div class="card"><div class="shdr">✅ Visit results <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">نتائج الزيارات الميدانية</span></div><div id="an-results"><div class="spin"></div></div></div>
         <div class="card"><div class="shdr">📈 Conversion rate <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">معدل التحويل لعروض</span></div><div id="an-conv"><div class="spin"></div></div></div>
         <div class="card"><div class="shdr">Visit coverage by area <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">تغطية المناطق</span></div><div id="an-area"></div></div>
+
+        <!-- ===== RECOMMENDATIONS (consolidated: Smart Insights + Coverage, moved to page end, with chart) ===== -->
+        <div class="ph" style="margin-top:26px;margin-bottom:14px;padding-top:18px;border-top:1px solid var(--ln)"><h2 style="font-size:17px">💡 Recommendations</h2><p class="ar">خلاصة التوصيات — أداء وتغطية</p></div>
+        <div class="card"><div class="shdr">Rep comparison <span class="ar" style="font-weight:600;font-size:11px;color:var(--mut)">مقارنة سريعة بين المندوبين</span></div><div id="rec-chart"><div class="spin"></div></div></div>
+        <div class="card"><div id="rec-list"><div class="spin"></div></div></div>
       </div>
 
       <div class="page" id="p-activity">
@@ -428,6 +435,8 @@ var HOOD_EN={
   'المربع':'Al-Murabba','المرقب':'Al-Marqab','البطحاء':'Al-Batha','الديرة':'Al-Dirah','الصالحية':'Al-Salhiyah','الملز':'Al-Malaz','الفاخرية':'Al-Fakhriyah','الوزارات':'Al-Wizarat','الخالدية':'Al-Khalidiyah','العود':'Al-Ood','الشميسي':'Al-Shemaisi'
 };
 function hoodEN(h){return HOOD_EN[h]||h;} // يعود للاسم العربي الأصلي إن لم يكن ضمن القائمة (نص حر قديم)
+var RESULT_EN={'طلب فتح حساب':'Account request','كتالوج':'Catalog request','عرض سعر':'Quote','عينة':'Sample','زيارة فنية':'Technical visit','غير مؤهل':'Not qualified','catalog':'Catalog request','sample':'Sample','quote':'Quote','techvisit':'Technical visit','طلب زيارة فنية لاحقة':'Technical visit requested','عرض فكرة عن نشاط شركتنا':'Company introduction','تنشيط ومتابعه تحصيل':'Reactivation & collection follow-up','علاقه':'Relationship','علاقة':'Relationship'};
+function resultEN(v){return RESULT_EN[v]||PURPOSE_EN[v]||v;}
 var HOOD_SUBREGION={};
 [['شمال الرياض',['الملقا','النرجس','العارض','الياسمين','الصحافة','العقيق','القيروان','حطين','الربيع','الغدير','الندى','النفل','الوادي','الفلاح','بنبان','النخيل','المصيف','المروج','الازدهار','الواحة','المرسلات','الورود','الرائد','السفارات']],
  ['شرق الرياض',['الرمال','اليرموك','النهضة','إشبيلية','الخليج','قرطبة','الحمراء','غرناطة','الروضة','الريان','السلي','النسيم','القدس','النظيم','المغرزات','الجزيرة','الرواد','الربوة','الشهداء','المونسية','القادسية','السلام','الأندلس','الروابي']],
@@ -518,7 +527,7 @@ function loadAll(){
 
 function renderAll(){
   renderOverview();renderReps();renderTopClients();renderRoles();renderLatest();renderRepSummary();renderActivity();renderRequests();
-  renderFollowups();renderReports();renderArchive();renderAnalytics();renderClientMix();renderUnvisited();renderQuality();renderInsights();renderSidebar();renderCounts();
+  renderFollowups();renderReports();renderArchive();renderAnalytics();renderClientMix();renderUnvisited();renderQuality();renderRecommendations();renderSidebar();renderCounts();
 }
 function renderCounts(){
   var fu=allFollowups().filter(function(v){return dstr(v['تاريخ المتابعة'])<=weekEnd();}).length;
@@ -598,10 +607,13 @@ function renderClientMix(){
   }).join('')+'</div>';
 }
 
-function renderInsights(){
-  var el=document.getElementById('ov-insights');if(!el)return;
-  if(REPS.length<2){el.innerHTML='<div class="empty" style="padding:14px">Need 2+ reps to compare</div>';return;}
+function renderRecommendations(){
+  var chartEl=document.getElementById('rec-chart'), listEl=document.getElementById('rec-list');
+  if(!chartEl||!listEl)return;
+  if(REPS.length<2){chartEl.innerHTML='';listEl.innerHTML='<div class="empty" style="padding:14px">Need 2+ reps to compare</div>';return;}
   var r1=REPS[0],r2=REPS[1];
+  var SUB_EN={'شمال الرياض':'North Riyadh','شرق الرياض':'East Riyadh','جنوب الرياض':'South Riyadh','غرب الرياض':'West Riyadh','وسط الرياض':'Central Riyadh'};
+  var mainSubs=['شمال الرياض','شرق الرياض','جنوب الرياض','غرب الرياض','وسط الرياض'];
   function stats(r){
     var rv=repVisits(r);
     var conv=rv.length?Math.round(rv.filter(isConverted).length/rv.length*100):0;
@@ -614,41 +626,79 @@ function renderInsights(){
     return {r:r,visits:rv.length,conv:conv,areas:Object.keys(subs).length,dirPct:dirTotal?Math.round(dirVisited/dirTotal*100):0,dirTotal:dirTotal,newPct:newPct};
   }
   var a=stats(r1),b=stats(r2);
-  var insByRep={};REPS.forEach(function(r){insByRep[r]=[];});
-  // conversion-rate gap — praise the leader, coach the laggard
+
+  // ---- 1) رسم بياني مقارن (أعمدة مزدوجة لكل مقياس) ----
+  var metrics=[['Conversion %','conv',100],['Areas covered','areas',6],['Client-list %','dirPct',100],['New-client %','newPct',100]];
+  var barH=22,gap=6,rowH=barH*2+gap+18,chartW=560,leftW=110,plotW=chartW-leftW-50;
+  var svg='<svg viewBox="0 0 '+chartW+' '+(rowH*metrics.length+10)+'" style="width:100%;height:auto;font-family:Inter,sans-serif">';
+  metrics.forEach(function(m,mi){
+    var y0=mi*rowH+8;
+    svg+='<text x="'+chartW+'" y="'+(y0+barH)+'" text-anchor="end" font-size="11" font-weight="700" fill="#243760">'+m[0]+'</text>';
+    [[a,'var(--navy)','#243760'],[b,'var(--gold-2)','#E8A320']].forEach(function(pair,ri){
+      var st=pair[0],col=pair[2],val=st[m[1]],max=m[2];
+      var w=Math.max(Math.round(val/max*plotW),2);
+      var y=y0+ri*(barH+2);
+      svg+='<rect x="0" y="'+y+'" width="'+plotW+'" height="'+barH+'" fill="#EFF1F6" rx="4"></rect>';
+      svg+='<rect x="0" y="'+y+'" width="'+w+'" height="'+barH+'" fill="'+col+'" rx="4"></rect>';
+      svg+='<text x="'+(w+6)+'" y="'+(y+barH/2+4)+'" font-size="10.5" font-weight="800" fill="#1F2937">'+val+(m[1]==='areas'?'':'%')+'</text>';
+    });
+  });
+  svg+='</svg>';
+  var legend='<div style="display:flex;gap:16px;justify-content:center;margin-top:8px;font-size:11px;font-weight:700">'+
+    '<span style="color:var(--navy)">■ '+esc(repEN(r1))+'</span><span style="color:var(--gold-2)">■ '+esc(repEN(r2))+'</span></div>';
+  chartEl.innerHTML='<div style="max-width:'+chartW+'px;margin:0 auto">'+svg+'</div>'+legend;
+
+  // ---- 2) نصوص مختصرة (أداء + تغطية) ----
+  var ins=[];
   if(Math.abs(a.conv-b.conv)>=15){
     var hi=a.conv>b.conv?a:b, lo=a.conv>b.conv?b:a;
-    insByRep[hi.r].push('📈 Your conversion rate is '+hi.conv+'% — the highest on the team, keep it up.');
-    insByRep[lo.r].push('📉 Your conversion rate is '+lo.conv+'%, below your teammate\'s '+hi.conv+'% — review how you close visits with a quote.');
+    ins.push('📈 <b>'+esc(repEN(hi.r))+'</b>: conversion '+hi.conv+'% — team-best.');
+    ins.push('📉 <b>'+esc(repEN(lo.r))+'</b>: conversion '+lo.conv+'% vs '+hi.conv+'% — review closing approach.');
   }
-  // geographic coverage gap
   if(a.areas!==b.areas){
     var wide=a.areas>b.areas?a:b, narrow=a.areas>b.areas?b:a;
-    insByRep[wide.r].push('🗺️ Your area coverage is '+wide.areas+' sub-regions — the widest spread on the team.');
-    insByRep[narrow.r].push('🗺️ Your area coverage is only '+narrow.areas+' area(s), versus '+wide.areas+' for your teammate — you may benefit from expanding your range.');
+    ins.push('🗺️ <b>'+esc(repEN(narrow.r))+'</b>: covers '+narrow.areas+' area(s) vs '+wide.areas+' — room to expand.');
   }
-  // client-directory completion gap
   if(a.dirTotal&&b.dirTotal&&Math.abs(a.dirPct-b.dirPct)>=10){
-    var ahead=a.dirPct>b.dirPct?a:b, behind=a.dirPct>b.dirPct?b:a;
-    insByRep[ahead.r].push('📇 Your client-list coverage is '+ahead.dirPct+'% of your assigned clients.');
-    insByRep[behind.r].push('📇 Your client-list coverage is only '+behind.dirPct+'% ('+(100-behind.dirPct)+'% of your list not yet visited).');
+    var behind=a.dirPct>b.dirPct?b:a;
+    ins.push('📇 <b>'+esc(repEN(behind.r))+'</b>: '+behind.dirPct+'% of client list visited ('+(100-behind.dirPct)+'% remaining).');
   }
-  // visit-volume gap
   if(a.visits&&b.visits&&Math.abs(a.visits-b.visits)/Math.max(a.visits,b.visits)>=0.3){
-    var more=a.visits>b.visits?a:b, less=a.visits>b.visits?b:a;
-    insByRep[less.r].push('📍 Your visit count is '+less.visits+' total, versus '+more.visits+' for your teammate.');
+    var less=a.visits>b.visits?b:a, more=a.visits>b.visits?a:b;
+    ins.push('📍 <b>'+esc(repEN(less.r))+'</b>: '+less.visits+' visits vs '+more.visits+' for teammate.');
   }
-  // new-client focus pattern
   if(Math.abs(a.newPct-b.newPct)>=20){
     var newer=a.newPct>b.newPct?a:b;
-    insByRep[newer.r].push('✨ Your new-client focus is '+newer.newPct+'% of visits — a stronger prospecting emphasis than your teammate.');
+    ins.push('✨ <b>'+esc(repEN(newer.r))+'</b>: '+newer.newPct+'% new-client visits — strong prospecting focus.');
   }
-  var anyIns=REPS.some(function(r){return insByRep[r].length;});
-  el.innerHTML=anyIns?('<div class="g2">'+REPS.map(function(r){
-    var abd=String(r).indexOf('عبدالرزاق')===0;
-    var list=insByRep[r].length?insByRep[r].map(function(i){return '<div style="padding:6px 0;border-bottom:1px solid var(--ln2);font-size:12px;line-height:1.6">'+i+'</div>';}).join(''):'<div class="empty" style="padding:10px;font-size:11.5px">No notable findings</div>';
-    return '<div style="border-top:3px solid '+(abd?'var(--gold)':'var(--navy)')+';padding-top:8px"><div style="font-weight:800;color:var(--navy);font-size:12.5px;margin-bottom:4px">'+esc(repEN(r))+'</div>'+list+'</div>';
-  }).join('')+'</div>'):'<div class="empty" style="padding:14px">No notable differences between reps right now</div>';
+  var cross={};
+  DATA.visits.forEach(function(v){
+    var rp=txt(v['المندوب']);var res=resolveSubregion(txt(v['الحي']));
+    var sr=cross[res.sub]=cross[res.sub]||{total:0,reps:{}};sr.total++;sr.reps[rp]=(sr.reps[rp]||0)+1;
+  });
+  mainSubs.forEach(function(s){
+    if(!cross[s])return;
+    var zeros=REPS.filter(function(r){return !(cross[s].reps[r]||0);});
+    if(zeros.length===1&&REPS.length===2){
+      var active=REPS.filter(function(r){return r!==zeros[0];})[0];
+      ins.push('🔹 <b>'+SUB_EN[s]+'</b> ('+cross[s].total+' visits): '+esc(repEN(active))+'-only — '+esc(repEN(zeros[0]))+' has none.');
+    }
+  });
+  REPS.forEach(function(r){
+    var covered=mainSubs.filter(function(s){return cross[s]&&(cross[s].reps[r]||0)>0;});
+    var missing=mainSubs.filter(function(s){return covered.indexOf(s)===-1;});
+    if(missing.length>=3)ins.push('⚠️ <b>'+esc(repEN(r))+'</b>: no visits yet in '+missing.map(function(s){return SUB_EN[s];}).join(', ')+'.');
+  });
+  REPS.forEach(function(r){
+    var repTotal=mainSubs.reduce(function(s,sub){return s+(cross[sub]?(cross[sub].reps[r]||0):0);},0);
+    if(!repTotal)return;
+    mainSubs.forEach(function(s){
+      var n=cross[s]?(cross[s].reps[r]||0):0,pct=Math.round(n/repTotal*100);
+      var otherHasIt=cross[s]&&REPS.some(function(r2){return r2!==r&&(cross[s].reps[r2]||0)>0;});
+      if(pct>=40&&n>=5&&otherHasIt)ins.push('⚖️ <b>'+SUB_EN[s]+'</b> = '+pct+'% of <b>'+esc(repEN(r))+'</b>\'s visits ('+n+') — consider diversifying.');
+    });
+  });
+  listEl.innerHTML=ins.length?ins.map(function(i){return '<div style="padding:6px 0;border-bottom:1px solid var(--ln2);font-size:12px;line-height:1.5">'+i+'</div>';}).join(''):'<div class="empty" style="padding:14px">No notable findings right now</div>';
 }
 
 function renderUnvisited(){
@@ -768,6 +818,7 @@ function renderTopClients(){
 function renderRoles(){
   var el=document.getElementById('rep-roles');if(!el)return;
   var ROLE_NORM={'contractor':'مقاول','engineer':'مهندس موقع','procure':'مشتريات','procurement':'مشتريات','pm':'مدير مشروع','dev':'مطور','owner':'مالك','مقاول':'مقاول','مهندس':'مهندس موقع','المقاول':'مقاول'};
+  var ROLE_EN={'مقاول':'Contractor','مهندس موقع':'Site engineer','مشتريات':'Purchasing','مدير مشروع':'Project manager','مالك':'Owner','مطور':'Developer','مستثمر':'Investor','رقم اللافتة':'Sign number (data entry error)'};
   el.innerHTML='<div class="g2">'+REPS.map(function(r){
     var allV=repVisits(r);var abd=String(r).indexOf('عبدالرزاق')===0;
     var roleCount={};allV.filter(function(v){return txt(v['النوع'])==='New';}).forEach(function(v){
@@ -779,9 +830,9 @@ function renderRoles(){
     var roleTotal=roleKeys.reduce(function(s,k){return s+roleCount[k];},0)||1;
     var roleHtml=roleKeys.length?roleKeys.map(function(k){
       var n=roleCount[k],pct=Math.round(n/roleTotal*100);
-      return '<div style="margin-bottom:6px"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px"><span class="ar">'+esc(k)+'</span><b>'+n+'</b></div><div style="height:6px;background:var(--ln2);border-radius:4px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--pu);border-radius:4px"></div></div></div>';
-    }).join(''):'<div class="empty" style="padding:14px">لا بيانات جهة اتصال بعد</div>';
-    return '<div class="card" style="border-top:3px solid '+(abd?'var(--gold)':'var(--navy)')+';margin-bottom:0"><div style="font-weight:800;color:var(--navy);font-size:13px;margin-bottom:8px" class="ar">'+esc(repEN(r))+'</div>'+roleHtml+'</div>';
+      return '<div style="margin-bottom:6px"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px"><span>'+esc(ROLE_EN[k]||k)+'</span><b>'+n+'</b></div><div style="height:6px;background:var(--ln2);border-radius:4px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--pu);border-radius:4px"></div></div></div>';
+    }).join(''):'<div class="empty" style="padding:14px">No contact-role data yet</div>';
+    return '<div class="card" style="border-top:3px solid '+(abd?'var(--gold)':'var(--navy)')+';margin-bottom:0"><div style="font-weight:800;color:var(--navy);font-size:13px;margin-bottom:8px">'+esc(repEN(r))+'</div>'+roleHtml+'</div>';
   }).join('')+'</div>';
 }
 
@@ -796,7 +847,7 @@ function renderLatest(){
 }
 
 
-var _repPeriod='week';
+var _repPeriod='day';
 var _repAnchor=today();
 var _rpCalMonth=null; // الشهر المعروض حاليًا فى نافذة التقويم المنبثقة
 var AR_MONTHS=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
@@ -1106,6 +1157,20 @@ function renderAnalytics(){
   document.getElementById('an-size').innerHTML=countBars(lastSize,SIZE_LABELS,['A','B','C']);
   document.getElementById('an-type').innerHTML=countBars(lastType,TYPE_LABELS,['فيلا','عمارة','تجاري','حكومي','صناعي']);
 
+  // نتائج الزيارات — كل زيارة نتيجتها حدث مستقل، فتُحسب جميعًا لا آخر قيمة فقط (بخلاف المرحلة/النوع)
+  var resultCounts={};
+  V.forEach(function(v){
+    var raw=txt(v['نتيجة الزيارة']);if(!raw)return;
+    var en=resultEN(raw);
+    resultCounts[en]=(resultCounts[en]||0)+1;
+  });
+  var resultKeys=Object.keys(resultCounts).sort(function(a,b){return resultCounts[b]-resultCounts[a];});
+  var resultTotal=resultKeys.reduce(function(s,k){return s+resultCounts[k];},0)||1;
+  document.getElementById('an-results').innerHTML=resultKeys.length?(resultKeys.map(function(k){
+    var n=resultCounts[k],pct=Math.round(n/resultTotal*100);
+    return '<div style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>'+esc(k)+'</span><b>'+n+' ('+pct+'%)</b></div><div style="height:7px;background:var(--ln2);border-radius:5px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--green);border-radius:5px"></div></div></div>';
+  }).join('')+'<div style="font-size:10px;color:var(--mut);text-align:center;margin-top:6px">out of '+resultTotal+' visits with a recorded result</div>'):'<div class="empty" style="padding:14px">No data yet</div>';
+
   // last visit & class per client
 
   // conversion per rep (+ توضيح المقصود بـ"تحويل")
@@ -1151,46 +1216,9 @@ function renderAnalytics(){
       '<div style="font-size:10px;margin-top:2px" class="ar">'+repLine+'</div>'+hoodsDetail+'</div>';
   }).join('');
 
-  // auto-generated coverage recommendations — one unified analysis (not split per rep)
-  var SUB_EN={'شمال الرياض':'North Riyadh','شرق الرياض':'East Riyadh','جنوب الرياض':'South Riyadh','غرب الرياض':'West Riyadh','وسط الرياض':'Central Riyadh'};
-  var mainSubs=['شمال الرياض','شرق الرياض','جنوب الرياض','غرب الرياض','وسط الرياض'];
-  var covIns=[];
-
-  // مناطق يغطّيها مندوب واحد حصريًا — بيان موحّد يذكر الاثنين معًا فى جملة واحدة
-  mainSubs.forEach(function(s){
-    if(!cross[s])return;
-    var zeros=REPS.filter(function(r){return !(cross[s].reps[r]||0);});
-    if(zeros.length===1&&REPS.length===2){
-      var active=REPS.filter(function(r){return r!==zeros[0];})[0];
-      var repTotal=mainSubs.reduce(function(sum,sub){return sum+(cross[sub]?(cross[sub].reps[active]||0):0);},0);
-      var sharePct=repTotal?Math.round(cross[s].reps[active]/repTotal*100):0;
-      covIns.push('🔹 <b>'+SUB_EN[s]+'</b> ('+cross[s].total+' visits) is covered exclusively by <b>'+esc(repEN(active))+'</b>'+(sharePct>=30?' ('+sharePct+'% of their visits)':'')+', while <b>'+esc(repEN(zeros[0]))+'</b> has no presence there yet — worth considering how coverage is split.');
-    }
-  });
-  // مناطق لم يزرها مندوب مطلقًا (٣+ مناطق) — لكل مندوب على حدة، لكن ضمن نفس القائمة الموحّدة
-  REPS.forEach(function(r){
-    var covered=mainSubs.filter(function(s){return cross[s]&&(cross[s].reps[r]||0)>0;});
-    var missing=mainSubs.filter(function(s){return covered.indexOf(s)===-1;});
-    if(missing.length>=3)covIns.push('⚠️ <b>'+esc(repEN(r))+'</b> hasn\'t visited yet: '+missing.map(function(s){return SUB_EN[s];}).join(', ')+'.');
-  });
-  // اختلال التوزيع: مندوب يغطّي كل المناطق اسميًا لكن جهده مركَّز بشدّة فى منطقة واحدة
-  REPS.forEach(function(r){
-    var repTotal=mainSubs.reduce(function(s,sub){return s+(cross[sub]?(cross[sub].reps[r]||0):0);},0);
-    if(!repTotal)return;
-    mainSubs.forEach(function(s){
-      var n=cross[s]?(cross[s].reps[r]||0):0;
-      var pct=Math.round(n/repTotal*100);
-      var otherHasIt=cross[s]&&REPS.some(function(r2){return r2!==r&&(cross[s].reps[r2]||0)>0;});
-      // تفادي التكرار: لا نُعيد نفس المنطقة إن كانت مذكورة فعلًا فى بند التغطية الحصرية أعلاه
-      if(pct>=40&&n>=5&&otherHasIt)covIns.push('⚖️ <b>'+SUB_EN[s]+'</b> makes up '+pct+'% of <b>'+esc(repEN(r))+'\'s</b> visits ('+n+') — diversifying into other areas could open new opportunities.');
-    });
-  });
-  var recsHtml=covIns.length?('<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--ln)"><div style="font-weight:800;color:var(--navy);font-size:12px;margin-bottom:8px">💡 Coverage recommendations</div>'+
-    covIns.map(function(i){return '<div style="font-size:11.5px;padding:6px 0;line-height:1.6;border-bottom:1px solid var(--ln2)">'+i+'</div>';}).join('')+'</div>'):'';
-
   document.getElementById('an-area').innerHTML=
     '<div style="font-size:10.5px;color:var(--mut);margin-bottom:10px">Direct rep comparison — bar length reflects visit count, color reflects the rep</div>'+
-    barsHtml+recsHtml;
+    barsHtml;
 }
 
 document.getElementById('pin').focus();
