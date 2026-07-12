@@ -355,16 +355,18 @@
 
       <div class="page" id="p-followups">
         <div class="ph"><h2>Follow-ups</h2><p class="ar">المتابعات القادمة</p></div>
-        <div class="kgrid" style="grid-template-columns:repeat(3,1fr)">
+        <div class="kgrid" style="grid-template-columns:repeat(4,1fr)">
           <div class="kcard k-red" style="text-align:center;position:relative"><span class="badge" style="position:absolute;top:12px;left:12px;background:var(--red-l);color:var(--red)">OVERDUE</span><div class="ki" style="margin:0 auto 6px">⏳</div><div class="kv" style="color:var(--red)" id="fu-od">0</div><div class="kl">Overdue <small class="sub ar">متأخرة</small></div></div>
           <div class="kcard k-gold" style="text-align:center;position:relative"><span class="badge" style="position:absolute;top:12px;left:12px;background:var(--gold-l);color:var(--amb)">TODAY</span><div class="ki" style="margin:0 auto 6px">🔔</div><div class="kv" style="color:var(--amb)" id="fu-td">0</div><div class="kl">Today <small class="sub ar">اليوم</small></div></div>
           <div class="kcard k-green" style="text-align:center;position:relative"><span class="badge" style="position:absolute;top:12px;left:12px;background:var(--green-l);color:var(--green)">THIS WEEK</span><div class="ki" style="margin:0 auto 6px">🗓️</div><div class="kv" style="color:var(--green)" id="fu-wk">0</div><div class="kl">This week <small class="sub ar">هذا الأسبوع</small></div></div>
+          <div class="kcard" style="text-align:center;position:relative;border-top-color:var(--pu)"><span class="badge" style="position:absolute;top:12px;left:12px;background:var(--navy-l);color:var(--pu)">NEEDS DATE</span><div class="ki" style="margin:0 auto 6px">❔</div><div class="kv" style="color:var(--pu)" id="fu-nd">0</div><div class="kl">Needs date <small class="sub ar">بلا تاريخ</small></div></div>
         </div>
         <div class="pills" style="margin-top:14px">
           <button class="pill on" id="fuf-all" onclick="setFuf('all')">All</button>
           <button class="pill" id="fuf-od" onclick="setFuf('overdue')">Overdue</button>
           <button class="pill" id="fuf-td" onclick="setFuf('today')">Today</button>
           <button class="pill" id="fuf-wk" onclick="setFuf('week')">This week</button>
+          <button class="pill" id="fuf-nd" onclick="setFuf('needsdate')">Needs date</button>
           <input type="search" id="fu-q" class="ctrl" style="flex:1;min-width:140px" placeholder="Search client / بحث" oninput="renderFollowups()" />
           <select id="fu-rep" class="ctrl" onchange="renderFollowups()">
             <option value="all">All reps</option>
@@ -479,7 +481,7 @@ function prettyDate(d){if(!/^\d{4}-\d{2}-\d{2}$/.test(d))return d;var dt=new Dat
 function repSummary(r){var rows=DATA.summary.filter(function(x){return txt(x['المندوب'])===r;});return rows.length?rows[rows.length-1]:null;}
 function repVisits(r){return DATA.visits.filter(function(v){return txt(v['المندوب'])===r;});}
 function todayVisits(){var td=today();return DATA.visits.filter(function(v){return dstr(v['التاريخ'])===td;});}
-function allFollowups(){return DATA.visits.filter(function(v){var nd=dstr(v['تاريخ المتابعة']);var na=txt(v['الخطوة القادمة']);return nd&&na&&na!=='لا توجد متابعة';}).sort(function(a,b){return dstr(a['تاريخ المتابعة']).localeCompare(dstr(b['تاريخ المتابعة']));});}
+function allFollowups(){return DATA.visits.filter(function(v){var na=txt(v['الخطوة القادمة']);return na&&na!=='لا توجد متابعة';}).sort(function(a,b){return dstr(a['تاريخ المتابعة']).localeCompare(dstr(b['تاريخ المتابعة']));});}
 
 function onPin(){var v=document.getElementById('pin').value;document.getElementById('pin-err').textContent='';if(v.length===4)setTimeout(doLogin,60);}
 function doLogin(){
@@ -530,7 +532,8 @@ function renderAll(){
   renderFollowups();renderReports();renderArchive();renderAnalytics();renderClientMix();renderUnvisited();renderQuality();renderRecommendations();renderSidebar();renderCounts();
 }
 function renderCounts(){
-  var fu=allFollowups().filter(function(v){return dstr(v['تاريخ المتابعة'])<=weekEnd();}).length;
+  var all=allFollowups();
+  var fu=all.filter(function(v){var d=dstr(v['تاريخ المتابعة']);return !d||d<=weekEnd();}).length;
   var b=document.getElementById('c-fu');
   if(b){if(fu){b.style.display='';b.textContent=fu;}else b.style.display='none';}
 }
@@ -1046,24 +1049,26 @@ function renderRequests(){
 }
 
 var _fuf='all';
-function setFuf(f){_fuf=f;['fuf-all','fuf-od','fuf-td','fuf-wk'].forEach(function(id){document.getElementById(id).classList.remove('on');});var m={'all':'fuf-all','overdue':'fuf-od','today':'fuf-td','week':'fuf-wk'};document.getElementById(m[f]).classList.add('on');renderFollowups();}
+function setFuf(f){_fuf=f;['fuf-all','fuf-od','fuf-td','fuf-wk','fuf-nd'].forEach(function(id){document.getElementById(id).classList.remove('on');});var m={'all':'fuf-all','overdue':'fuf-od','today':'fuf-td','week':'fuf-wk','needsdate':'fuf-nd'};document.getElementById(m[f]).classList.add('on');renderFollowups();}
 function renderFollowups(){
-  var fu=allFollowups(),td=today(),we=weekEnd();
-  var od=fu.filter(function(v){return dstr(v['تاريخ المتابعة'])<td;});
-  var tdc=fu.filter(function(v){return dstr(v['تاريخ المتابعة'])===td;});
-  var wk=fu.filter(function(v){var d=dstr(v['تاريخ المتابعة']);return d>td&&d<=we;});
-  set('fu-od',od.length);set('fu-td',tdc.length);set('fu-wk',wk.length);
-  var all=od.concat(tdc).concat(wk).sort(function(a,b){return dstr(a['تاريخ المتابعة']).localeCompare(dstr(b['تاريخ المتابعة']));});
-  if(_fuf==='overdue')all=od;else if(_fuf==='today')all=tdc;else if(_fuf==='week')all=wk;
+  var allFu=allFollowups(),td=today(),we=weekEnd();
+  var nd=allFu.filter(function(v){return !dstr(v['تاريخ المتابعة']);});
+  var dated=allFu.filter(function(v){return !!dstr(v['تاريخ المتابعة']);});
+  var od=dated.filter(function(v){return dstr(v['تاريخ المتابعة'])<td;});
+  var tdc=dated.filter(function(v){return dstr(v['تاريخ المتابعة'])===td;});
+  var wk=dated.filter(function(v){var d=dstr(v['تاريخ المتابعة']);return d>td&&d<=we;});
+  set('fu-od',od.length);set('fu-td',tdc.length);set('fu-wk',wk.length);set('fu-nd',nd.length);
+  var all=od.concat(tdc).concat(wk).concat(nd);
+  if(_fuf==='overdue')all=od;else if(_fuf==='today')all=tdc;else if(_fuf==='week')all=wk;else if(_fuf==='needsdate')all=nd;
   var repF=(document.getElementById('fu-rep')||{}).value||'all';
   if(repF!=='all')all=all.filter(function(v){return txt(v['المندوب'])===repF;});
   var q=((document.getElementById('fu-q')||{}).value||'').trim().toLowerCase();
   if(q)all=all.filter(function(v){return txt(v['العميل']).toLowerCase().indexOf(q)>-1;});
-  function statusOf(v){var d=dstr(v['تاريخ المتابعة']);if(d<td)return{t:'Overdue',c:'var(--red)',bg:'var(--red-l)'};if(d===td)return{t:'Today',c:'var(--amb)',bg:'var(--gold-l)'};return{t:'This week',c:'var(--green)',bg:'var(--green-l)'};}
+  function statusOf(v){var d=dstr(v['تاريخ المتابعة']);if(!d)return{t:'Needs date',c:'var(--pu)',bg:'var(--navy-l)'};if(d<td)return{t:'Overdue',c:'var(--red)',bg:'var(--red-l)'};if(d===td)return{t:'Today',c:'var(--amb)',bg:'var(--gold-l)'};return{t:'This week',c:'var(--green)',bg:'var(--green-l)'};}
   if(!all.length){document.getElementById('fu-list').innerHTML='<div class="empty"><div class="ei">✅</div><b>No matching follow-ups</b></div>';return;}
   var rows=all.map(function(v){
-    var s=statusOf(v),cn=txt(v['العميل']);
-    return '<tr><td style="white-space:nowrap">'+dstr(v['تاريخ المتابعة'])+'</td><td>'+repBadge(txt(v['المندوب']))+'</td><td><b class="ar">'+esc(cn)+'</b><div class="ar" style="font-size:10px;color:var(--mut)">'+esc(txt(v['الخطوة القادمة']))+'</div></td><td><span class="badge" style="background:'+s.bg+';color:'+s.c+'">'+s.t+'</span></td><td><button class="pill on" style="font-size:10.5px;padding:5px 12px" onclick="openClientModal(\''+esc(cn).replace(/'/g,"")+'\')">View details</button></td></tr>';
+    var s=statusOf(v),cn=txt(v['العميل']),d=dstr(v['تاريخ المتابعة']);
+    return '<tr><td style="white-space:nowrap">'+(d||'—')+'</td><td>'+repBadge(txt(v['المندوب']))+'</td><td><b class="ar">'+esc(cn)+'</b><div class="ar" style="font-size:10px;color:var(--mut)">'+esc(txt(v['الخطوة القادمة']))+'</div></td><td><span class="badge" style="background:'+s.bg+';color:'+s.c+'">'+s.t+'</span></td><td><button class="pill on" style="font-size:10.5px;padding:5px 12px" onclick="openClientModal(\''+esc(cn).replace(/'/g,"")+'\')">View details</button></td></tr>';
   }).join('');
   document.getElementById('fu-list').innerHTML='<div class="card" style="padding:0;overflow-x:auto"><table><thead><tr><th>Follow-up date</th><th>Rep</th><th>Client / Next step</th><th>Status</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>';
 }
