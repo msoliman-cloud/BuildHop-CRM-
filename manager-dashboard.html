@@ -207,6 +207,15 @@
     .mtab.on{color:var(--navy)} .mtab .mi{display:block;font-size:17px}
     .content{padding-bottom:70px}
   }
+  #print-area{display:none}
+  .prow{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid #eee}
+  .pflag{background:#FFF3E0;border:1px solid #E8A320;border-radius:8px;padding:8px 10px;margin-bottom:6px;font-size:12px}
+  @media print{
+    body *{visibility:hidden}
+    #print-area, #print-area *{visibility:visible}
+    #print-area{display:block;position:absolute;top:0;left:0;width:100%;padding:20px}
+    .mtabs{display:none!important}
+  }
 </style>
 </head>
 <body>
@@ -288,7 +297,12 @@
           </div>
           <div id="rp-cal-pop" class="rp-cal-pop" style="display:none"></div>
           <div id="rp-summary"><div class="spin"></div></div>
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <button class="pill" onclick="printRepReport(REPS[0])" style="flex:1">🖨️ Print Abdulrazak's report</button>
+            <button class="pill" onclick="printRepReport(REPS[1])" style="flex:1">🖨️ Print Hassan's report</button>
+          </div>
         </div>
+        <div id="print-area"></div>
 
         <!-- ===== 4) SMART INSIGHTS (own section, English) ===== -->
 
@@ -997,22 +1011,149 @@ function renderRpCalYears(pop){
 }
 function rpCalPickYear(y){_repAnchor=new Date(y,6,15).toISOString().slice(0,10);document.getElementById('rp-cal-pop').style.display='none';renderRepSummary();}
 
+function printRepReport(r){
+  var b=periodBounds(_repPeriod,_repAnchor);
+  var pv=repVisits(r).filter(function(v){return dstr(v['التاريخ'])>=b.start&&dstr(v['التاريخ'])<=b.end;});
+  var abd=String(r).indexOf('عبدالرزاق')===0;
+
+  if(!pv.length){
+    document.getElementById('print-area').innerHTML='<h2>'+esc(repEN(r))+' — '+esc(periodLabel(_repPeriod,_repAnchor))+'</h2><p>No visits in this period.</p>';
+    window.print();return;
+  }
+
+  var seenNew={},seenExisting={},seenProspect={};
+  pv.forEach(function(v){
+    var c=txt(v['العميل']);if(!c)return;
+    if(txt(v['النوع'])==='New')seenNew[c]=1;
+    else if(txt(v['تصنيف العميل'])==='prospect')seenProspect[c]=1;
+    else seenExisting[c]=1;
+  });
+  var areaSet={};pv.forEach(function(v){var res=resolveSubregion(txt(v['الحي']));areaSet[res.sub]=(areaSet[res.sub]||0)+1;});
+  var areaKeys=Object.keys(areaSet).sort(function(a,b){return areaSet[b]-areaSet[a];});
+
+  var byClient={};
+  pv.slice().sort(function(x,y){return (dstr(x['التاريخ'])+txt(x['الوقت'])).localeCompare(dstr(y['التاريخ'])+txt(y['الوقت']));}).forEach(function(v){
+    var c=txt(v['العميل']);if(!c)return;
+    var o=byClient[c]=byClient[c]||{count:0};
+    o.count++;
+    o.result=resultEN(txt(v['نتيجة الزيارة'])||txt(v['هدف الزيارة']))||'—';
+    var na=txt(v['الخطوة القادمة']),nd=dstr(v['تاريخ المتابعة']);
+    if(!na||na==='لا توجد متابعة')o.fu='Not needed';
+    else if(nd)o.fu='Scheduled ('+nd+')';
+    else o.fu='Needs date';
+  });
+  var clientRows=Object.keys(byClient).map(function(c){return [c,byClient[c]];}).sort(function(a,b){return b[1].count-a[1].count;});
+
+  // ===== فحص جودة البيانات المُدخَلة لكل زيارة فى هذه الفترة تحديدًا =====
+  var flags=[];
+  pv.forEach(function(v){
+    var c=txt(v['العميل']),d=dstr(v['التاريخ']),isNew=txt(v['النوع'])==='New';
+    var missing=[];
+    if(!txt(v['الإحداثيات']))missing.push('GPS location');
+    if(isNew&&!txt(v['الهاتف']))missing.push('phone number');
+    if(isNew&&!txt(v['جهة الاتصال']))missing.push('contact name');
+    var na=txt(v['الخطوة القادمة']);
+    if(na&&na!=='لا توجد متابعة'&&!dstr(v['تاريخ المتابعة']))missing.push('follow-up date');
+    if(missing.length)flags.push({c:c,d:d,missing:missing});
+  });
+
+  var html='<div style="font-family:Inter,sans-serif;max-width:800px;margin:0 auto">'+
+    '<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid '+(abd?'#E8A320':'#243760')+';padding-bottom:12px;margin-bottom:16px">'+
+      '<div><h1 style="margin:0;font-size:22px;color:#243760">'+esc(repEN(r))+'</h1><div style="color:#6B7280;font-size:13px">Period report — '+esc(periodLabel(_repPeriod,_repAnchor))+'</div></div>'+
+      '<div style="text-align:left;font-size:11px;color:#6B7280">BuildHop CRM<br>Generated '+today()+'</div>'+
+    '</div>'+
+    '<div style="display:flex;gap:14px;margin-bottom:18px">'+
+      [['Visits',pv.length],['New',Object.keys(seenNew).length],['Existing',Object.keys(seenExisting).length],['Prospect',Object.keys(seenProspect).length]].map(function(s){
+        return '<div style="flex:1;text-align:center;border:1px solid #E6E9F0;border-radius:10px;padding:10px"><div style="font-size:20px;font-weight:900;color:#243760">'+s[1]+'</div><div style="font-size:10px;color:#6B7280">'+s[0]+'</div></div>';
+      }).join('')+
+    '</div>'+
+    '<h3 style="color:#243760;font-size:13px;border-bottom:1px solid #E6E9F0;padding-bottom:4px">Areas covered ('+areaKeys.length+')</h3>'+
+    areaKeys.map(function(a){return '<div class="prow"><span>'+esc(SUB_EN_G[a]||a)+'</span><b>'+areaSet[a]+'</b></div>';}).join('')+
+    '<h3 style="color:#243760;font-size:13px;border-bottom:1px solid #E6E9F0;padding-bottom:4px;margin-top:18px">All clients visited ('+clientRows.length+')</h3>'+
+    '<table style="width:100%;border-collapse:collapse;font-size:11.5px"><thead><tr style="text-align:left;color:#6B7280"><th style="padding:4px 0">Client</th><th style="padding:4px;text-align:center">Visits</th><th style="padding:4px">Latest result</th><th style="padding:4px">Follow-up</th></tr></thead><tbody>'+
+    clientRows.map(function(x){return '<tr style="border-top:1px solid #EFF1F6"><td style="padding:5px 0">'+esc(x[0])+'</td><td style="padding:5px;text-align:center">'+x[1].count+'</td><td style="padding:5px">'+esc(x[1].result)+'</td><td style="padding:5px">'+esc(x[1].fu)+'</td></tr>';}).join('')+
+    '</tbody></table>'+
+    '<h3 style="color:#243760;font-size:13px;border-bottom:1px solid #E6E9F0;padding-bottom:4px;margin-top:18px">⚠️ Missing information ('+flags.length+' visit(s))</h3>'+
+    (flags.length?flags.map(function(f){return '<div class="pflag"><b>'+esc(f.c)+'</b> ('+f.d+') — missing: '+f.missing.join(', ')+'</div>';}).join(''):'<p style="color:#0A8A4F;font-size:12px">✅ No missing fields detected for this period.</p>')+
+    '</div>';
+
+  document.getElementById('print-area').innerHTML=html;
+  setTimeout(function(){window.print();},50);
+}
+
 function renderRepSummary(){
   set('rp-range-label',periodLabel(_repPeriod,_repAnchor));
   var b=periodBounds(_repPeriod,_repAnchor);
   var el=document.getElementById('rp-summary');
   el.innerHTML='<div class="rep-grid">'+REPS.map(function(r){
     var pv=repVisits(r).filter(function(v){return dstr(v['التاريخ'])>=b.start&&dstr(v['التاريخ'])<=b.end;});
-    var nw=pv.filter(function(v){return txt(v['النوع'])==='New';}).length;
-    var hoods={};pv.forEach(function(v){var h=txt(v['الحي'])||txt(v['المنطقة']);if(h)hoods[h]=1;});
+    var abd=String(r).indexOf('عبدالرزاق')===0;
+    if(!pv.length){
+      return '<div class="rcard '+(abd?'abd':'')+'" style="padding:14px"><div style="font-weight:800;color:var(--navy);margin-bottom:8px">'+esc(repEN(r))+'</div><div class="empty" style="padding:12px">No visits in this period</div></div>';
+    }
+
+    // عملاء فريدون حسب النوع
+    var seenNew={},seenExisting={},seenProspect={};
+    pv.forEach(function(v){
+      var c=txt(v['العميل']);if(!c)return;
+      if(txt(v['النوع'])==='New')seenNew[c]=1;
+      else if(txt(v['تصنيف العميل'])==='prospect')seenProspect[c]=1;
+      else seenExisting[c]=1;
+    });
+    // منطقة مغطّاة
+    var areaSet={};pv.forEach(function(v){var res=resolveSubregion(txt(v['الحي']));areaSet[res.sub]=(areaSet[res.sub]||0)+1;});
+    var areaKeys=Object.keys(areaSet).sort(function(a,b){return areaSet[b]-areaSet[a];});
+    // أهداف الزيارة (نظرة عامة سريعة)
     var purpose={};pv.forEach(function(v){var p=txt(v['هدف الزيارة']);if(p)purpose[p]=(purpose[p]||0)+1;});
     var purposeKeys=Object.keys(purpose).sort(function(a,b){return purpose[b]-purpose[a];});
-    var purposeDetail=purposeKeys.length?('<div style="margin-top:8px"><div style="font-size:10px;font-weight:700;color:var(--navy);margin-bottom:3px">Visit purposes</div>'+
-      purposeKeys.map(function(p){return '<div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--mut);padding:2px 0"><span>'+esc(purposeEN(p))+'</span><b style="color:var(--ink)">'+purpose[p]+'</b></div>';}).join('')+'</div>'):'<div style="font-size:11px;color:var(--mut);margin-top:8px">No visits in this period</div>';
-    var abd=String(r).indexOf('عبدالرزاق')===0;
+
+    // جدول كل عميل تمّت زيارته: التكرار + آخر نتيجة + حالة المتابعة (هدف↔نتيجة↔متابعة مربوطة معًا)
+    var byClient={};
+    pv.slice().sort(function(x,y){return (dstr(x['التاريخ'])+txt(x['الوقت'])).localeCompare(dstr(y['التاريخ'])+txt(y['الوقت']));}).forEach(function(v){
+      var c=txt(v['العميل']);if(!c)return;
+      var o=byClient[c]=byClient[c]||{count:0};
+      o.count++;
+      // آخر زيارة لهذا العميل (بما أننا نمرّ بترتيب زمني تصاعدي، آخر مرة تُكتب تبقى الأحدث)
+      o.result=resultEN(txt(v['نتيجة الزيارة'])||txt(v['هدف الزيارة']))||'—';
+      var na=txt(v['الخطوة القادمة']),nd=dstr(v['تاريخ المتابعة']);
+      if(!na||na==='لا توجد متابعة')o.fu={t:'Not needed',c:'var(--mut)'};
+      else if(nd)o.fu={t:'Scheduled',c:'var(--green)'};
+      else o.fu={t:'Needs date',c:'var(--pu)'};
+    });
+    var clientRows=Object.keys(byClient).map(function(c){return [c,byClient[c]];}).sort(function(a,b){return b[1].count-a[1].count;});
+    var looseEnds=clientRows.filter(function(x){return x[1].fu.t==='Needs date';}).length;
+
+    // توصية مبنية على بيانات هذه الفترة (بما فيها فجوات المتابعة المكتشفة الآن)
+    var tips=[];
+    var newCount=Object.keys(seenNew).length,prospectCount=Object.keys(seenProspect).length;
+    if(newCount===0)tips.push('No new-client visits this period — consider prospecting.');
+    if(prospectCount===0&&newCount===0)tips.push('No prospect activity either — pipeline may need attention.');
+    if(areaKeys.length<=2&&pv.length>=5)tips.push('Visits concentrated in '+areaKeys.length+' area(s) — consider broader coverage.');
+    var topRepeat=clientRows.filter(function(x){return x[1].count>=3;})[0];
+    if(topRepeat)tips.push(topRepeat[1].count+' visits to <b>'+esc(topRepeat[0])+'</b> — verify this is progressing toward an outcome.');
+    if(looseEnds>0)tips.push(looseEnds+' client(s) have a next step but no follow-up date set — ask the rep to schedule them.');
+    if(!tips.length)tips.push('Balanced activity this period — no notable concerns.');
+
+    var statRow='<div class="rstats"><div class="rstat"><div class="n" style="color:var(--navy)">'+pv.length+'</div><div class="l">Visits</div></div><div class="rstat"><div class="n" style="color:var(--pu)">'+Object.keys(seenNew).length+'</div><div class="l">New</div></div><div class="rstat"><div class="n" style="color:var(--green)">'+Object.keys(seenExisting).length+'</div><div class="l">Existing</div></div><div class="rstat"><div class="n" style="color:var(--amb)">'+prospectCount+'</div><div class="l">Prospect</div></div></div>';
+
+    var areasHtml=areaKeys.length?('<div style="margin-top:8px"><div style="font-size:10px;font-weight:700;color:var(--navy);margin-bottom:3px">Areas covered ('+areaKeys.length+')</div>'+
+      areaKeys.map(function(a){return '<div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--mut);padding:2px 0"><span>'+esc(SUB_EN_G[a]||a)+'</span><b style="color:var(--ink)">'+areaSet[a]+'</b></div>';}).join('')+'</div>'):'';
+
+    var purposeHtml=purposeKeys.length?('<div style="margin-top:8px"><div style="font-size:10px;font-weight:700;color:var(--navy);margin-bottom:3px">Visit purposes</div>'+
+      purposeKeys.map(function(p){return '<div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--mut);padding:2px 0"><span>'+esc(purposeEN(p))+'</span><b style="color:var(--ink)">'+purpose[p]+'</b></div>';}).join('')+'</div>'):'';
+
+    var clientTable='<div style="margin-top:8px"><div style="font-size:10px;font-weight:700;color:var(--navy);margin-bottom:3px">All clients visited ('+clientRows.length+')</div>'+
+      '<div style="max-height:220px;overflow-y:auto"><table style="width:100%;font-size:10px;border-collapse:collapse">'+
+      '<thead><tr style="color:var(--mut);text-align:left"><th style="padding:3px 4px 3px 0;font-weight:700">Client</th><th style="padding:3px 4px;text-align:center;font-weight:700">×</th><th style="padding:3px 4px;font-weight:700">Latest result</th><th style="padding:3px 0 3px 4px;font-weight:700">Follow-up</th></tr></thead><tbody>'+
+      clientRows.map(function(x){
+        return '<tr style="border-top:1px solid var(--ln2)"><td style="padding:4px 4px 4px 0;color:var(--ink)">'+esc(x[0])+'</td><td style="padding:4px;text-align:center;font-weight:800;color:var(--navy)">'+x[1].count+'</td><td style="padding:4px;color:var(--mut)">'+esc(x[1].result)+'</td><td style="padding:4px 0 4px 4px;color:'+x[1].fu.c+';font-weight:700;white-space:nowrap">'+x[1].fu.t+'</td></tr>';
+      }).join('')+'</tbody></table></div></div>';
+
+    var tipsHtml='<div style="margin-top:10px;padding-top:8px;border-top:1px dashed var(--ln2)"><div style="font-size:10px;font-weight:700;color:var(--navy);margin-bottom:3px">💡 Suggestion</div>'+
+      tips.map(function(t){return '<div style="font-size:10.5px;color:var(--mut);line-height:1.5;padding:2px 0">'+t+'</div>';}).join('')+'</div>';
+
     return '<div class="rcard '+(abd?'abd':'')+'" style="padding:14px"><div style="font-weight:800;color:var(--navy);margin-bottom:8px">'+esc(repEN(r))+'</div>'+
-      '<div class="rstats"><div class="rstat"><div class="n" style="color:var(--navy)">'+pv.length+'</div><div class="l">Visits</div></div><div class="rstat"><div class="n" style="color:var(--pu)">'+nw+'</div><div class="l">New</div></div><div class="rstat"><div class="n" style="color:var(--green)">'+Object.keys(hoods).length+'</div><div class="l">Areas</div></div></div>'+
-      purposeDetail+'</div>';
+      statRow+areasHtml+purposeHtml+clientTable+tipsHtml+'</div>';
   }).join('')+'</div>';
 }
 
